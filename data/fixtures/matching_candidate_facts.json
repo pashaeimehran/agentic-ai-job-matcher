@@ -1,0 +1,18 @@
+{
+  "skills": [
+    {"name": "Python", "quote": "Python for data processing and model training."},
+    {"name": "C++", "quote": "C++ for embedded software."},
+    {"name": "SQL", "quote": "SQL for relational queries."},
+    {"name": "PyTorch", "quote": "Trained classification models using PyTorch and scikit-learn."},
+    {"name": "FastAPI", "quote": "Developed a FastAPI service with Pydantic validation and REST endpoints."},
+    {"name": "Docker", "quote": "Packaged applications with Docker and automated checks using GitHub Actions."},
+    {"name": "Azure", "quote": "Deployed a demonstration service on Azure Container Apps."},
+    {"name": "ROS 2", "quote": "Implemented a ROS 2 bridge for LoRa communication between two Raspberry Pi devices."}
+  ],
+  "languages": [
+    {"name": "English", "level": "C1", "quote": "English C1 and German B1."},
+    {"name": "German", "level": "B1", "quote": "English C1 and German B1."},
+    {"name": "Turkish", "level": "native", "quote": "Turkish native proficiency."}
+  ],
+  "employment": []
+}

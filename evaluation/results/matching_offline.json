@@ -1,0 +1,90 @@
+{
+  "mode": "offline_lexical_hash_synthetic",
+  "limitations": "Single public synthetic CV; lexical hash is not a semantic embedding; these labels are development data, not independent hiring decisions.",
+  "job_cases": 6,
+  "labeled_requirement_checks": 25,
+  "requirement_status_accuracy": 1.0,
+  "score_reproducibility": true,
+  "ranked_job_ids": [
+    "match-02-ml-engineer",
+    "match-01-python-backend",
+    "match-03-robotics",
+    "match-04-cloud-platform",
+    "match-05-senior-platform",
+    "match-06-cpp-security"
+  ],
+  "retrieval": {
+    "vector": {
+      "hit_at_3": 0.833333,
+      "precision_at_3": 0.277778,
+      "recall_at_3": 0.833333
+    },
+    "hybrid": {
+      "hit_at_3": 1.0,
+      "precision_at_3": 0.333333,
+      "recall_at_3": 1.0
+    }
+  },
+  "cases": [
+    {
+      "job_id": "match-01-python-backend",
+      "score": 95.11,
+      "status_correct": 4,
+      "status_total": 4,
+      "retrieval_hit_at_3": {
+        "vector": true,
+        "hybrid": true
+      }
+    },
+    {
+      "job_id": "match-02-ml-engineer",
+      "score": 95.68,
+      "status_correct": 4,
+      "status_total": 4,
+      "retrieval_hit_at_3": {
+        "vector": true,
+        "hybrid": true
+      }
+    },
+    {
+      "job_id": "match-03-robotics",
+      "score": 70.76,
+      "status_correct": 3,
+      "status_total": 3,
+      "retrieval_hit_at_3": {
+        "vector": true,
+        "hybrid": true
+      }
+    },
+    {
+      "job_id": "match-04-cloud-platform",
+      "score": 53.45,
+      "status_correct": 4,
+      "status_total": 4,
+      "retrieval_hit_at_3": {
+        "vector": true,
+        "hybrid": true
+      }
+    },
+    {
+      "job_id": "match-05-senior-platform",
+      "score": 41.26,
+      "status_correct": 4,
+      "status_total": 4,
+      "retrieval_hit_at_3": {
+        "vector": false,
+        "hybrid": true
+      }
+    },
+    {
+      "job_id": "match-06-cpp-security",
+      "score": 28.53,
+      "status_correct": 6,
+      "status_total": 6,
+      "retrieval_hit_at_3": {
+        "vector": true,
+        "hybrid": true
+      }
+    }
+  ]
+}

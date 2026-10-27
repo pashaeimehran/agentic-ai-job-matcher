@@ -1,0 +1,12 @@
+# OPTIONAL: install ONLY in a separate Python 3.12 evaluation environment.
+# Do not install these requirements into the main Python 3.14 project venv.
+# Main project pins OpenAI 3.x, while this Ragas stack requires OpenAI <3.
+ragas==0.4.3
+openai>=2.0,<3.0
+instructor==1.16.0
+langchain-community==0.4.1
+pydantic==2.13.5
+python-dotenv==1.2.3
+psycopg[binary]>=3.2,<4
+pypdf>=5,<7
+requests>=2.32,<3

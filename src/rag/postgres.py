@@ -40,7 +40,14 @@ class PostgresVectorStore:
                     [(c.chunk_id,c.cv_id,c.section,c.ordinal,c.text,c.start,c.end,json.dumps(v))
                      for c,v in zip(chunks,vectors)])
 
-    def search(self, cv_id, vector, model, dimensions, k):
+    def list_chunks(self, cv_id):
+        with self.connect() as conn:
+            rows = conn.execute("""SELECT chunk_id,cv_id,section,ordinal,text,
+                start_offset AS start,end_offset AS end FROM cv_chunks
+                WHERE cv_id=%s ORDER BY ordinal""", (cv_id,)).fetchall()
+        return [CVChunk(**row) for row in rows]
+
+    def search(self, cv_id, vector, model, dimensions, k, section=None):
         validate_vectors([vector], 1, dimensions)
         with self.connect() as conn:
             # Share lock keeps metadata and chunks consistent across both queries.
@@ -52,8 +59,9 @@ class PostgresVectorStore:
             rows = conn.execute("""SELECT chunk_id,cv_id,section,ordinal,text,
                 start_offset AS start,end_offset AS end,
                 1 - (embedding <=> %s::vector) AS score FROM cv_chunks
-                WHERE cv_id=%s ORDER BY embedding <=> %s::vector, ordinal LIMIT %s""",
-                (json.dumps(vector), cv_id, json.dumps(vector), k)).fetchall()
+                WHERE cv_id=%s AND (%s::text IS NULL OR lower(section)=lower(%s::text))
+                ORDER BY embedding <=> %s::vector, ordinal LIMIT %s""",
+                (json.dumps(vector), cv_id, section, section, json.dumps(vector), k)).fetchall()
         return [SearchHit(chunk=CVChunk(**{k:v for k,v in row.items() if k != "score"}),
                           score=max(-1.0,min(1.0,row["score"]))) for row in rows]
 

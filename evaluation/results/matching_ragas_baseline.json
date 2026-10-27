@@ -1,0 +1,32 @@
+{
+  "mode": "paid_live_ragas",
+  "scope": "Synthetic CV only; Ragas judge estimates, not ground truth",
+  "method": "deterministic_rank_then_explain_top_n",
+  "candidate_profile_source": "labeled-fixture",
+  "context_policy": "retrieved_plus_approved_cited_source_chunks",
+  "jobs": 3,
+  "metrics": {
+    "faithfulness": 0.7028,
+    "answer_relevancy": 0.698
+  },
+  "per_job": [
+    {
+      "job_id": "match-02-ml-engineer",
+      "faithfulness": 0.7273,
+      "answer_relevancy": 0.6813,
+      "context_chunks": 5
+    },
+    {
+      "job_id": "match-01-python-backend",
+      "faithfulness": 0.7143,
+      "answer_relevancy": 0.7497,
+      "context_chunks": 5
+    },
+    {
+      "job_id": "match-03-robotics",
+      "faithfulness": 0.6667,
+      "answer_relevancy": 0.6629,
+      "context_chunks": 5
+    }
+  ]
+}
