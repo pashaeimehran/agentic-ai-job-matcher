@@ -1,0 +1,50 @@
+[
+  {
+    "id": "match-01-python-backend",
+    "posting": {"role": "Python Backend Engineer", "skills": ["Python", "FastAPI", "Docker"], "experience_years": null, "language": ["English"], "seniority": null, "location": "Nuremberg"},
+    "language_levels": {"English": "C1"},
+    "reference_section": "Backend Project",
+    "reference_quote": "Developed a FastAPI service with Pydantic validation and REST endpoints.",
+    "expected_status": {"skill:Python": "supported", "skill:FastAPI": "supported", "skill:Docker": "supported", "language:English C1": "supported"}
+  },
+  {
+    "id": "match-02-ml-engineer",
+    "posting": {"role": "Machine Learning Engineer", "skills": ["Python", "PyTorch", "SQL"], "experience_years": null, "language": ["German"], "seniority": null, "location": "Munich"},
+    "language_levels": {"German": "B1"},
+    "reference_section": "Machine Learning",
+    "reference_quote": "Trained classification models using PyTorch and scikit-learn.",
+    "expected_status": {"skill:Python": "supported", "skill:PyTorch": "supported", "skill:SQL": "supported", "language:German B1": "supported"}
+  },
+  {
+    "id": "match-03-robotics",
+    "posting": {"role": "Robotics Engineer", "skills": ["ROS 2", "C++"], "experience_years": null, "language": ["German"], "seniority": null, "location": "Berlin"},
+    "language_levels": {"German": "B2"},
+    "reference_section": "Robotics",
+    "reference_quote": "Implemented a ROS 2 bridge for LoRa communication between two Raspberry Pi devices.",
+    "expected_status": {"skill:ROS 2": "supported", "skill:C++": "supported", "language:German B2": "unmet"}
+  },
+  {
+    "id": "match-04-cloud-platform",
+    "posting": {"role": "Cloud Platform Engineer", "skills": ["Azure", "Terraform", "Kubernetes"], "experience_years": null, "language": ["English"], "seniority": null, "location": "Remote Germany"},
+    "language_levels": {},
+    "reference_section": "Deployment",
+    "reference_quote": "Deployed a demonstration service on Azure Container Apps.",
+    "expected_status": {"skill:Azure": "supported", "skill:Terraform": "unknown", "skill:Kubernetes": "unknown", "language:English": "supported"}
+  },
+  {
+    "id": "match-05-senior-platform",
+    "posting": {"role": "Senior Platform Engineer", "skills": ["Python", "Kubernetes"], "experience_years": 5, "language": ["German"], "seniority": "Senior", "location": "Hamburg"},
+    "language_levels": {"German": "C1"},
+    "reference_section": "Programming",
+    "reference_quote": "Python for data processing and model training.",
+    "expected_status": {"skill:Python": "supported", "skill:Kubernetes": "unknown", "experience:5 years": "unknown", "language:German C1": "unmet"}
+  },
+  {
+    "id": "match-06-cpp-security",
+    "posting": {"role": "C++ Security Engineer", "skills": ["C++", "C", "Rust", "Linux"], "experience_years": 3, "language": ["German"], "seniority": null, "location": "Stuttgart"},
+    "language_levels": {"German": "C2"},
+    "reference_section": "Programming",
+    "reference_quote": "C++ for embedded software.",
+    "expected_status": {"skill:C++": "supported", "skill:C": "unknown", "skill:Rust": "unknown", "skill:Linux": "unknown", "experience:3 years": "unknown", "language:German C2": "unmet"}
+  }
+]

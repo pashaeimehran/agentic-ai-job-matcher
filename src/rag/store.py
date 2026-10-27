@@ -7,7 +7,8 @@ from src.rag.schemas import CVDocument, CVChunk, SearchHit
 
 class VectorStore(Protocol):
     def replace(self, document: CVDocument, chunks: list[CVChunk], vectors: list[list[float]], model: str, dimensions: int) -> None: ...
-    def search(self, cv_id: str, vector: list[float], model: str, dimensions: int, k: int) -> list[SearchHit]: ...
+    def search(self, cv_id: str, vector: list[float], model: str, dimensions: int, k: int, section: str | None = None) -> list[SearchHit]: ...
+    def list_chunks(self, cv_id: str) -> list[CVChunk]: ...
     def delete(self, cv_id: str) -> None: ...
 
 
@@ -27,14 +28,18 @@ class MemoryVectorStore:
         validate_replacement(document, chunks, vectors, dimensions)
         self.documents[document.cv_id] = (model, dimensions, list(zip(chunks, vectors)))
 
-    def search(self, cv_id, vector, model, dimensions, k):
+    def list_chunks(self, cv_id):
+        return [c for c, _ in self.documents[cv_id][2]] if cv_id in self.documents else []
+
+    def search(self, cv_id, vector, model, dimensions, k, section=None):
         if cv_id not in self.documents:
             return []
         stored_model, stored_dimensions, entries = self.documents[cv_id]
         if (model, dimensions) != (stored_model, stored_dimensions):
             raise ValueError("Embedding configuration changed. Re-ingest this CV.")
         validate_vectors([vector], 1, dimensions)
-        return sorted((SearchHit(chunk=c, score=cosine(vector, v)) for c, v in entries),
+        return sorted((SearchHit(chunk=c, score=cosine(vector, v)) for c, v in entries
+                       if section is None or c.section.casefold() == section.casefold()),
                       key=lambda h: (-h.score, h.chunk.ordinal))[:k]
 
     def delete(self, cv_id):

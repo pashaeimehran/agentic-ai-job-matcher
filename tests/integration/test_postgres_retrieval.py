@@ -22,6 +22,12 @@ def test_postgres_roundtrip_replace_isolation_rollback_delete(tmp_path):
     try:
         first=service.ingest(fixture,ids[0]);service.ingest(fixture,ids[1])
         service.ingest(fixture,ids[0])
+        stored = store.list_chunks(ids[0])
+        assert len(stored) == len(first)
+        assert all(c.cv_id == ids[0] for c in stored)
+        section_hits = store.search(ids[0], HashEmbeddings().embed(["German language"])[0],
+                                    "lexical-hash-v1", 512, 50, section="Languages")
+        assert section_hits and all(h.chunk.section == "Languages" for h in section_hits)
         hits=service.search_cv("German language level",ids[0],50)
         assert len(hits)==len(first)
         assert all(h.chunk.cv_id==ids[0] for h in hits)

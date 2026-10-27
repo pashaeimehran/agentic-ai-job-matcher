@@ -18,3 +18,5 @@ pytest-cache-files-*
 data/private/
 .update-backups/
 evaluation/results/retrieval_live*.json
+evaluation/results/matching_ragas_live*.json
+evaluation/results/matching_ragas_final.json

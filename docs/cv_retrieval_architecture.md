@@ -16,8 +16,12 @@ limits, not token counts. Source offsets refer to normalized text.
 
 `CVDocument` validates the document ID, source name, text and content hash.
 `CVChunk` records source offsets, section, order and a deterministic identifier.
-This phase stores source evidence, not an LLM-generated career profile. The next
-matching phase can extract structured career facts against this evidence.
+This layer stores source evidence, not a permanent LLM-generated career
+profile. The matching layer extracts source-attributed candidate facts from
+stored chunks when required; the **labeled-fixture Ragas mode** instead uses
+versioned synthetic facts after verifying the exact stored CV and chunks.
+Neither mode changes the original document/chunk schema or requires a new
+PostgreSQL migration. See [matching architecture](job_cv_matching_architecture.md).
 
 ## Dependencies and boundaries
 
@@ -55,7 +59,7 @@ OpenAI requests transmit CV text. The CLI does not log raw content in error
 messages; search and ask intentionally display selected evidence. Real CVs
 belong in ignored `data/private/`. Deletion removes database records, not the
 original input, terminal history, database backups or provider-side retention.
-The Docker volume persists across `docker compose down`.
+The Docker volume persists across `docker compose down` (without `-v`).
 
 ## What the evaluation measures
 
