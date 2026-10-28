@@ -1,0 +1,368 @@
+{
+  "mode": "replay",
+  "agent": "langgraph",
+  "limitations": "replay validates dataset and harness only; it is not a model measurement",
+  "cases": 18,
+  "first_tool_accuracy": 1.0,
+  "sequence_accuracy": 1.0,
+  "sequence_cases": 3,
+  "argument_validity_rate": 1.0,
+  "task_completion_rate": 1.0,
+  "total_tool_calls": 17,
+  "mean_tool_calls": 0.944444,
+  "results": [
+    {
+      "id": "search-ai-engineer",
+      "category": "search_jobs",
+      "first_tool": "search_jobs",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "search_jobs"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "search-role-city",
+      "category": "search_jobs",
+      "first_tool": "search_jobs",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "search_jobs"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "search-no-results",
+      "category": "search_jobs",
+      "first_tool": "search_jobs",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "search_jobs"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "empty"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "details-specific-job",
+      "category": "get_job_details",
+      "first_tool": "get_job_details",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "get_job_details"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "details-language-levels",
+      "category": "get_job_details",
+      "first_tool": "get_job_details",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "get_job_details"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "cv-python",
+      "category": "search_cv",
+      "first_tool": "search_cv",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "search_cv"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "cv-german-level",
+      "category": "search_cv",
+      "first_tool": "search_cv",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "search_cv"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "match-single-job",
+      "category": "calculate_match",
+      "first_tool": "calculate_match",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "calculate_match"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "match-two-jobs",
+      "category": "calculate_match",
+      "first_tool": "calculate_match",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "calculate_match"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "match-skill-gap",
+      "category": "calculate_match",
+      "first_tool": "calculate_match",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "calculate_match"
+      ],
+      "sequence_correct": true,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "save-job",
+      "category": "save_job",
+      "first_tool": "save_job",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "save_job"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "save-job-with-note",
+      "category": "save_job",
+      "first_tool": "save_job",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "save_job"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "no-tool-general-advice",
+      "category": "no_tool",
+      "first_tool": null,
+      "first_tool_correct": true,
+      "tool_sequence": [],
+      "sequence_correct": null,
+      "tool_calls": 0,
+      "valid_argument_calls": 0,
+      "tool_statuses": [],
+      "run_status": "completed",
+      "model_turns": 1,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "no-tool-greeting",
+      "category": "no_tool",
+      "first_tool": null,
+      "first_tool_correct": true,
+      "tool_sequence": [],
+      "sequence_correct": null,
+      "tool_calls": 0,
+      "valid_argument_calls": 0,
+      "tool_statuses": [],
+      "run_status": "completed",
+      "model_turns": 1,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "ambiguous-save",
+      "category": "ambiguous",
+      "first_tool": null,
+      "first_tool_correct": true,
+      "tool_sequence": [],
+      "sequence_correct": null,
+      "tool_calls": 0,
+      "valid_argument_calls": 0,
+      "tool_statuses": [],
+      "run_status": "completed",
+      "model_turns": 1,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "malformed-unknown-job",
+      "category": "malformed",
+      "first_tool": "calculate_match",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "calculate_match"
+      ],
+      "sequence_correct": null,
+      "tool_calls": 1,
+      "valid_argument_calls": 1,
+      "tool_statuses": [
+        "error"
+      ],
+      "run_status": "completed",
+      "model_turns": 2,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "search-then-save",
+      "category": "multi_step",
+      "first_tool": "search_jobs",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "search_jobs",
+        "save_job"
+      ],
+      "sequence_correct": true,
+      "tool_calls": 2,
+      "valid_argument_calls": 2,
+      "tool_statuses": [
+        "ok",
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 3,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    },
+    {
+      "id": "reference-scenario-germany",
+      "category": "reference_scenario",
+      "first_tool": "search_jobs",
+      "first_tool_correct": true,
+      "tool_sequence": [
+        "search_jobs",
+        "calculate_match"
+      ],
+      "sequence_correct": true,
+      "tool_calls": 2,
+      "valid_argument_calls": 2,
+      "tool_statuses": [
+        "ok",
+        "ok"
+      ],
+      "run_status": "completed",
+      "model_turns": 3,
+      "ungrounded_scores": [],
+      "task_completed": true,
+      "final_answer": "Reference replay complete."
+    }
+  ],
+  "reference_status_problems": []
+}

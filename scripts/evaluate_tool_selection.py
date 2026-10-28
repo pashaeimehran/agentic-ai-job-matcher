@@ -1,4 +1,4 @@
-"""Tool-selection evaluation for the manual agent loop.
+"""Tool-selection evaluation for the manual agent loop and the LangGraph agent.
 
 Modes:
   replay  Deterministic. Replays each case's reference_calls through the real
@@ -7,8 +7,12 @@ Modes:
   live    Paid OpenAI calls. Measures the configured model's tool selection on
           the synthetic fixture CV and catalog (no private data).
 
+--agent selects the orchestrator (default: manual). Both run the same cases,
+registry and fixtures, so their reports are directly comparable.
+
 Examples:
     python -m scripts.evaluate_tool_selection --mode replay
+    python -m scripts.evaluate_tool_selection --mode replay --agent langgraph
     python -m scripts.evaluate_tool_selection --mode live
 """
 from __future__ import annotations
@@ -20,11 +24,17 @@ from pathlib import Path
 from typing import Callable
 
 from src.agent import AgentConfig, AgentRunResult, ManualAgent
+from src.graph import GraphConfig, LangGraphAgent
 from src.llm.tool_calling import AssistantTurn, ToolCall, ToolCallingLLMProvider
 from src.tools import default_registry
 from src.tools.context import build_offline_context
 
 CASES_PATH = Path(__file__).resolve().parents[1] / "data" / "fixtures" / "tool_selection_cases.json"
+
+AGENTS = {
+    "manual": lambda provider, registry, context: ManualAgent(provider, registry, context, AgentConfig()),
+    "langgraph": lambda provider, registry, context: LangGraphAgent(provider, registry, context, GraphConfig()),
+}
 
 
 def load_cases(path: Path = CASES_PATH) -> list[dict]:
@@ -83,19 +93,22 @@ def score_case(case: dict, result: AgentRunResult) -> dict:
 
 
 def evaluate(provider_for: Callable[[dict], ToolCallingLLMProvider], mode: str,
-             config: AgentConfig = AgentConfig()) -> dict:
+             config: AgentConfig = AgentConfig(), agent_factory: Callable | None = None,
+             agent_name: str = "manual") -> dict:
     cases = load_cases()
     registry = default_registry()
+    factory = agent_factory or (lambda p, r, c: ManualAgent(p, r, c, config))
     rows = []
     for case in cases:
         # Fresh context per case so saved jobs and cached state never leak between cases.
-        agent = ManualAgent(provider_for(case), registry, build_offline_context(), config)
+        agent = factory(provider_for(case), registry, build_offline_context())
         rows.append(score_case(case, agent.run(case["request"], run_id=f"eval-{case['id']}")))
     calls = sum(r["tool_calls"] for r in rows)
     sequence_rows = [r for r in rows if r["sequence_correct"] is not None]
     n = len(rows)
     return {
         "mode": mode,
+        "agent": agent_name,
         "limitations": ("replay validates dataset and harness only; it is not a model measurement"
                         if mode == "replay" else
                         "single run per case on synthetic fixtures; LLM outputs are non-deterministic"),
@@ -129,12 +142,15 @@ def check_reference_statuses(report: dict) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Evaluate agent tool selection")
     parser.add_argument("--mode", choices=["replay", "live"], required=True)
+    parser.add_argument("--agent", choices=sorted(AGENTS), default="manual")
     parser.add_argument("--output")
     args = parser.parse_args()
+    agent = {"agent_factory": AGENTS[args.agent], "agent_name": args.agent}
+    suffix = "" if args.agent == "manual" else f"_{args.agent}"
     if args.mode == "replay":
-        report = evaluate(lambda case: ReferenceReplayProvider(case["reference_calls"]), "replay")
+        report = evaluate(lambda case: ReferenceReplayProvider(case["reference_calls"]), "replay", **agent)
         report["reference_status_problems"] = check_reference_statuses(report)
-        default_output = "evaluation/results/tool_selection_replay.json"
+        default_output = f"evaluation/results/tool_selection_replay{suffix}.json"
     else:
         from dotenv import load_dotenv
         from openai import OpenAI
@@ -142,13 +158,13 @@ def main() -> int:
         load_dotenv()
         model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         provider = OpenAIProvider(OpenAI(), model)
-        report = evaluate(lambda case: provider, "live")
+        report = evaluate(lambda case: provider, "live", **agent)
         report["model"] = model
-        default_output = "evaluation/results/tool_selection_live.json"
+        default_output = f"evaluation/results/tool_selection_live{suffix}.json"
     path = Path(args.output or default_output)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print(f"Mode: {report['mode']} ({report['cases']} cases)")
+    print(f"Mode: {report['mode']}, agent: {report['agent']} ({report['cases']} cases)")
     for key in ("first_tool_accuracy", "sequence_accuracy", "argument_validity_rate",
                 "task_completion_rate", "mean_tool_calls"):
         print(f"{key}: {report[key]}")

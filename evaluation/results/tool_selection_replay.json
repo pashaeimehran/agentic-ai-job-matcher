@@ -1,5 +1,6 @@
 {
   "mode": "replay",
+  "agent": "manual",
   "limitations": "replay validates dataset and harness only; it is not a model measurement",
   "cases": 18,
   "first_tool_accuracy": 1.0,

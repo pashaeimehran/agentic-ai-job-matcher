@@ -4,7 +4,7 @@ A Germany-focused AI job-matching project with structured job extraction, semant
 
 **In development · Python · LLM applications · PostgreSQL/pgvector**
 
-The current version provides a local CLI, the extraction/retrieval foundation, deterministic Job–CV matching, and a framework-free tool-calling agent loop. LangGraph orchestration and a web API are planned.
+The current version provides the extraction/retrieval foundation, deterministic Job–CV matching, five validated tools, and four entry points over those tools: a framework-free agent loop (baseline), a LangGraph agent, a FastAPI backend, and an MCP server.
 
 ## Problem & Motivation
 
@@ -34,6 +34,14 @@ See the [retrieval architecture](docs/cv_retrieval_architecture.md) for implemen
 
 Five validated tools (`search_jobs`, `get_job_details`, `search_cv`, `calculate_match`, `save_job`) wrap the existing job fixtures, CV retrieval, and deterministic matching. A bounded manual loop lets the LLM choose tools while Python validates arguments, executes, classifies failures, and retries only retryable errors. Match scores come only from deterministic Python. See the [tool-calling architecture](docs/tool_calling_agent_architecture.md).
 
+### LangGraph orchestration, REST API, and MCP
+
+The same tool registry is reused by three further entry points; none re-implements search, matching, or scoring ([architecture overview](docs/architecture_overview.md)):
+
+- **LangGraph agent** (`src/graph/`): explicit state, small testable nodes (`prepare → agent → execute_tools → finalize | fail`), pure conditional-routing functions, model-turn/tool-call/invalid-request limits, and optional per-thread checkpointing. A replay harness runs 29 identical scenarios through both agents; 28 are functionally identical and the one difference is a documented guard. See [LangGraph vs. the manual loop](docs/why-langgraph.md).
+- **FastAPI** (`src/api/`): `GET /health`, `GET /jobs`, `GET /jobs/{job_id}`, `POST /search`, `POST /analyze-job` (deterministic, no LLM), `POST /chat` (LangGraph), with typed Pydantic schemas and one documented error contract. See the [API reference](docs/api.md).
+- **MCP server** (`src/mcp_server/`): exposes the five tools to external LLM clients; schemas come from the registry, which also remains the validation authority. See [MCP usage](docs/mcp.md).
+
 ## Technologies
 
 | Technology | Role |
@@ -44,9 +52,12 @@ Five validated tools (`search_jobs`, `get_job_details`, `search_cv`, `calculate_
 | PostgreSQL 16 and pgvector | Persistent CV chunks and exact vector search |
 | Docker Compose | Local database service |
 | pypdf | Text extraction from digitally generated PDFs |
+| LangGraph | Agent orchestration graph and per-thread checkpointing |
+| FastAPI and Uvicorn | Typed REST API |
+| MCP Python SDK | Tool exposure to external LLM clients |
 | pytest | Offline regression and opt-in database integration tests |
 
-The example configuration uses `gpt-4o-mini` and `text-embedding-3-small`. Agent frameworks, a public API, and cloud deployment are not part of this version.
+The example configuration uses `gpt-4o-mini` and `text-embedding-3-small`. Authentication, durable conversation memory, and cloud deployment are not part of this version.
 
 ## How to Run
 
@@ -84,6 +95,14 @@ These commands do not require an API key or running database:
 python -m pytest
 python -m scripts.evaluate_cv_retrieval --output evaluation/results/retrieval_offline_local.json
 python -m scripts.evaluate_tool_selection --mode replay --output evaluation/results/tool_selection_replay_local.json
+python -m scripts.compare_agents --output evaluation/results/agent_comparison_local.json
+```
+
+Serve the REST API (OpenAPI UI at `http://127.0.0.1:8000/docs`) or the MCP server (stdio). Both use the synthetic CV and fixture catalog; only `POST /chat` needs `OPENAI_API_KEY`:
+
+```bash
+python -m scripts.serve_api
+python -m scripts.serve_mcp
 ```
 
 The default test run skips the opt-in database test unless its database configuration is supplied. The offline evaluator uses lexical hash embeddings and in-memory storage; it exercises retrieval logic rather than OpenAI semantic retrieval. It writes a local report for comparison with the committed benchmark.
@@ -150,7 +169,8 @@ Results below are preserved in the repository's reports. They are not an evaluat
 | Job extraction | 40/40 exact fixture passes | 40 controlled variants across 10 output scenarios |
 | Offline lexical retrieval | Hit@3: 95%; MRR: 0.867 | Synthetic CV, 20 questions, 900/150 character chunking |
 | Live semantic retrieval | Hit@3: 100%; MRR: 0.975 | Same synthetic benchmark and chunking |
-| Offline tests | 36 passed in recorded local validation | Regression checks reported in project documentation |
+| Offline tests | 221 passed, 1 skipped (opt-in database test) | Unit, LangGraph, API, and MCP tests; no network |
+| Manual loop vs. LangGraph | 28/29 scenarios functionally identical; identical match scores | Deterministic replay; the one difference is the documented invalid-request guard |
 | PostgreSQL integration | Passed in recorded local validation | Database behavior, including retrieval and replacement |
 | Live Q&A smoke checks | Source-backed German B1 answer; salary abstention | Two checks, not a comprehensive answer-quality evaluation |
 
@@ -160,7 +180,8 @@ Evidence: [benchmark summary](benchmarks/retrieval_baseline.md), [semantic retri
 
 ### Current boundaries
 
-- LangGraph orchestration and the web API remain planned. The manual agent searches a small synthetic fixture job catalog, not live job boards.
+- The agents, API, and MCP server search a small synthetic fixture job catalog, not live job boards. The API and MCP server use the synthetic CV by default.
+- The API and MCP server are unauthenticated, single-user local services. LangGraph conversation threads are process-local memory and are lost on restart.
 - Q&A validates quotations and source IDs, but these checks do not establish that a quotation answers the question correctly. Broader relevance and abstention evaluation remains necessary.
 - Scanned PDFs need OCR before ingestion; multi-column PDF reading order may need review.
 - The CLI is a local single-user application, without multi-user authentication or authorization.
@@ -177,7 +198,10 @@ Evidence: [benchmark summary](benchmarks/retrieval_baseline.md), [semantic retri
 | `src/data_sources/` | Optional live source and fixture access |
 | `src/matching/` | Deterministic, evidence-aware Job–CV matching |
 | `src/tools/` | Validated tool schemas, registry, and tool implementations |
-| `src/agent/` | Framework-free, bounded tool-calling agent loop |
+| `src/agent/` | Framework-free, bounded tool-calling agent loop (baseline) |
+| `src/graph/` | LangGraph agent: state, nodes, routing, checkpointing |
+| `src/api/` | FastAPI app, schemas, error contract, dependencies |
+| `src/mcp_server/` | MCP adapter over the shared tool registry |
 | `scripts/` | CLI and evaluation entry points |
 | `tests/` | Offline unit tests and opt-in integration test |
 | `data/fixtures/` | Synthetic examples and evaluation labels |
