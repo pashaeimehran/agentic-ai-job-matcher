@@ -1,0 +1,1717 @@
+{
+  "mode": "offline_replay",
+  "limitations": "Replays fixed model turns through both orchestrators. It measures orchestration equivalence, not model quality.",
+  "scenarios": 29,
+  "equivalent": 28,
+  "expected_differences": [
+    "repeated-invalid-requests"
+  ],
+  "unexpected_differences": [],
+  "expected_differences_not_observed": [],
+  "task_completion_rate": {
+    "manual": 0.896552,
+    "langgraph": 0.862069
+  },
+  "total_tool_calls": {
+    "manual": 35,
+    "langgraph": 34
+  },
+  "score_scenarios": 6,
+  "score_consistency": true,
+  "termination_reasons": {
+    "manual": [
+      "completed",
+      "max_model_turns_exceeded",
+      "max_tool_calls_exceeded",
+      "provider_error"
+    ],
+    "langgraph": [
+      "completed",
+      "invalid_tool_requests",
+      "max_model_turns_exceeded",
+      "max_tool_calls_exceeded",
+      "provider_error"
+    ]
+  },
+  "results": [
+    {
+      "id": "search-ai-engineer",
+      "category": "tool_selection/search_jobs",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "search-role-city",
+      "category": "tool_selection/search_jobs",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "search-no-results",
+      "category": "tool_selection/search_jobs",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "empty",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "empty",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "details-specific-job",
+      "category": "tool_selection/get_job_details",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "get_job_details"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "get_job_details"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "details-language-levels",
+      "category": "tool_selection/get_job_details",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "get_job_details"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "get_job_details"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "cv-python",
+      "category": "tool_selection/search_cv",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_cv"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_cv"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "cv-german-level",
+      "category": "tool_selection/search_cv",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_cv"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_cv"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "match-single-job",
+      "category": "tool_selection/calculate_match",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "match-01-python-backend",
+            95.11
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "match-01-python-backend",
+            95.11
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "match-two-jobs",
+      "category": "tool_selection/calculate_match",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "match-skill-gap",
+      "category": "tool_selection/calculate_match",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-17",
+            73.72
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-17",
+            73.72
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "save-job",
+      "category": "tool_selection/save_job",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "save_job"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "save_job"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "save-job-with-note",
+      "category": "tool_selection/save_job",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "save_job"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "save_job"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "no-tool-general-advice",
+      "category": "tool_selection/no_tool",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [],
+        "tool_calls": 0,
+        "model_turns": 1,
+        "tool_outcomes": [],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [],
+        "tool_calls": 0,
+        "model_turns": 1,
+        "tool_outcomes": [],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "no-tool-greeting",
+      "category": "tool_selection/no_tool",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [],
+        "tool_calls": 0,
+        "model_turns": 1,
+        "tool_outcomes": [],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [],
+        "tool_calls": 0,
+        "model_turns": 1,
+        "tool_outcomes": [],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "ambiguous-save",
+      "category": "tool_selection/ambiguous",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [],
+        "tool_calls": 0,
+        "model_turns": 1,
+        "tool_outcomes": [],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [],
+        "tool_calls": 0,
+        "model_turns": 1,
+        "tool_outcomes": [],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "malformed-unknown-job",
+      "category": "tool_selection/malformed",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "not_found",
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "not_found",
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "search-then-save",
+      "category": "tool_selection/multi_step",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs",
+          "save_job"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs",
+          "save_job"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "reference-scenario-germany",
+      "category": "tool_selection/reference_scenario",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-33",
+            74.31
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-25",
+            69.51
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-33",
+            74.31
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-25",
+            69.51
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "invalid-arguments-recovery",
+      "category": "failure",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "error",
+            "invalid_arguments",
+            0
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-01",
+            69.59
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "error",
+            "invalid_arguments",
+            0
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-01",
+            69.59
+          ]
+        ],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "unknown-tool-recovery",
+      "category": "failure",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "find_jobs",
+          "search_jobs"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "error",
+            "unknown_tool",
+            0
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "find_jobs",
+          "search_jobs"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "error",
+            "unknown_tool",
+            0
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "repeated-invalid-requests",
+      "category": "failure",
+      "equivalent": false,
+      "differences": [
+        "status",
+        "tool_sequence",
+        "tool_calls",
+        "model_turns",
+        "tool_outcomes"
+      ],
+      "expected_difference": "LangGraph stops after max_invalid_tool_turns=2 consecutive all-invalid turns; the manual loop has no such guard and keeps spending model turns until the model answers.",
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "find_jobs",
+          "search_jobs",
+          "search_jobs"
+        ],
+        "tool_calls": 3,
+        "model_turns": 4,
+        "tool_outcomes": [
+          [
+            "error",
+            "unknown_tool",
+            0
+          ],
+          [
+            "error",
+            "invalid_arguments",
+            0
+          ],
+          [
+            "error",
+            "invalid_arguments",
+            0
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "invalid_tool_requests",
+        "task_completed": false,
+        "tool_sequence": [
+          "find_jobs",
+          "search_jobs"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "unknown_tool",
+            0
+          ],
+          [
+            "error",
+            "invalid_arguments",
+            0
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": "Stopped after 2 consecutive turns with only invalid tool requests.",
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "execute_tools",
+          "fail"
+        ]
+      }
+    },
+    {
+      "id": "tool-internal-failure",
+      "category": "failure",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "internal",
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "internal",
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "retryable-failure-recovers",
+      "category": "failure",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "empty",
+            null,
+            2
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "empty",
+            null,
+            2
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "retryable-failure-exhausted",
+      "category": "failure",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "transient",
+            2
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "transient",
+            2
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "non-retryable-failure",
+      "category": "failure",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "precondition_failed",
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "search_jobs"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "error",
+            "precondition_failed",
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    },
+    {
+      "id": "provider-error",
+      "category": "failure",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "provider_error",
+        "task_completed": false,
+        "tool_sequence": [],
+        "tool_calls": 0,
+        "model_turns": 1,
+        "tool_outcomes": [],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": "Model call failed (ConnectionError)."
+      },
+      "langgraph": {
+        "status": "provider_error",
+        "task_completed": false,
+        "tool_sequence": [],
+        "tool_calls": 0,
+        "model_turns": 1,
+        "tool_outcomes": [],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": "Model call failed (ConnectionError).",
+        "path": [
+          "prepare",
+          "agent",
+          "fail"
+        ]
+      }
+    },
+    {
+      "id": "model-turn-limit",
+      "category": "limit",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "max_model_turns_exceeded",
+        "task_completed": false,
+        "tool_sequence": [
+          "search_jobs",
+          "search_jobs",
+          "search_jobs"
+        ],
+        "tool_calls": 3,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": "Model-turn limit of 3 reached without a final answer."
+      },
+      "langgraph": {
+        "status": "max_model_turns_exceeded",
+        "task_completed": false,
+        "tool_sequence": [
+          "search_jobs",
+          "search_jobs",
+          "search_jobs"
+        ],
+        "tool_calls": 3,
+        "model_turns": 3,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": "Model-turn limit of 3 reached without a final answer.",
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "execute_tools",
+          "agent",
+          "execute_tools",
+          "fail"
+        ]
+      }
+    },
+    {
+      "id": "tool-call-limit",
+      "category": "limit",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "max_tool_calls_exceeded",
+        "task_completed": false,
+        "tool_sequence": [
+          "get_job_details",
+          "get_job_details",
+          "get_job_details"
+        ],
+        "tool_calls": 3,
+        "model_turns": 1,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": "Tool-call limit of 3 reached."
+      },
+      "langgraph": {
+        "status": "max_tool_calls_exceeded",
+        "task_completed": false,
+        "tool_sequence": [
+          "get_job_details",
+          "get_job_details",
+          "get_job_details"
+        ],
+        "tool_calls": 3,
+        "model_turns": 1,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ],
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [],
+        "ungrounded_scores": [],
+        "error": "Tool-call limit of 3 reached.",
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "fail"
+        ]
+      }
+    },
+    {
+      "id": "invented-score-detected",
+      "category": "grounding",
+      "equivalent": true,
+      "differences": [],
+      "expected_difference": null,
+      "manual": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "ungrounded_scores": [
+          "99"
+        ],
+        "error": null
+      },
+      "langgraph": {
+        "status": "completed",
+        "task_completed": true,
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "tool_outcomes": [
+          [
+            "ok",
+            null,
+            1
+          ]
+        ],
+        "match_scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "ungrounded_scores": [
+          "99"
+        ],
+        "error": null,
+        "path": [
+          "prepare",
+          "agent",
+          "execute_tools",
+          "agent",
+          "finalize"
+        ]
+      }
+    }
+  ]
+}

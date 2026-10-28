@@ -150,21 +150,23 @@ no-tool cases, sequence satisfied) and tool-call counts.
 - `--mode live` (paid, git-ignored result): the configured OpenAI model on the
   synthetic CV and fixture catalog. One run per case; results vary between runs.
 
-## Why LangGraph is not used yet
+## The manual loop as baseline
 
 The loop above *is* what an agent framework automates: a state of messages, a
 model node, a tool node, a conditional edge on "has tool calls", and limits.
-Building it by hand makes these mechanics, failure modes and limits explicit,
-and gives a behavioural baseline (tests and evaluation) for the LangGraph
-version to match.
+Building it by hand made these mechanics, failure modes and limits explicit,
+and provides the behavioural baseline that the LangGraph agent is compared
+against. It stays in the repository and is the default for `scripts.run_agent`.
+See [why-langgraph.md](why-langgraph.md) for the graph and the comparison.
 
 ## Reuse
 
 The tool layer has no dependency on the loop. `ToolRegistry.specs()` gives
 JSON schemas, and `ToolRegistry.execute(name, args, context)` returns a
-serialisable `ToolOutcome` and never raises for tool problems. A LangGraph
-tool node, a FastAPI route or an MCP server can call the same two methods with
-their own `ToolContext`.
+serialisable `ToolOutcome` and never raises for tool problems. The LangGraph
+`execute_tools` node, the FastAPI routes ([api.md](api.md)) and the MCP server
+([mcp.md](mcp.md)) call these same two methods; see the
+[architecture overview](architecture_overview.md).
 
 ## Running
 
@@ -173,6 +175,7 @@ python -m pytest tests/unit/test_tools.py tests/unit/test_agent_loop.py
 python -m scripts.evaluate_tool_selection --mode replay
 python -m scripts.evaluate_tool_selection --mode live          # paid
 python -m scripts.run_agent "Find AI Engineer jobs in Germany that fit my CV and explain the best matches."
+python -m scripts.run_agent --agent langgraph "Find AI Engineer jobs in Germany that fit my CV and explain the best matches."
 ```
 
 ## Limitations
