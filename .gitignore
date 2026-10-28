@@ -20,3 +20,5 @@ data/private/
 evaluation/results/retrieval_live*.json
 evaluation/results/matching_ragas_live*.json
 evaluation/results/matching_ragas_final.json
+evaluation/results/tool_selection_live*.json
+evaluation/results/tool_selection_replay_local.json

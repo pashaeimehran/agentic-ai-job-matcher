@@ -4,7 +4,7 @@ A Germany-focused AI job-matching project with structured job extraction, semant
 
 **In development · Python · LLM applications · PostgreSQL/pgvector**
 
-The current version provides a local CLI and the extraction/retrieval foundation. Job–CV ranking, agent orchestration, and a web API are planned.
+The current version provides a local CLI, the extraction/retrieval foundation, deterministic Job–CV matching, and a framework-free tool-calling agent loop. LangGraph orchestration and a web API are planned.
 
 ## Problem & Motivation
 
@@ -29,6 +29,10 @@ Job text is cleaned, sent through a provider-independent LLM interface, and vali
 The implementation separates LLM providers, embeddings, storage, and retrieval services. Database replacement is transactional, and retrieval checks embedding-model compatibility. The default chunk size is 900 characters with 150-character overlap; these are character counts, not token counts.
 
 See the [retrieval architecture](docs/cv_retrieval_architecture.md) for implementation details and boundaries.
+
+### Tool calling and manual agent loop
+
+Five validated tools (`search_jobs`, `get_job_details`, `search_cv`, `calculate_match`, `save_job`) wrap the existing job fixtures, CV retrieval, and deterministic matching. A bounded manual loop lets the LLM choose tools while Python validates arguments, executes, classifies failures, and retries only retryable errors. Match scores come only from deterministic Python. See the [tool-calling architecture](docs/tool_calling_agent_architecture.md).
 
 ## Technologies
 
@@ -79,6 +83,7 @@ These commands do not require an API key or running database:
 ```bash
 python -m pytest
 python -m scripts.evaluate_cv_retrieval --output evaluation/results/retrieval_offline_local.json
+python -m scripts.evaluate_tool_selection --mode replay --output evaluation/results/tool_selection_replay_local.json
 ```
 
 The default test run skips the opt-in database test unless its database configuration is supplied. The offline evaluator uses lexical hash embeddings and in-memory storage; it exercises retrieval logic rather than OpenAI semantic retrieval. It writes a local report for comparison with the committed benchmark.
@@ -155,7 +160,7 @@ Evidence: [benchmark summary](benchmarks/retrieval_baseline.md), [semantic retri
 
 ### Current boundaries
 
-- Job ranking, agent orchestration, and the web API remain planned.
+- LangGraph orchestration and the web API remain planned. The manual agent searches a small synthetic fixture job catalog, not live job boards.
 - Q&A validates quotations and source IDs, but these checks do not establish that a quotation answers the question correctly. Broader relevance and abstention evaluation remains necessary.
 - Scanned PDFs need OCR before ingestion; multi-column PDF reading order may need review.
 - The CLI is a local single-user application, without multi-user authentication or authorization.
@@ -170,6 +175,9 @@ Evidence: [benchmark summary](benchmarks/retrieval_baseline.md), [semantic retri
 | `src/llm/` | Provider-independent structured generation |
 | `src/rag/` | CV ingestion, embeddings, storage, retrieval, and Q&A |
 | `src/data_sources/` | Optional live source and fixture access |
+| `src/matching/` | Deterministic, evidence-aware Job–CV matching |
+| `src/tools/` | Validated tool schemas, registry, and tool implementations |
+| `src/agent/` | Framework-free, bounded tool-calling agent loop |
 | `scripts/` | CLI and evaluation entry points |
 | `tests/` | Offline unit tests and opt-in integration test |
 | `data/fixtures/` | Synthetic examples and evaluation labels |
