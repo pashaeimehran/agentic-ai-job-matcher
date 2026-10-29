@@ -1,0 +1,55 @@
+# Build, publish and deploy to Azure Container Apps. Manual trigger only: production
+# changes are an explicit decision, and the "production" GitHub environment can require
+# a reviewer approval before the deploy job runs.
+#
+# The image is built on the runner with Docker and pushed with a short-lived Entra token.
+# ACR Tasks (az acr build) are not used: they are paused on free-credit subscriptions.
+# This workflow deploys application images (infra/azure/deploy_app.sh). Infrastructure is
+# created and changed with infra/azure/deploy.sh (Bicep).
+#
+# Required repository/environment configuration (names only, never values):
+#   secrets.AZURE_CLIENT_ID, secrets.AZURE_TENANT_ID, secrets.AZURE_SUBSCRIPTION_ID
+#       OIDC federated credential (user-assigned managed identity or Entra app) with AcrPush on
+#       the registry and Contributor on the Container App (no client secret stored in GitHub).
+#   vars.AZURE_RESOURCE_GROUP, vars.AZURE_CONTAINER_APP (app name; the registry is read from it)
+# Runtime secrets (OpenAI key, DATABASE_URL, Langfuse keys) live in the Container App secret
+# store, set by infra/azure/deploy.sh, not in GitHub.
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag (default: commit SHA)"
+        required: false
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 30
+    env:
+      IMAGE_TAG: ${{ inputs.image_tag || github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      # Container App only: build, token push, az containerapp update, wait for a healthy
+      # revision, smoke test. PostgreSQL and the rest of the platform are not touched.
+      - name: Build, push and update Container App
+        env:
+          AZ_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+          AZ_CONTAINER_APP: ${{ vars.AZURE_CONTAINER_APP }}
+        run: bash infra/azure/deploy_app.sh

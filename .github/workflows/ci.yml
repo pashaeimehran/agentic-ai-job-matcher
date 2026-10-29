@@ -1,0 +1,101 @@
+# Pull-request and branch validation. No secrets and no paid API calls: every job runs in
+# fixture/offline mode. Live evaluations live in live-eval.yml (manual trigger only).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, "feat/**", "fix/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.14"
+  APP_MODE: fixture
+
+jobs:
+  test:
+    name: Tests and deterministic evaluations
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_DB: test
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U test -d test" --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      TEST_DATABASE_URL: postgresql://test:test@localhost:5432/test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            requirements*.txt
+            constraints.txt
+      - name: Install pinned dependencies
+        run: python -m pip install -r requirements-dev.txt -c constraints.txt
+      - name: Byte-compile sources (syntax check)
+        run: python -m compileall -q src scripts tests
+      - name: Tests (unit, API, MCP, LangGraph, observability, PostgreSQL integration)
+        run: python -m pytest -ra
+      - name: Matching evaluation (status accuracy gate = 100%)
+        run: python -m scripts.evaluate_job_matching --output "$RUNNER_TEMP/matching.json"
+      - name: Retrieval evaluation (offline Hit@3 gate = 80%)
+        run: python -m scripts.evaluate_cv_retrieval --output "$RUNNER_TEMP/retrieval.json"
+      - name: Tool-selection replay (both agents)
+        run: |
+          python -m scripts.evaluate_tool_selection --mode replay --output "$RUNNER_TEMP/ts_manual.json"
+          python -m scripts.evaluate_tool_selection --mode replay --agent langgraph --output "$RUNNER_TEMP/ts_graph.json"
+      - name: Manual loop vs LangGraph equivalence
+        run: python -m scripts.compare_agents --output "$RUNNER_TEMP/agents.json"
+      - name: Version-comparison harness (labels and score determinism)
+        run: python -m scripts.compare_versions --mode offline --output "$RUNNER_TEMP/versions.json"
+      - name: System evaluation gates
+        run: python -m scripts.evaluate_system --output "$RUNNER_TEMP/system.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evaluation-reports
+          path: ${{ runner.temp }}/*.json
+          retention-days: 14
+
+  docker:
+    name: Container build and fixture-mode smoke test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t job-match-agent:ci .
+      - name: Smoke test (no credentials)
+        run: |
+          docker run -d --name api -p 8000:8000 job-match-agent:ci
+          for _ in $(seq 1 30); do curl -sf http://localhost:8000/health && break; sleep 1; done
+          curl -sf http://localhost:8000/ready
+          curl -sf -X POST -H 'Content-Type: application/json' -d '{"job_id":"match-01-python-backend"}' \
+            http://localhost:8000/analyze-job | grep -q '"score_source":"deterministic"'
+          curl -sf -X POST -H 'Content-Type: application/json' \
+            -d '{"message":"Find AI Engineer jobs in Germany that fit my CV"}' http://localhost:8000/chat \
+            | grep -q calculate_match
+          test "$(docker exec api id -u)" = "10001"
+      - name: Container logs
+        if: always()
+        run: docker logs api || true
+      - name: Compose stack (API + PostgreSQL/pgvector)
+        run: |
+          docker compose up -d --build --wait
+          curl -sf http://localhost:8000/ready | grep -q '"schema ready"'
+          docker compose down -v

@@ -6,7 +6,8 @@ Examples:
     python -m scripts.run_agent --agent langgraph "Find AI Engineer jobs in Germany that fit my CV"
 
 --agent selects the manual loop (default, baseline) or the LangGraph agent; both
-use the same tools, limits and provider.
+use the same tools, limits and provider. The provider is the instrumented one
+from src.llm.factory: --verbose prints per-call tokens, cost and latency.
 
 Without --cv-id the synthetic fixture CV is used (no database). With --cv-id the
 CV must already be ingested in Postgres; its profile is extracted on first use.
@@ -44,25 +45,39 @@ def main() -> int:
     parser.add_argument("--cv-id", help="Use an ingested Postgres CV instead of the synthetic fixture")
     parser.add_argument("--max-model-turns", type=int, default=8)
     parser.add_argument("--max-tool-calls", type=int, default=12)
+    parser.add_argument("--prompt-version", choices=["v1", "v2"], default=None,
+                        help="Agent system prompt version (default: AGENT_PROMPT_VERSION or v1)")
     parser.add_argument("--verbose", action="store_true", help="Print structured agent/tool logs")
     args = parser.parse_args()
     load_dotenv()
     logging.basicConfig(level=logging.INFO if args.verbose else logging.WARNING, format="%(name)s %(message)s")
     try:
-        from openai import OpenAI
-        from src.llm.openai_provider import OpenAIProvider
-        provider = OpenAIProvider(OpenAI(), os.getenv("OPENAI_MODEL", "gpt-4o-mini"))
+        from src.agent.prompts import system_prompt
+        from src.config import Settings
+        from src.llm.factory import build_provider
+        from src.observability.metrics import CompositeUsageSink, LoggingUsageSink, MemoryUsageSink, summarize
+        settings = Settings.from_env({**os.environ, "APP_MODE": "live"})
+        version = args.prompt_version or settings.agent_prompt_version
+        usage = MemoryUsageSink()
+        provider = build_provider(settings, CompositeUsageSink([LoggingUsageSink(), usage]), None, version)
         context = live_cv_context(args.cv_id, provider) if args.cv_id else build_offline_context()
-        limits = {"max_model_turns": args.max_model_turns, "max_tool_calls": args.max_tool_calls}
-        agent = (LangGraphAgent(provider, default_registry(), context, GraphConfig(**limits))
+        limits = {"max_model_turns": args.max_model_turns, "max_tool_calls": args.max_tool_calls,
+                  "max_run_tokens": settings.agent_max_run_tokens,
+                  "max_run_cost_usd": settings.agent_max_run_cost_usd}
+        agent = (LangGraphAgent(provider, default_registry(), context, GraphConfig(**limits),
+                                system_prompt=system_prompt(version))
                  if args.agent == "langgraph" else
-                 ManualAgent(provider, default_registry(), context, AgentConfig(**limits)))
+                 ManualAgent(provider, default_registry(), context, AgentConfig(**limits),
+                             system_prompt=system_prompt(version)))
         result = agent.run(args.request)
     except Exception as exc:
         # Do not echo provider payloads, CV content or credentials.
         print(f"Agent run failed ({type(exc).__name__}). Check API, database and configuration.")
         return 1
-    print(f"Run {result.run_id} ({args.agent}): {result.status} after {result.model_turns} model turn(s)")
+    print(f"Run {result.run_id} ({args.agent}, prompt {version}): {result.status} after "
+          f"{result.model_turns} model turn(s)")
+    totals = summarize(usage.records)
+    print(f"  usage: {totals['total_tokens']} tokens, estimated ${totals['estimated_cost_usd']}")
     if args.agent == "langgraph":
         print("  path:", " -> ".join(result.path))
     for record in result.tool_calls:

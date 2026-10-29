@@ -1,0 +1,41 @@
+[
+  {
+    "id": "gaps-llm-engineer",
+    "request": "How well does my CV fit the LLM Engineer job fixture-21? What am I missing?",
+    "match_job_ids": ["fixture-21"],
+    "expected": {"fixture-21": {"unmet": [], "unknown": ["OpenAI API", "Pydantic"]}}
+  },
+  {
+    "id": "lacking-genai-developer",
+    "request": "Which requirements am I lacking for the Generative AI Developer role fixture-29?",
+    "match_job_ids": ["fixture-29"],
+    "expected": {"fixture-29": {"unmet": [], "unknown": ["RAG", "pgvector", "3 years"]}}
+  },
+  {
+    "id": "weaknesses-cpp-security",
+    "request": "Should I apply to match-06-cpp-security? List my weaknesses for it.",
+    "match_job_ids": ["match-06-cpp-security"],
+    "expected": {"match-06-cpp-security": {"unmet": ["German C2"], "unknown": ["C", "Rust", "Linux", "3 years"]}}
+  },
+  {
+    "id": "unmet-and-unknown-platform",
+    "request": "Do I meet the requirements for match-05-senior-platform?",
+    "match_job_ids": ["match-05-senior-platform"],
+    "expected": {"match-05-senior-platform": {"unmet": ["German C1"], "unknown": ["Kubernetes", "5 years"]}}
+  },
+  {
+    "id": "compare-gaps-two-jobs",
+    "request": "Compare my fit for fixture-05 and match-04-cloud-platform and tell me my skill gaps for each.",
+    "match_job_ids": ["fixture-05", "match-04-cloud-platform"],
+    "expected": {
+      "fixture-05": {"unmet": [], "unknown": ["RAG", "LangChain", "Azure OpenAI", "5 years"]},
+      "match-04-cloud-platform": {"unmet": [], "unknown": ["Terraform", "Kubernetes"]}
+    }
+  },
+  {
+    "id": "search-and-explain-germany",
+    "request": "Find AI Engineer jobs in Germany that fit my CV and explain the best matches, including what I lack.",
+    "match_job_ids": [],
+    "expected": {}
+  }
+]

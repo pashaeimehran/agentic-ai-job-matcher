@@ -1,12 +1,13 @@
+# Runtime dependencies (installed in the container image).
 openai==3.9.0
 pydantic==2.13.5
 python-dotenv==1.2.3
 requests>=2.32.0,<3.0.0
-pytest>=8.3.0,<10.0.0
 # Orchestration, REST API and MCP server
 langgraph==1.2.18
 fastapi==0.162.0
 uvicorn==0.54.0
 mcp==2.3.0
-# fastapi.testclient
 httpx==0.28.1
+# Tracing (optional at runtime: disabled unless Langfuse keys are configured)
+langfuse==5.0.4

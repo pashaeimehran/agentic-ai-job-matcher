@@ -33,15 +33,38 @@ class ToolContext:
         return self._profile
 
 
-def build_offline_context(saved_jobs: SavedJobStore | None = None,
-                          cv_id: str = "synthetic-demo") -> ToolContext:
-    """Synthetic CV, lexical hash embeddings and fixture catalog; no network."""
-    from src.matching.fixtures import ROOT, fixture_profile
-    from src.rag.embeddings import HashEmbeddings
-    from src.rag.store import MemoryVectorStore
+def ensure_ingested(service: CVService, path, cv_id: str):
+    """Ingest a CV unless a persistent store already holds the identical document and embedding setup.
 
-    service = CVService(HashEmbeddings(), MemoryVectorStore())
-    chunks = service.ingest(ROOT / "sample_cv.md", cv_id)
+    Avoids re-embedding (and paying for) the same CV on every restart.
+    """
+    from src.rag.ingestion import read_cv
+    document_info = getattr(service.store, "document_info", None)
+    if document_info is not None:
+        stored = document_info(cv_id)
+        current = (read_cv(path, cv_id).content_hash, service.embeddings.model, service.embeddings.dimensions)
+        if stored is not None and tuple(stored) == current:
+            chunks = service.store.list_chunks(cv_id)
+            if chunks:
+                return chunks
+    return service.ingest(path, cv_id)
+
+
+def build_synthetic_context(service: CVService, saved_jobs: SavedJobStore | None = None,
+                            cv_id: str = "synthetic-demo") -> ToolContext:
+    """Synthetic CV with its human-labeled profile and the fixture catalog, on any CV service/store."""
+    from src.matching.fixtures import ROOT, fixture_profile
+
+    chunks = ensure_ingested(service, ROOT / "sample_cv.md", cv_id)
     return ToolContext(catalog=FixtureJobCatalog(), cv_service=service, cv_id=cv_id,
                        profile_loader=lambda: fixture_profile(cv_id, chunks),
                        saved_jobs=saved_jobs or MemorySavedJobStore())
+
+
+def build_offline_context(saved_jobs: SavedJobStore | None = None,
+                          cv_id: str = "synthetic-demo") -> ToolContext:
+    """Synthetic CV, lexical hash embeddings and fixture catalog; no network."""
+    from src.rag.embeddings import HashEmbeddings
+    from src.rag.store import MemoryVectorStore
+
+    return build_synthetic_context(CVService(HashEmbeddings(), MemoryVectorStore()), saved_jobs, cv_id)

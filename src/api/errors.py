@@ -73,6 +73,7 @@ _TOOL_ERRORS: dict[str, tuple[int, ApiErrorCode]] = {
 _AGENT_ERRORS: dict[str, tuple[int, ApiErrorCode, bool]] = {
     "provider_error": (502, "llm_provider_error", True),
     "max_model_turns_exceeded": (422, "agent_limit_exceeded", False),
+    "budget_exceeded": (422, "agent_limit_exceeded", False),
     "max_tool_calls_exceeded": (422, "agent_limit_exceeded", False),
     "invalid_tool_requests": (422, "agent_limit_exceeded", False),
     "graph_recursion_limit": (422, "agent_limit_exceeded", False),

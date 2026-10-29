@@ -9,7 +9,8 @@ from src.tools.errors import ErrorCode
 from src.tools.registry import RetryPolicy
 from src.tools.schemas import ToolOutcome
 
-RunStatus = Literal["completed", "max_model_turns_exceeded", "max_tool_calls_exceeded", "provider_error"]
+RunStatus = Literal["completed", "max_model_turns_exceeded", "max_tool_calls_exceeded", "provider_error",
+                    "budget_exceeded"]
 
 
 class AgentConfig(BaseModel):
@@ -19,6 +20,14 @@ class AgentConfig(BaseModel):
     # Counts every requested call, including rejected or failed ones.
     max_tool_calls: int = Field(default=12, ge=0, le=100)
     tool_retry: RetryPolicy = RetryPolicy()
+    # Per-run LLM spending limits, enforced before each model call by the instrumented
+    # provider (src.observability). None disables the limit.
+    max_run_tokens: int | None = Field(default=None, ge=1)
+    max_run_cost_usd: float | None = Field(default=None, gt=0)
+
+    def budget(self):
+        from src.observability.context import RunBudget
+        return RunBudget(max_tokens=self.max_run_tokens, max_cost_usd=self.max_run_cost_usd)
 
 
 class ToolCallRecord(BaseModel):

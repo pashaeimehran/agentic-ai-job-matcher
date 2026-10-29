@@ -15,6 +15,7 @@ from typing import Any, Callable, Generic, TypeVar
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from src.llm.tool_calling import ToolSpec
+from src.observability.tracing import get_tracer
 from src.tools.errors import classify_exception
 from src.tools.schemas import StrictArgs, ToolError, ToolOutcome, ToolResult
 
@@ -93,6 +94,20 @@ class ToolRegistry:
     def execute(self, name: str, raw_arguments: str | dict[str, Any], context: Any,
                 retry: RetryPolicy = RetryPolicy(), *, run_id: str | None = None,
                 step: int | None = None) -> ToolOutcome:
+        """Validate and run one tool inside a "tool.<name>" span (metadata only unless content capture is on)."""
+        tracer = get_tracer()
+        with tracer.span(f"tool.{name}", kind="tool", metadata={"run_id": run_id, "step": step},
+                         input=raw_arguments) as span:
+            outcome = self._execute(name, raw_arguments, context, retry, run_id=run_id, step=step)
+            span.update(metadata={"status": outcome.status, "attempts": outcome.attempts,
+                                  "error_code": outcome.error.code if outcome.error else None,
+                                  "duration_ms": outcome.duration_ms},
+                        **({"level": "ERROR", "status_message": outcome.error.code} if outcome.error else {}),
+                        **({"output": outcome.model_dump(mode="json")} if tracer.capture_content else {}))
+            return outcome
+
+    def _execute(self, name: str, raw_arguments: str | dict[str, Any], context: Any,
+                 retry: RetryPolicy, *, run_id: str | None, step: int | None) -> ToolOutcome:
         started = time.perf_counter()
         meta = {"run_id": run_id, "step": step, "tool": name}
         args = self.validate(name, raw_arguments)

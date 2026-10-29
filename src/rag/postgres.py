@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 import psycopg
 from psycopg.rows import dict_row
 from src.rag.embeddings import validate_vectors
@@ -18,9 +17,9 @@ class PostgresVectorStore:
         return psycopg.connect(self.dsn, connect_timeout=10, row_factory=dict_row)
 
     def initialize(self):
-        sql = Path(__file__).with_name("schema.sql").read_text(encoding="utf-8")
-        with self.connect() as conn:
-            conn.execute(sql)
+        """Apply the full application schema (CV tables, saved jobs, cost log); see src.db."""
+        from src.db import initialize_database
+        initialize_database(self.dsn)
 
     def replace(self, document, chunks, vectors, model, dimensions):
         validate_replacement(document, chunks, vectors, dimensions)
@@ -39,6 +38,13 @@ class PostgresVectorStore:
                     VALUES (%s,%s,%s,%s,%s,%s,%s,%s::vector)""",
                     [(c.chunk_id,c.cv_id,c.section,c.ordinal,c.text,c.start,c.end,json.dumps(v))
                      for c,v in zip(chunks,vectors)])
+
+    def document_info(self, cv_id):
+        """(content_hash, embedding_model, dimensions) of a stored CV, or None."""
+        with self.connect() as conn:
+            row = conn.execute("SELECT content_hash,embedding_model,dimensions FROM cv_documents WHERE cv_id=%s",
+                               (cv_id,)).fetchone()
+        return None if row is None else (row["content_hash"], row["embedding_model"], row["dimensions"])
 
     def list_chunks(self, cv_id):
         with self.connect() as conn:

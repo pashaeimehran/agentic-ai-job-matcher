@@ -1,0 +1,231 @@
+{
+  "generated_at": "2026-10-28T23:19:08+00:00",
+  "metric_classes": {
+    "deterministic_offline": [
+      "retrieval",
+      "matching",
+      "tool_selection_replay",
+      "orchestration",
+      "version_harness",
+      "fixture_end_to_end"
+    ],
+    "single_live_run": [
+      "live_tool_selection_and_cache"
+    ],
+    "repeated_live_samples": [
+      "recorded.version_comparison"
+    ],
+    "llm_judge": [
+      "recorded.ragas"
+    ]
+  },
+  "retrieval": {
+    "questions": 20,
+    "hit_at_3": 0.95,
+    "mrr": 0.8667,
+    "embeddings": "lexical-hash-v1 (not semantic)"
+  },
+  "matching": {
+    "job_cases": 6,
+    "labeled_requirement_checks": 25,
+    "requirement_status_accuracy": 1.0,
+    "score_reproducibility": true,
+    "retrieval_at_3": {
+      "vector": {
+        "hit_at_3": 0.833333,
+        "precision_at_3": 0.277778,
+        "recall_at_3": 0.833333
+      },
+      "hybrid": {
+        "hit_at_3": 1.0,
+        "precision_at_3": 0.333333,
+        "recall_at_3": 1.0
+      }
+    }
+  },
+  "tool_selection_replay": {
+    "manual": {
+      "cases": 18,
+      "first_tool_accuracy": 1.0,
+      "task_completion_rate": 1.0,
+      "reference_status_problems": []
+    },
+    "langgraph": {
+      "cases": 18,
+      "first_tool_accuracy": 1.0,
+      "task_completion_rate": 1.0,
+      "reference_status_problems": []
+    }
+  },
+  "orchestration": {
+    "scenarios": 29,
+    "equivalent": 28,
+    "expected_differences": [
+      "repeated-invalid-requests"
+    ],
+    "unexpected_differences": [],
+    "task_completion_rate": {
+      "manual": 0.896552,
+      "langgraph": 0.862069
+    },
+    "total_tool_calls": {
+      "manual": 35,
+      "langgraph": 34
+    },
+    "score_consistency": true,
+    "termination_reasons": {
+      "manual": [
+        "completed",
+        "max_model_turns_exceeded",
+        "max_tool_calls_exceeded",
+        "provider_error"
+      ],
+      "langgraph": [
+        "completed",
+        "invalid_tool_requests",
+        "max_model_turns_exceeded",
+        "max_tool_calls_exceeded",
+        "provider_error"
+      ]
+    }
+  },
+  "version_harness": {
+    "label_problems": [],
+    "deterministic_score_consistency": true,
+    "fixture_task_success": {
+      "v1": 1.0,
+      "v2": 1.0
+    }
+  },
+  "fixture_end_to_end": {
+    "requests": 8,
+    "repeats": 5,
+    "task_success_rate": 1.0,
+    "mean_tool_calls": 1.0,
+    "latency_ms_p50": 6.0,
+    "latency_ms_p95": 14.2,
+    "note": "Scripted provider: measures orchestration + tool latency and wiring, not model quality."
+  },
+  "live_tool_selection_and_cache": {
+    "model": "gpt-4o-mini",
+    "agent": "langgraph",
+    "passes": {
+      "cold": {
+        "cases": 18,
+        "first_tool_accuracy": 1.0,
+        "task_completion_rate": 1.0,
+        "mean_tool_calls": 0.944444,
+        "llm_calls": 34,
+        "errors": 0,
+        "input_tokens": 36071,
+        "output_tokens": 3052,
+        "total_tokens": 39123,
+        "estimated_cost_usd": 0.00724185,
+        "cache_hits": 0,
+        "cache_hit_rate": 0.0,
+        "provider_latency_ms_p50": 1150.974,
+        "provider_latency_ms_p95": 4123.684,
+        "mean_tokens_per_query": 2173.5,
+        "mean_cost_usd_per_query": 0.000402,
+        "end_to_end_latency_ms_p50": 2361.5,
+        "end_to_end_latency_ms_p95": 6931.3
+      },
+      "warm": {
+        "cases": 18,
+        "first_tool_accuracy": 1.0,
+        "task_completion_rate": 1.0,
+        "mean_tool_calls": 0.944444,
+        "llm_calls": 34,
+        "errors": 0,
+        "input_tokens": 2935,
+        "output_tokens": 69,
+        "total_tokens": 3004,
+        "estimated_cost_usd": 0.00048165,
+        "cache_hits": 31,
+        "cache_hit_rate": 0.911765,
+        "provider_latency_ms_p50": 892.116,
+        "provider_latency_ms_p95": 1445.175,
+        "mean_tokens_per_query": 166.9,
+        "mean_cost_usd_per_query": 2.7e-05,
+        "end_to_end_latency_ms_p50": 6.5,
+        "end_to_end_latency_ms_p95": 990.5
+      }
+    },
+    "note": "Single live run per case and pass. The warm pass reuses cached model turns when the full conversation (including tool observations) is identical; time-dependent tool output (save_job timestamps) makes later turns miss by design."
+  },
+  "recorded": {
+    "version_comparison": {
+      "source": "evaluation/results/version_comparison_live.json",
+      "generated_at": "2026-10-28T23:15:36+00:00",
+      "model": "gpt-4o-mini",
+      "repeats": 5,
+      "scenarios": 6,
+      "summary": {
+        "v1": {
+          "runs": 30,
+          "task_success_rate": 0.8667,
+          "completed_rate": 1.0,
+          "runs_with_mischaracterized_unknown": 4,
+          "mischaracterized_unknown_rate": 0.1333,
+          "mischaracterized_requirement_mentions": 16,
+          "unknown_coverage": 0.9615,
+          "runs_with_ungrounded_scores": 0,
+          "calculate_match_coverage": 1.0,
+          "mean_tool_calls": 1.6,
+          "mean_model_turns": 2.167,
+          "wall_latency_ms_p50": 3734.4,
+          "wall_latency_ms_p95": 9949.9,
+          "mean_tokens_per_query": 3329.2,
+          "mean_cost_usd_per_query": 0.000632,
+          "total_cost_usd": 0.018967
+        },
+        "v2": {
+          "runs": 30,
+          "task_success_rate": 0.9667,
+          "completed_rate": 1.0,
+          "runs_with_mischaracterized_unknown": 1,
+          "mischaracterized_unknown_rate": 0.0333,
+          "mischaracterized_requirement_mentions": 5,
+          "unknown_coverage": 0.9615,
+          "runs_with_ungrounded_scores": 0,
+          "calculate_match_coverage": 1.0,
+          "mean_tool_calls": 2.367,
+          "mean_model_turns": 2.167,
+          "wall_latency_ms_p50": 3931.5,
+          "wall_latency_ms_p95": 11691.9,
+          "mean_tokens_per_query": 3800.9,
+          "mean_cost_usd_per_query": 0.000733,
+          "total_cost_usd": 0.022002
+        }
+      },
+      "deterministic_score_consistency": true,
+      "mischaracterization_fisher_p_two_sided": 0.3533
+    },
+    "ragas": {
+      "source": "evaluation/results/matching_ragas_final.json",
+      "scope": "Synthetic CV only; Ragas judge estimates, not ground truth",
+      "candidate_profile_source": "labeled-fixture",
+      "jobs": 3,
+      "metrics": {
+        "faithfulness": 0.744,
+        "answer_relevancy": 0.6715
+      }
+    },
+    "tool_selection_live_manual": {
+      "source": "evaluation/results/tool_selection_live.json",
+      "model": "gpt-4o-mini",
+      "cases": 18,
+      "first_tool_accuracy": 1.0,
+      "task_completion_rate": 1.0
+    }
+  },
+  "gates": {
+    "matching_status_accuracy_is_1": true,
+    "scores_reproducible": true,
+    "retrieval_hit_at_3_at_least_0.8": true,
+    "replay_reference_statuses_ok": true,
+    "no_unexpected_orchestration_differences": true,
+    "orchestration_score_consistency": true,
+    "version_labels_match_calculate_match": true
+  }
+}
