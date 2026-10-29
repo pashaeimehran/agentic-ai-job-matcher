@@ -153,13 +153,17 @@ def main() -> int:
         default_output = f"evaluation/results/tool_selection_replay{suffix}.json"
     else:
         from dotenv import load_dotenv
-        from openai import OpenAI
-        from src.llm.openai_provider import OpenAIProvider
+        from src.config import Settings
+        from src.llm.factory import build_provider
+        from src.observability.metrics import MemoryUsageSink, summarize
         load_dotenv()
-        model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-        provider = OpenAIProvider(OpenAI(), model)
+        # Cache off: every case is an independent model sample.
+        settings = Settings.from_env({**os.environ, "APP_MODE": "live", "LLM_CACHE_ENABLED": "false"})
+        sink = MemoryUsageSink()
+        provider = build_provider(settings, sink, None, prompt_version="v1")
         report = evaluate(lambda case: provider, "live", **agent)
-        report["model"] = model
+        report["model"] = settings.openai_model
+        report["usage"] = summarize(sink.records)
         default_output = f"evaluation/results/tool_selection_live{suffix}.json"
     path = Path(args.output or default_output)
     path.parent.mkdir(parents=True, exist_ok=True)

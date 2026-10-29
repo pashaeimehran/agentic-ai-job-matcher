@@ -1,3 +1,3 @@
-from src.llm.provider import LLMMessage, LLMProviderError, StructuredLLMProvider
+from src.llm.provider import LLMMessage, LLMProviderError, LLMUsage, StructuredLLMProvider
 
-__all__ = ["LLMMessage", "LLMProviderError", "StructuredLLMProvider"]
+__all__ = ["LLMMessage", "LLMProviderError", "LLMUsage", "StructuredLLMProvider"]

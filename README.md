@@ -1,212 +1,252 @@
 # Agentic AI Job Matcher
 
-A Germany-focused AI job-matching project with structured job extraction, semantic CV search, and answers grounded in retrieved CV evidence.
+[![CI](https://github.com/pashaeimehran/agentic-ai-job-matcher/actions/workflows/ci.yml/badge.svg)](https://github.com/pashaeimehran/agentic-ai-job-matcher/actions/workflows/ci.yml)
 
-**In development · Python · LLM applications · PostgreSQL/pgvector**
+An evidence-grounded job-matching agent for the German job market. It extracts structured
+requirements from job postings, retrieves supporting passages from a CV, scores fit with
+deterministic code, and lets an LLM agent search, compare and explain matches using validated
+tools. It runs behind a REST API and an MCP server, and is measured, traced, costed,
+containerized and ready to deploy to Azure.
 
-The current version provides the extraction/retrieval foundation, deterministic Job–CV matching, five validated tools, and four entry points over those tools: a framework-free agent loop (baseline), a LangGraph agent, a FastAPI backend, and an MCP server.
+**Python · LangGraph · FastAPI · MCP · PostgreSQL/pgvector · Langfuse · Docker · Azure Container Apps**
 
-## Problem & Motivation
+## The problem
 
-Job descriptions and CVs express requirements and experience in different formats. Comparing them systematically requires extracting consistent information and finding evidence for a candidate's qualifications.
+Job postings and CVs describe the same things differently. A useful match tells a candidate
+which requirements their CV *shows* they meet, which it shows they *don't* meet, and which it
+simply doesn't mention. It must never invent evidence or a score. So this project keeps the
+judgement in deterministic, testable code and uses the LLM only to choose tools and explain the
+results, with every claim traceable to a CV quotation.
 
-This project builds that foundation: it converts job text into validated fields and retrieves relevant CV passages. Answers cite checked source quotations, allowing a user to inspect the evidence behind a response. An end-to-end ranking workflow is the next stage, not a completed capability.
+## Architecture
 
-## Approach
+```
+             REST client                    MCP client (its own LLM)
+                  │                                  │
+        FastAPI  (src/api)                 MCP server (src/mcp_server)
+                  │  /chat                           │  tools/call
+         LangGraph agent (src/graph)                 │
+   prepare → agent ⇄ execute_tools → finalize        │
+                  │                                  │
+                  └──────────► ToolRegistry ◄────────┘   validation, retries, error contract
+                               (src/tools)
+        search_jobs · get_job_details · search_cv · calculate_match · save_job
+                  │                 │                   │
+            job catalog      CV retrieval (src/rag)   deterministic matching (src/matching)
+                                    │
+                       PostgreSQL + pgvector  ── cv_documents · cv_chunks · saved_jobs · cost_log
 
-### Structured job extraction
+ Cross-cutting (src/observability, src/llm):
+   InstrumentedProvider → retries · per-run budget · response cache · usage + cost · Langfuse spans
+   OpenAI provider (live)  |  deterministic fixture provider (zero-key demo)
+```
 
-Job text is cleaned, sent through a provider-independent LLM interface, and validated against Pydantic schemas. An optional BA Jobsuche client supplies job listings; committed fixtures support repeatable development without that service.
-
-### CV ingestion and retrieval
-
-1. Parse a PDF, Markdown, or text CV.
-2. Split the normalized content into deterministic chunks, using section boundaries where available.
-3. Generate OpenAI embeddings and store chunks in PostgreSQL with pgvector.
-4. Embed a question and retrieve the closest chunks using CV-scoped cosine search.
-5. Ask the LLM to select verbatim evidence. Check that returned source IDs and quotations belong to the retrieved chunks; reject invalid citations and represent missing evidence explicitly.
-
-The implementation separates LLM providers, embeddings, storage, and retrieval services. Database replacement is transactional, and retrieval checks embedding-model compatibility. The default chunk size is 900 characters with 150-character overlap; these are character counts, not token counts.
-
-See the [retrieval architecture](docs/cv_retrieval_architecture.md) for implementation details and boundaries.
-
-### Tool calling and manual agent loop
-
-Five validated tools (`search_jobs`, `get_job_details`, `search_cv`, `calculate_match`, `save_job`) wrap the existing job fixtures, CV retrieval, and deterministic matching. A bounded manual loop lets the LLM choose tools while Python validates arguments, executes, classifies failures, and retries only retryable errors. Match scores come only from deterministic Python. See the [tool-calling architecture](docs/tool_calling_agent_architecture.md).
-
-### LangGraph orchestration, REST API, and MCP
-
-The same tool registry is reused by three further entry points; none re-implements search, matching, or scoring ([architecture overview](docs/architecture_overview.md)):
-
-- **LangGraph agent** (`src/graph/`): explicit state, small testable nodes (`prepare → agent → execute_tools → finalize | fail`), pure conditional-routing functions, model-turn/tool-call/invalid-request limits, and optional per-thread checkpointing. A replay harness runs 29 identical scenarios through both agents; 28 are functionally identical and the one difference is a documented guard. See [LangGraph vs. the manual loop](docs/why-langgraph.md).
-- **FastAPI** (`src/api/`): `GET /health`, `GET /jobs`, `GET /jobs/{job_id}`, `POST /search`, `POST /analyze-job` (deterministic, no LLM), `POST /chat` (LangGraph), with typed Pydantic schemas and one documented error contract. See the [API reference](docs/api.md).
-- **MCP server** (`src/mcp_server/`): exposes the five tools to external LLM clients; schemas come from the registry, which also remains the validation authority. See [MCP usage](docs/mcp.md).
+The REST API, MCP server, LangGraph agent and the framework-free baseline agent
+(`src/agent/loop.py`) all call the same `ToolRegistry`. None of them re-implements search,
+matching or scoring. More detail: [architecture overview](docs/architecture_overview.md).
 
 ## Technologies
 
 | Technology | Role |
 |---|---|
-| Python 3.11+ | CLI, extraction, ingestion, and evaluation |
-| OpenAI API | Structured LLM outputs and semantic embeddings |
-| Pydantic | Input and output schema validation |
-| PostgreSQL 16 and pgvector | Persistent CV chunks and exact vector search |
-| Docker Compose | Local database service |
-| pypdf | Text extraction from digitally generated PDFs |
-| LangGraph | Agent orchestration graph and per-thread checkpointing |
-| FastAPI and Uvicorn | Typed REST API |
-| MCP Python SDK | Tool exposure to external LLM clients |
-| pytest | Offline regression and opt-in database integration tests |
+| Python 3.14, Pydantic | application code, schema validation for every LLM output and tool argument |
+| OpenAI (`gpt-4o-mini`, `text-embedding-3-small`) | tool calling, structured extraction, embeddings (live mode) |
+| LangGraph | agent orchestration: explicit state, routing, limits, per-thread checkpoints |
+| FastAPI, Uvicorn | typed REST API with health and readiness probes |
+| MCP Python SDK | exposes the five tools to external LLM clients |
+| PostgreSQL 16 + pgvector | CV chunks and vectors, saved jobs, cost log |
+| Langfuse (self-hosted) | traces of requests, graph nodes, tool calls and model calls |
+| Ragas | LLM-judge faithfulness / relevancy (isolated environment) |
+| Docker, Docker Compose | image and local stack (API, PostgreSQL, Langfuse) |
+| GitHub Actions, Bicep, Azure CLI | CI, Azure Container Apps + PostgreSQL Flexible Server deployment |
+| pytest | 306 offline tests plus 2 opt-in PostgreSQL integration tests |
 
-The example configuration uses `gpt-4o-mini` and `text-embedding-3-small`. Authentication, durable conversation memory, and cloud deployment are not part of this version.
+## Quick start: fixture mode, no API key
 
-## How to Run
+Fixture mode runs the real API, LangGraph agent, tools, retrieval, matching and PostgreSQL
+persistence with a deterministic scripted model in place of OpenAI. It makes no paid calls and
+needs no credentials. [What it does and doesn't simulate](docs/limitations.md#fixture-mode).
 
-### 1. Install the project
+### With Docker (recommended)
+
+Requires Docker with Compose v2.
 
 ```bash
 git clone https://github.com/pashaeimehran/agentic-ai-job-matcher.git
 cd agentic-ai-job-matcher
+docker compose up -d --build --wait        # API + PostgreSQL/pgvector, about 1-2 minutes on first build
+```
+
+Open <http://127.0.0.1:8000/docs> for the interactive API, or (on Windows PowerShell, type
+`curl.exe` instead of `curl`):
+
+```bash
+curl http://127.0.0.1:8000/ready
+curl -X POST http://127.0.0.1:8000/analyze-job -H "Content-Type: application/json" \
+     -d '{"job_id": "match-01-python-backend"}'
+curl -X POST http://127.0.0.1:8000/chat -H "Content-Type: application/json" \
+     -d '{"message": "Find AI Engineer jobs in Germany that fit my CV"}'
+```
+
+`/analyze-job` returns a deterministic score (95.11 for this job) with supported, unmet and
+unknown requirements. `/chat` runs the agent: `search_jobs` → `calculate_match` → answer.
+
+Add tracing with a self-hosted Langfuse at <http://localhost:3000> (login `admin@example.com` /
+`local-admin-password`, local only):
+
+```bash
+TRACING_ENABLED=true docker compose --profile observability up -d --build --wait
+```
+
+Stop with `docker compose down` (add `-v` to delete the database and trace volumes).
+
+### Without Docker
+
+Requires Python 3.14. Without `DATABASE_URL`, CV chunks stay in memory and saved jobs go to
+`data/private/saved_jobs.json`.
+
+```bash
 python -m venv .venv
+source .venv/bin/activate                  # Windows PowerShell: .\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements-dev.txt -c constraints.txt
+python -m scripts.serve_api                # http://127.0.0.1:8000/docs
 ```
 
-Activate on Linux/macOS:
+## Live mode
+
+Copy `.env.example` to `.env`, set `OPENAI_API_KEY` and `APP_MODE=live` (or leave `APP_MODE`
+unset: it becomes `live` when a key is present), then start either way. Live mode uses OpenAI
+for the agent and for CV embeddings, so these calls are paid. Every variable is documented in
+[`.env.example`](.env.example). The CLI covers CV ingestion and Q&A (`python -m scripts.cv
+--help`) and running the agents directly (`python -m scripts.run_agent --help`). See the
+[retrieval setup guide](docs/apply_cv_retrieval.md).
+
+## Tests
 
 ```bash
-source .venv/bin/activate
+python -m pytest                                         # offline: no key, no network, no database
+TEST_DATABASE_URL=postgresql://user:pass@127.0.0.1:5432/db python -m pytest   # + PostgreSQL integration
 ```
 
-Or on Windows PowerShell:
+The tests cover tools, matching, retrieval, both agents, the API, the MCP server, configuration,
+fixture mode, observability, cache, cost accounting and log hygiene. On Windows, use `127.0.0.1`
+rather than `localhost` in connection URLs: `localhost` tries IPv6 first, and Compose publishes on
+IPv4 only.
 
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
+## Evaluations
 
 ```bash
-python -m pip install -r requirements-retrieval.txt
+python -m scripts.evaluate_system                        # all deterministic evaluations + gates (CI)
+python -m scripts.compare_versions --mode offline        # version-comparison harness check
+python -m scripts.evaluate_system --live                 # paid: live tool selection, cost, latency, cache
+python -m scripts.compare_versions --mode live --repeats 5   # paid: prompt v1 vs v2
 ```
 
-Run the remaining commands from the repository root.
+The dedicated evaluators (`evaluate_cv_retrieval`, `evaluate_job_matching`,
+`evaluate_tool_selection`, `compare_agents`, `evaluate_job_extraction`, `evaluate_matching_ragas`)
+still run on their own. Ragas runs in a separate environment ([how](docs/apply_job_cv_matching.md)).
+Methodology and every metric: [docs/evaluation.md](docs/evaluation.md).
 
-### 2. Try the offline checks
+## Results
 
-These commands do not require an API key or running database:
+Synthetic data throughout. Deterministic results are reproducible. Live results are single runs
+unless marked, and Ragas is an LLM judge.
 
-```bash
-python -m pytest
-python -m scripts.evaluate_cv_retrieval --output evaluation/results/retrieval_offline_local.json
-python -m scripts.evaluate_tool_selection --mode replay --output evaluation/results/tool_selection_replay_local.json
-python -m scripts.compare_agents --output evaluation/results/agent_comparison_local.json
-```
-
-Serve the REST API (OpenAPI UI at `http://127.0.0.1:8000/docs`) or the MCP server (stdio). Both use the synthetic CV and fixture catalog; only `POST /chat` needs `OPENAI_API_KEY`:
-
-```bash
-python -m scripts.serve_api
-python -m scripts.serve_mcp
-```
-
-The default test run skips the opt-in database test unless its database configuration is supplied. The offline evaluator uses lexical hash embeddings and in-memory storage; it exercises retrieval logic rather than OpenAI semantic retrieval. It writes a local report for comparison with the committed benchmark.
-
-### 3. Configure live retrieval
-
-For a fresh clone, copy `.env.example` to `.env`. If `.env` already exists, preserve it and add any missing settings.
-
-Linux/macOS:
-
-```bash
-cp .env.example .env
-```
-
-Windows PowerShell:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Edit `.env` to set `OPENAI_API_KEY`, `POSTGRES_PASSWORD`, and `DATABASE_URL`. Use the same database password in the password variable and connection URL. For initial setup, letters, numbers, and underscores avoid URL-escaping issues. Keep `.env` out of commits.
-
-Install and start Docker with Compose support, then initialize the database:
-
-```bash
-docker compose up -d --wait
-python -m scripts.cv init-db
-```
-
-The database binds to local port 5432. Docker preserves its data in a named volume; changing `.env` does not reset an existing database password.
-
-### 4. Run the synthetic CV example
-
-The following commands make paid OpenAI calls. Ingestion sends CV chunks for embeddings; Q&A also sends retrieved chunks for answer selection.
-
-```bash
-python -m scripts.cv ingest data/fixtures/sample_cv.md --cv-id demo
-python -m scripts.cv search "What is the German language level?" --cv-id demo
-python -m scripts.cv ask "What is the German language level?" --cv-id demo
-python -m scripts.cv ask "What salary does the candidate expect?" --cv-id demo
-```
-
-The fixture contains German B1 evidence. The salary question has no supporting answer and is intended to exercise abstention. Search displays chunk IDs and text; Q&A displays selected quotations or an insufficient-evidence response. Reusing a CV ID replaces its stored content.
-
-### 5. Run live evaluation
-
-```bash
-python -m scripts.evaluate_cv_retrieval --live --output evaluation/results/retrieval_live_local.json
-python -m scripts.evaluate_job_extraction --limit 0
-```
-
-Both commands use paid APIs. The retrieval evaluator creates temporary CV records, compares four chunk configurations, cleans up those records, and checks the default configuration against an 80% Hit@3 gate. The extraction evaluator runs all fixture cases and writes `evaluation/results/job_extraction_evaluation.json`, replacing that report if it exists.
-
-Database integration checks and troubleshooting are documented in the [existing setup guide](docs/apply_cv_retrieval.md#3-configure-local-postgresql). Its first section describes a historical patch installer; a fresh clone should use the setup steps above.
-
-## Results & Limitations
-
-### Recorded component evaluation
-
-Results below are preserved in the repository's reports. They are not an evaluation of end-to-end job matching.
-
-| Component | Recorded result | Scope |
+| Area | Result | Kind |
 |---|---|---|
-| Job extraction | 40/40 exact fixture passes | 40 controlled variants across 10 output scenarios |
-| Offline lexical retrieval | Hit@3: 95%; MRR: 0.867 | Synthetic CV, 20 questions, 900/150 character chunking |
-| Live semantic retrieval | Hit@3: 100%; MRR: 0.975 | Same synthetic benchmark and chunking |
-| Offline tests | 221 passed, 1 skipped (opt-in database test) | Unit, LangGraph, API, and MCP tests; no network |
-| Manual loop vs. LangGraph | 28/29 scenarios functionally identical; identical match scores | Deterministic replay; the one difference is the documented invalid-request guard |
-| PostgreSQL integration | Passed in recorded local validation | Database behavior, including retrieval and replacement |
-| Live Q&A smoke checks | Source-backed German B1 answer; salary abstention | Two checks, not a comprehensive answer-quality evaluation |
+| Requirement-status accuracy | 100% (25 labeled checks, 6 jobs); scores reproducible | deterministic |
+| CV retrieval Hit@3 / MRR | 95% / 0.867 offline (lexical); 100% / 0.975 live (semantic) | deterministic / single run |
+| Matching retrieval @3, vector → hybrid | recall 83% → 100%, precision 28% → 33% | deterministic |
+| Tool selection, 18 cases | first-tool accuracy 100%, manual loop and LangGraph, live | single run |
+| Manual loop vs LangGraph, 29 scenarios | 28 identical, 1 documented guard difference, identical scores | deterministic |
+| Prompt v1 → v2 (grounding of "unknown") | task success 86.7% → 96.7%; runs with deficit wording 4/30 → 1/30 (p = 0.35, not significant) | 5 repeats × 6 scenarios × 2 |
+| Cost per query, live agent | $0.000402 cold; $0.000027 with a warm cache (91% hit rate) | single run |
+| Latency, live agent | p50 2.4 s / p95 6.9 s cold; p50 6.5 ms warm | single run |
+| Ragas faithfulness / answer relevancy | 0.68–0.74 / 0.67–0.70 over three runs | LLM judge |
+| Job extraction | 40/40 fixture variants exact | single run |
 
-Hit@3 measures whether expected evidence occurs in the top three retrieved chunks. MRR measures how highly the first relevant chunk is ranked. The synthetic benchmark is a development set, not an independent test of generalization to unseen CVs.
+Full version comparison: [evaluation/results/version_comparison.md](evaluation/results/version_comparison.md).
 
-Evidence: [benchmark summary](benchmarks/retrieval_baseline.md), [semantic retrieval report](evaluation/results/retrieval_semantic.json), [offline retrieval report](evaluation/results/retrieval_offline.json), and [extraction report](evaluation/results/job_extraction_evaluation.json).
+## Tool calling vs LangGraph
 
-### Current boundaries
+Both agents use the same tools, provider interface and limits. The **manual loop**
+(`src/agent/loop.py`) is a plain bounded `while` loop: the model requests tools, Python validates
+and executes them, and failures are classified and retried only when retryable. The **LangGraph
+agent** (`src/graph/`) expresses the same logic as explicit state and small nodes
+(`prepare → agent ⇄ execute_tools → finalize | fail`) with pure routing functions, per-thread
+checkpointing and one extra guard that stops repeated invalid tool requests. A replay harness
+shows they behave identically on 28 of 29 scenarios. The LangGraph version is the one served by
+the API. Why: [docs/why-langgraph.md](docs/why-langgraph.md). Tool contracts:
+[docs/tool_calling_agent_architecture.md](docs/tool_calling_agent_architecture.md).
 
-- The agents, API, and MCP server search a small synthetic fixture job catalog, not live job boards. The API and MCP server use the synthetic CV by default.
-- The API and MCP server are unauthenticated, single-user local services. LangGraph conversation threads are process-local memory and are lost on restart.
-- Q&A validates quotations and source IDs, but these checks do not establish that a quotation answers the question correctly. Broader relevance and abstention evaluation remains necessary.
-- Scanned PDFs need OCR before ingestion; multi-column PDF reading order may need review.
-- The CLI is a local single-user application, without multi-user authentication or authorization.
-- Start with the synthetic CV. Keep personal files in ignored `data/private/`; live processing sends their text to OpenAI.
-- The optional BA Jobsuche client uses an unofficial backend whose availability is not guaranteed. Fixtures remain the repeatable development input.
+## MCP
 
-## Repository Guide
+`python -m scripts.serve_mcp` serves `search_jobs`, `get_job_details`, `search_cv`,
+`calculate_match` and `save_job` over stdio. Schemas come from the shared registry, which also
+remains the validation authority. Read-only and idempotent hints are set per tool. The server calls
+no LLM: the MCP client's model decides. [docs/mcp.md](docs/mcp.md).
 
-| Directory | Purpose |
+## Observability and cost controls
+
+- Langfuse traces: `POST /chat → agent.langgraph → graph.* → llm.complete | tool.*`, carrying
+  model, tokens, cost, cache hit, retries and run IDs. Prompts and CV text are excluded unless
+  content capture is explicitly enabled. Tracing is optional: if Langfuse is down, requests still
+  succeed and shutdown stays bounded.
+- One structured record per LLM call (tokens, cost, latency, status, cache hit, error category)
+  goes to JSON logs and the PostgreSQL `cost_log` table. Prices live in a single dated table.
+- Cost controls: max model turns and tool calls, per-run token/cost budget, output-token cap,
+  bounded retries, and an in-memory response cache keyed by everything that determines the
+  answer, with explicit versioning.
+
+[docs/observability.md](docs/observability.md) · [docs/cost-controls.md](docs/cost-controls.md)
+
+## Deployment
+
+One image (multi-stage, non-root, no secrets) runs locally with Compose and on **Azure Container
+Apps** with **Azure Database for PostgreSQL Flexible Server** (pgvector), provisioned by
+`infra/azure/main.bicep` and `infra/azure/deploy.sh`. CI (`.github/workflows/ci.yml`) runs tests,
+deterministic evaluation gates, the image build and container and Compose smoke tests on every pull
+request without secrets. The image is built with Docker from the working tree and pushed to ACR
+with a short-lived token (no ACR Tasks, no registry admin user). The app pulls it with a managed
+identity. Deployment (`deploy.yml`) is manual and approval-gated, with OIDC login.
+
+**Live demo (fixture mode, synthetic data):**
+<https://jobmatch-api.blueglacier-8c9485b6.northeurope.azurecontainerapps.io/docs>. It runs in
+`northeurope` and scales to zero, so the first request after idle takes about 30 s. Verified there:
+health and readiness, pgvector, deterministic `/analyze-job` (95.11), and `/chat` running
+`search_jobs → calculate_match`. Bicep (`infra/azure/deploy.sh`) creates and changes the
+infrastructure. Image updates (`infra/azure/deploy_app.sh`, the `deploy.yml` workflow) only update
+the Container App. A live OpenAI run in Azure was deliberately not executed, because the public API
+has no authentication. Details: [docs/deployment.md](docs/deployment.md).
+
+## Limitations
+
+No authentication or multi-user isolation. Conversation memory and the cache are in-process, so
+the API runs as one replica. The job catalog is a small synthetic fixture set. Evaluation sets are
+small and synthetic, and most live results are single runs. The match score is an advisory
+heuristic, not a hiring decision. Full list: [docs/limitations.md](docs/limitations.md). Personal
+data handling and the EU AI Act: [docs/data-protection.md](docs/data-protection.md). What comes
+next: [docs/future-improvements.md](docs/future-improvements.md).
+
+## Repository guide
+
+| Path | Purpose |
 |---|---|
-| `src/extraction/` | Job cleaning and structured extraction |
-| `src/llm/` | Provider-independent structured generation |
-| `src/rag/` | CV ingestion, embeddings, storage, retrieval, and Q&A |
-| `src/data_sources/` | Optional live source and fixture access |
-| `src/matching/` | Deterministic, evidence-aware Job–CV matching |
-| `src/tools/` | Validated tool schemas, registry, and tool implementations |
-| `src/agent/` | Framework-free, bounded tool-calling agent loop (baseline) |
+| `src/extraction/` | job-text cleaning and structured extraction |
+| `src/rag/` | CV parsing, chunking, embeddings, pgvector store, retrieval, grounded Q&A |
+| `src/matching/` | deterministic, evidence-aware job–CV matching and ranking |
+| `src/tools/` | tool schemas, registry, implementations, saved-job stores |
+| `src/agent/` | framework-free agent loop, versioned prompts, grounding check |
 | `src/graph/` | LangGraph agent: state, nodes, routing, checkpointing |
-| `src/api/` | FastAPI app, schemas, error contract, dependencies |
-| `src/mcp_server/` | MCP adapter over the shared tool registry |
-| `scripts/` | CLI and evaluation entry points |
-| `tests/` | Offline unit tests and opt-in integration test |
-| `data/fixtures/` | Synthetic examples and evaluation labels |
-| `benchmarks/` and `evaluation/results/` | Recorded measurements and reports |
-| `docs/` | Architecture and detailed setup notes |
+| `src/api/`, `src/mcp_server/` | REST and MCP adapters |
+| `src/llm/` | provider interface, OpenAI provider, fixture provider, factory |
+| `src/observability/` | tracing, metrics, pricing, cache, run context, cost log |
+| `src/config.py`, `src/db.py` | environment configuration, schema initialization |
+| `scripts/` | CLIs, servers and evaluators |
+| `data/fixtures/` | synthetic CV, jobs and labeled evaluation cases |
+| `evaluation/results/`, `benchmarks/` | recorded reports |
+| `infra/azure/`, `.github/workflows/` | deployment and CI |
+| `docs/` | architecture, API, MCP, evaluation, operations and governance notes |
 
 ## License
 

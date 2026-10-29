@@ -1,10 +1,47 @@
+# Local stack for the actual architecture.
+#
+#   docker compose up -d --build --wait                     # API + PostgreSQL/pgvector (fixture mode, no keys)
+#   docker compose --profile observability up -d --wait     # + self-hosted Langfuse (UI on http://localhost:3000)
+#
+# Every published port binds to 127.0.0.1. Default credentials below are for a local
+# laptop only (marked CHANGEME); never reuse them on a reachable host.
+x-langfuse-env: &langfuse-env
+  DATABASE_URL: postgresql://langfuse:${LANGFUSE_DB_PASSWORD:-langfuse_local}@langfuse-postgres:5432/langfuse
+  NEXTAUTH_URL: http://localhost:3000
+  SALT: ${LANGFUSE_SALT:-local-dev-salt}                                   # CHANGEME
+  ENCRYPTION_KEY: ${LANGFUSE_ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000}  # CHANGEME
+  TELEMETRY_ENABLED: "false"
+  CLICKHOUSE_MIGRATION_URL: clickhouse://clickhouse:9000
+  CLICKHOUSE_URL: http://clickhouse:8123
+  CLICKHOUSE_USER: clickhouse
+  CLICKHOUSE_PASSWORD: ${LANGFUSE_CLICKHOUSE_PASSWORD:-clickhouse_local}
+  CLICKHOUSE_CLUSTER_ENABLED: "false"
+  LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+  LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+  LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: minio
+  LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${LANGFUSE_MINIO_PASSWORD:-minio_local_secret}
+  LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://minio:9000
+  LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+  LANGFUSE_S3_EVENT_UPLOAD_PREFIX: events/
+  LANGFUSE_S3_MEDIA_UPLOAD_BUCKET: langfuse
+  LANGFUSE_S3_MEDIA_UPLOAD_REGION: auto
+  LANGFUSE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: minio
+  LANGFUSE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: ${LANGFUSE_MINIO_PASSWORD:-minio_local_secret}
+  LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://minio:9000
+  LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: "true"
+  LANGFUSE_S3_MEDIA_UPLOAD_PREFIX: media/
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  REDIS_AUTH: ${LANGFUSE_REDIS_PASSWORD:-redis_local_secret}
+
 services:
+  # --- Application ---------------------------------------------------------------------
   postgres:
     image: pgvector/pgvector:pg16
     environment:
       POSTGRES_DB: careermatch
       POSTGRES_USER: careermatch
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-careermatch_local}           # CHANGEME
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
@@ -14,5 +51,155 @@ services:
       interval: 5s
       timeout: 5s
       retries: 12
+
+  api:
+    build: .
+    image: job-match-agent:local
+    environment:
+      APP_MODE: ${APP_MODE:-fixture}
+      APP_ENV: ${APP_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DATABASE_URL: postgresql://careermatch:${POSTGRES_PASSWORD:-careermatch_local}@postgres:5432/careermatch
+      # Mode-specific ID: fixture (hash) and live (OpenAI) embeddings never overwrite each other
+      # or the CLI's "synthetic-demo" record.
+      CV_ID: ${CV_ID:-synthetic-demo-${APP_MODE:-fixture}}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      AGENT_PROMPT_VERSION: ${AGENT_PROMPT_VERSION:-v2}
+      AGENT_MAX_RUN_TOKENS: ${AGENT_MAX_RUN_TOKENS:-60000}
+      LLM_CACHE_ENABLED: ${LLM_CACHE_ENABLED:-true}
+      TRACING_ENABLED: ${TRACING_ENABLED:-false}
+      LANGFUSE_HOST: http://langfuse-web:3000
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-pk-lf-local-dev}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-sk-lf-local-dev}
+      LANGFUSE_CAPTURE_CONTENT: ${LANGFUSE_CAPTURE_CONTENT:-false}
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/ready', timeout=4)"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 6
+    # Covers uvicorn's 20 s graceful shutdown plus the bounded trace flush.
+    stop_grace_period: 30s
+    restart: unless-stopped
+
+  # --- Self-hosted Langfuse (profile: observability) ------------------------------------
+  langfuse-web:
+    profiles: ["observability"]
+    image: langfuse/langfuse:4
+    environment:
+      <<: *langfuse-env
+      NEXTAUTH_SECRET: ${LANGFUSE_NEXTAUTH_SECRET:-local-dev-nextauth-secret}   # CHANGEME
+      LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://localhost:9090
+      LANGFUSE_S3_MEDIA_UPLOAD_INTERNAL_ENDPOINT: http://minio:9000
+      # Headless initialization: a local org/project whose API keys the api service uses.
+      LANGFUSE_INIT_ORG_ID: job-match-local
+      LANGFUSE_INIT_ORG_NAME: Job Match Agent (local)
+      LANGFUSE_INIT_PROJECT_ID: job-match-agent
+      LANGFUSE_INIT_PROJECT_NAME: job-match-agent
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-pk-lf-local-dev}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-sk-lf-local-dev}
+      LANGFUSE_INIT_USER_EMAIL: ${LANGFUSE_INIT_USER_EMAIL:-admin@example.com}
+      LANGFUSE_INIT_USER_NAME: admin
+      LANGFUSE_INIT_USER_PASSWORD: ${LANGFUSE_INIT_USER_PASSWORD:-local-admin-password}  # CHANGEME
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on: &langfuse-deps
+      langfuse-postgres:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      # The Next.js server listens on the container hostname, not 127.0.0.1; the image has node but no curl.
+      test: ["CMD", "node", "-e", "fetch('http://'+require('os').hostname()+':3000/api/public/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 12
+    restart: unless-stopped
+
+  langfuse-worker:
+    profiles: ["observability"]
+    image: langfuse/langfuse-worker:4
+    environment:
+      <<: *langfuse-env
+    depends_on: *langfuse-deps
+    restart: unless-stopped
+
+  langfuse-postgres:
+    profiles: ["observability"]
+    image: postgres:17
+    environment:
+      POSTGRES_DB: langfuse
+      POSTGRES_USER: langfuse
+      POSTGRES_PASSWORD: ${LANGFUSE_DB_PASSWORD:-langfuse_local}
+    volumes:
+      - langfuse_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langfuse -d langfuse"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  clickhouse:
+    profiles: ["observability"]
+    image: clickhouse/clickhouse-server:25.12
+    user: "101:101"
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: ${LANGFUSE_CLICKHOUSE_PASSWORD:-clickhouse_local}
+    volumes:
+      - langfuse_clickhouse:/var/lib/clickhouse
+      - langfuse_clickhouse_logs:/var/log/clickhouse-server
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 12
+
+  minio:
+    profiles: ["observability"]
+    image: cgr.dev/chainguard/minio:latest
+    entrypoint: sh
+    command: -c 'mkdir -p /data/langfuse && minio server --address ":9000" --console-address ":9001" /data'
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: ${LANGFUSE_MINIO_PASSWORD:-minio_local_secret}
+    ports:
+      - "127.0.0.1:9090:9000"
+    volumes:
+      - langfuse_minio:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      timeout: 5s
+      start_period: 5s
+      retries: 30
+
+  redis:
+    profiles: ["observability"]
+    image: redis:7
+    command: --requirepass ${LANGFUSE_REDIS_PASSWORD:-redis_local_secret} --maxmemory-policy noeviction
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${LANGFUSE_REDIS_PASSWORD:-redis_local_secret}", "ping"]
+      interval: 3s
+      timeout: 10s
+      retries: 10
+
 volumes:
   cv_postgres:
+  langfuse_postgres:
+  langfuse_clickhouse:
+  langfuse_clickhouse_logs:
+  langfuse_minio:

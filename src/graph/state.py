@@ -13,7 +13,7 @@ from src.agent.schemas import AgentConfig, AgentRunResult, ToolCallRecord
 from src.llm.tool_calling import ConversationItem, ToolCall
 
 GraphRunStatus = Literal["completed", "max_model_turns_exceeded", "max_tool_calls_exceeded",
-                         "provider_error", "invalid_tool_requests", "graph_recursion_limit"]
+                         "provider_error", "budget_exceeded", "invalid_tool_requests", "graph_recursion_limit"]
 
 # Terminal routes taken from the graph's conditional edges.
 Route = Literal["execute_tools", "finalize", "fail", "agent"]

@@ -18,12 +18,26 @@ class ApiModel(BaseModel):
 
 
 class HealthResponse(ApiModel):
+    """Liveness: the process is up and its services are built. Does not touch external dependencies."""
     status: Literal["ok"] = "ok"
     version: str
+    mode: str = Field(description="fixture (scripted, no paid calls), live (OpenAI) or custom (tests).")
     agent: Literal["langgraph"] = "langgraph"
     chat_available: bool = Field(description="False when no LLM provider is configured.")
     tools: list[str]
     catalog_jobs: int = Field(ge=0)
+
+
+class ReadinessCheck(ApiModel):
+    ok: bool
+    detail: str
+
+
+class ReadyResponse(ApiModel):
+    """Readiness: required dependencies are usable. Never calls the LLM provider."""
+    status: Literal["ready", "not_ready"]
+    mode: str
+    checks: dict[str, ReadinessCheck]
 
 
 # --- Jobs ----------------------------------------------------------------------

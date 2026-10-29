@@ -1,7 +1,7 @@
 """Minimal saved-job persistence and the save_job tool.
 
 A JSON file is enough for a single-user CLI. Writes are atomic (temp file +
-replace). A database-backed store can implement SavedJobStore later.
+replace). PostgresSavedJobStore is used by the API when DATABASE_URL is set.
 """
 from __future__ import annotations
 
@@ -86,6 +86,39 @@ class JsonFileSavedJobStore:
                 Path(tmp).unlink(missing_ok=True)
                 raise
             return record, True
+
+
+class PostgresSavedJobStore:
+    """saved_jobs table (created by src.db); owner_id is fixed until authentication exists."""
+
+    def __init__(self, dsn: str, owner_id: str = "default") -> None:
+        self.dsn, self.owner_id = dsn, owner_id
+
+    def _connect(self):
+        import psycopg
+        return psycopg.connect(self.dsn, connect_timeout=10)
+
+    @staticmethod
+    def _record(row) -> SavedJob:
+        return SavedJob(job_id=row[0], note=row[1], saved_at=row[2].astimezone(timezone.utc).isoformat(
+            timespec="seconds"))
+
+    def list(self) -> list[SavedJob]:
+        with self._connect() as conn:
+            rows = conn.execute("SELECT job_id, note, saved_at FROM saved_jobs WHERE owner_id=%s "
+                                "ORDER BY saved_at, job_id", (self.owner_id,)).fetchall()
+        return [self._record(row) for row in rows]
+
+    def save(self, job_id: str, note: str | None) -> tuple[SavedJob, bool]:
+        with self._connect() as conn:
+            created = conn.execute("INSERT INTO saved_jobs (owner_id, job_id, note) VALUES (%s, %s, %s) "
+                                   "ON CONFLICT (owner_id, job_id) DO NOTHING RETURNING job_id, note, saved_at",
+                                   (self.owner_id, job_id, note)).fetchone()
+            if created is not None:
+                return self._record(created), True
+            row = conn.execute("SELECT job_id, note, saved_at FROM saved_jobs WHERE owner_id=%s AND job_id=%s",
+                               (self.owner_id, job_id)).fetchone()
+        return self._record(row), False
 
 
 def save_job(args: SaveJobArgs, ctx: "ToolContext") -> SaveJobResult:

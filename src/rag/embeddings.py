@@ -34,9 +34,14 @@ class OpenAIEmbeddings:
         self.client, self.model, self.dimensions = client, model, dimensions
 
     def embed(self, texts: Sequence[str]) -> list[list[float]]:
+        return self.embed_with_usage(texts)[0]
+
+    def embed_with_usage(self, texts: Sequence[str]):
+        """Vectors plus summed token usage (src.llm.provider.LLMUsage) across batches."""
+        from src.llm.provider import LLMUsage
         if any(not text.strip() or len(text) > 2000 for text in texts):
             raise ValueError("Embedding inputs must contain 1..2000 characters.")
-        output = []
+        output, tokens = [], 0
         for offset in range(0, len(texts), 32):
             batch = list(texts[offset:offset + 32])
             response = self.client.embeddings.create(model=self.model, input=batch,
@@ -45,7 +50,8 @@ class OpenAIEmbeddings:
             if [item.index for item in items] != list(range(len(batch))):
                 raise ValueError("Unexpected embedding response indices.")
             output.extend(validate_vectors([item.embedding for item in items], len(batch), self.dimensions))
-        return output
+            tokens += getattr(getattr(response, "usage", None), "prompt_tokens", 0) or 0
+        return output, LLMUsage(input_tokens=tokens)
 
 
 class HashEmbeddings:

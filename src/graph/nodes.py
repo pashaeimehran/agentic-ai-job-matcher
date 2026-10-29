@@ -24,6 +24,8 @@ from src.agent.schemas import ToolCallRecord
 from src.llm.tool_calling import (AssistantTurn, ChatMessage, ConversationItem, ToolCallingLLMProvider,
                                   ToolResultMessage)
 from src.graph.state import AgentState, GraphConfig, Route
+from src.observability.context import BudgetExceededError
+from src.observability.tracing import get_tracer
 from src.tools.registry import ToolRegistry
 
 logger = logging.getLogger("src.graph")
@@ -54,7 +56,7 @@ def close_dangling_calls(messages: list[ConversationItem]) -> list[ConversationI
 # --- Routing (pure) --------------------------------------------------------------
 
 def route_after_agent(state: AgentState) -> Route:
-    if state.get("status") == "provider_error":
+    if state.get("status") in ("provider_error", "budget_exceeded"):
         return "fail"
     return "execute_tools" if state.get("pending_calls") else "finalize"
 
@@ -70,6 +72,19 @@ def route_after_tools(state: AgentState, limits: GraphConfig) -> Route:
 def failure_status(state: AgentState) -> str:
     """Status recorded by the fail node; a missing status means the turn budget ran out."""
     return state.get("status") or "max_model_turns_exceeded"
+
+
+def traced_node(name: str, node):
+    """Wrap a node in a "graph.<name>" span; the node itself stays free of tracing code."""
+    def run(state: AgentState) -> dict:
+        metadata = {"run_id": state.get("run_id"), "model_turns": state.get("model_turns", 0)}
+        with get_tracer().span(f"graph.{name}", kind="chain", metadata=metadata) as span:
+            update = node(state)
+            span.update(metadata={"status": update.get("status"),
+                                  "pending_calls": len(update.get("pending_calls") or [])})
+            return update
+    run.__name__ = name
+    return run
 
 
 # --- Nodes ----------------------------------------------------------------------
@@ -101,6 +116,10 @@ class GraphNodes:
         path = [*state.get("path", []), "agent"]
         try:
             reply = self.provider.complete(state["messages"], self.registry.specs())
+        except BudgetExceededError as exc:
+            _log("model_turn_failed", run_id=state["run_id"], step=step, exception=type(exc).__name__)
+            return {"model_turns": step - 1, "path": path, "pending_calls": [], "status": "budget_exceeded",
+                    "error": str(exc)}
         except Exception as exc:  # noqa: BLE001 - provider payloads are not echoed
             _log("model_turn_failed", run_id=state["run_id"], step=step, exception=type(exc).__name__)
             return {"model_turns": step, "path": path, "pending_calls": [], "status": "provider_error",

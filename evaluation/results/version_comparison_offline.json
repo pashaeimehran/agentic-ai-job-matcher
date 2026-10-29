@@ -1,0 +1,736 @@
+{
+  "mode": "offline",
+  "generated_at": "2026-10-28T23:07:24+00:00",
+  "baseline": "v1",
+  "candidate": "v2",
+  "change": "Prompt-only change. v2 adds explicit definitions of supported / unmet / unknown and forbids describing an unknown requirement as lacking, missing, a gap, a weakness or unmet. Tools, deterministic matching and scoring, model, limits and scenarios are unchanged.",
+  "agent": "langgraph",
+  "cache": "disabled",
+  "scenarios": 6,
+  "repeats": 1,
+  "label_problems": [],
+  "deterministic_score_consistency": true,
+  "scored_jobs": 9,
+  "summary": {
+    "v1": {
+      "runs": 6,
+      "task_success_rate": 1.0,
+      "completed_rate": 1.0,
+      "runs_with_mischaracterized_unknown": 0,
+      "mischaracterized_unknown_rate": 0.0,
+      "mischaracterized_requirement_mentions": 0,
+      "unknown_coverage": 1.0,
+      "runs_with_ungrounded_scores": 0,
+      "calculate_match_coverage": 1.0,
+      "mean_tool_calls": 1.167,
+      "mean_model_turns": 2.167,
+      "wall_latency_ms_p50": 9.2,
+      "wall_latency_ms_p95": 12.6,
+      "mean_tokens_per_query": 0.0,
+      "mean_cost_usd_per_query": 0.0,
+      "total_cost_usd": 0.0
+    },
+    "v2": {
+      "runs": 6,
+      "task_success_rate": 1.0,
+      "completed_rate": 1.0,
+      "runs_with_mischaracterized_unknown": 0,
+      "mischaracterized_unknown_rate": 0.0,
+      "mischaracterized_requirement_mentions": 0,
+      "unknown_coverage": 1.0,
+      "runs_with_ungrounded_scores": 0,
+      "calculate_match_coverage": 1.0,
+      "mean_tool_calls": 1.167,
+      "mean_model_turns": 2.167,
+      "wall_latency_ms_p50": 7.8,
+      "wall_latency_ms_p95": 12.1,
+      "mean_tokens_per_query": 0.0,
+      "mean_cost_usd_per_query": 0.0,
+      "total_cost_usd": 0.0
+    }
+  },
+  "mischaracterization_fisher_p_two_sided": 1.0,
+  "per_case": {
+    "v1": {
+      "gaps-llm-engineer": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 10.5,
+        "wall_latency_ms_p95": 10.5,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "lacking-genai-developer": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 9.1,
+        "wall_latency_ms_p95": 9.1,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "weaknesses-cpp-security": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 7.6,
+        "wall_latency_ms_p95": 7.6,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "unmet-and-unknown-platform": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 8.7,
+        "wall_latency_ms_p95": 8.7,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "compare-gaps-two-jobs": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 9.2,
+        "wall_latency_ms_p95": 9.2,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "search-and-explain-germany": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 2.0,
+        "mean_model_turns": 3.0,
+        "wall_latency_ms_p50": 13.3,
+        "wall_latency_ms_p95": 13.3,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      }
+    },
+    "v2": {
+      "gaps-llm-engineer": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 8.0,
+        "wall_latency_ms_p95": 8.0,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "lacking-genai-developer": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 6.9,
+        "wall_latency_ms_p95": 6.9,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "weaknesses-cpp-security": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 7.7,
+        "wall_latency_ms_p95": 7.7,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "unmet-and-unknown-platform": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 6.9,
+        "wall_latency_ms_p95": 6.9,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "compare-gaps-two-jobs": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 9.1,
+        "wall_latency_ms_p95": 9.1,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      },
+      "search-and-explain-germany": {
+        "runs": 1,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 2.0,
+        "mean_model_turns": 3.0,
+        "wall_latency_ms_p50": 13.1,
+        "wall_latency_ms_p95": 13.1,
+        "mean_tokens_per_query": 0.0,
+        "mean_cost_usd_per_query": 0.0,
+        "total_cost_usd": 0.0
+      }
+    }
+  },
+  "limitations": "offline mode replays a deterministic fixture provider: it validates labels, harness and score determinism, not model behaviour",
+  "runs": {
+    "v1": [
+      {
+        "repeat": 0,
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 10.507,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 9.144,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 7.56,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 8.738,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 9.207,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 13.334,
+        "llm_calls": 3,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      }
+    ],
+    "v2": [
+      {
+        "repeat": 0,
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 7.983,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 6.877,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 7.681,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 6.86,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 9.123,
+        "llm_calls": 2,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      },
+      {
+        "repeat": 0,
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ]
+        ],
+        "task_success": true,
+        "wall_latency_ms": 13.122,
+        "llm_calls": 3,
+        "total_tokens": 0,
+        "estimated_cost_usd": 0.0
+      }
+    ]
+  }
+}

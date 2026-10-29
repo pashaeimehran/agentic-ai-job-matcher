@@ -1,0 +1,2905 @@
+{
+  "mode": "live",
+  "generated_at": "2026-10-28T23:15:36+00:00",
+  "baseline": "v1",
+  "candidate": "v2",
+  "change": "Prompt-only change. v2 adds explicit definitions of supported / unmet / unknown and forbids describing an unknown requirement as lacking, missing, a gap, a weakness or unmet. Tools, deterministic matching and scoring, model, limits and scenarios are unchanged.",
+  "agent": "langgraph",
+  "cache": "disabled",
+  "scenarios": 6,
+  "repeats": 5,
+  "label_problems": [],
+  "deterministic_score_consistency": true,
+  "scored_jobs": 11,
+  "summary": {
+    "v1": {
+      "runs": 30,
+      "task_success_rate": 0.8667,
+      "completed_rate": 1.0,
+      "runs_with_mischaracterized_unknown": 4,
+      "mischaracterized_unknown_rate": 0.1333,
+      "mischaracterized_requirement_mentions": 16,
+      "unknown_coverage": 0.9615,
+      "runs_with_ungrounded_scores": 0,
+      "calculate_match_coverage": 1.0,
+      "mean_tool_calls": 1.6,
+      "mean_model_turns": 2.167,
+      "wall_latency_ms_p50": 3734.4,
+      "wall_latency_ms_p95": 9949.9,
+      "mean_tokens_per_query": 3329.2,
+      "mean_cost_usd_per_query": 0.000632,
+      "total_cost_usd": 0.018967
+    },
+    "v2": {
+      "runs": 30,
+      "task_success_rate": 0.9667,
+      "completed_rate": 1.0,
+      "runs_with_mischaracterized_unknown": 1,
+      "mischaracterized_unknown_rate": 0.0333,
+      "mischaracterized_requirement_mentions": 5,
+      "unknown_coverage": 0.9615,
+      "runs_with_ungrounded_scores": 0,
+      "calculate_match_coverage": 1.0,
+      "mean_tool_calls": 2.367,
+      "mean_model_turns": 2.167,
+      "wall_latency_ms_p50": 3931.5,
+      "wall_latency_ms_p95": 11691.9,
+      "mean_tokens_per_query": 3800.9,
+      "mean_cost_usd_per_query": 0.000733,
+      "total_cost_usd": 0.022002
+    }
+  },
+  "mischaracterization_fisher_p_two_sided": 0.3533,
+  "per_case": {
+    "v1": {
+      "gaps-llm-engineer": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 3300.2,
+        "wall_latency_ms_p95": 4235.0,
+        "mean_tokens_per_query": 2409.8,
+        "mean_cost_usd_per_query": 0.000457,
+        "total_cost_usd": 0.002286
+      },
+      "lacking-genai-developer": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 3472.2,
+        "wall_latency_ms_p95": 3875.1,
+        "mean_tokens_per_query": 2455.0,
+        "mean_cost_usd_per_query": 0.000465,
+        "total_cost_usd": 0.002327
+      },
+      "weaknesses-cpp-security": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 3560.1,
+        "wall_latency_ms_p95": 6623.0,
+        "mean_tokens_per_query": 2510.8,
+        "mean_cost_usd_per_query": 0.000461,
+        "total_cost_usd": 0.002306
+      },
+      "unmet-and-unknown-platform": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 3210.0,
+        "wall_latency_ms_p95": 3969.6,
+        "mean_tokens_per_query": 2425.6,
+        "mean_cost_usd_per_query": 0.000443,
+        "total_cost_usd": 0.002217
+      },
+      "compare-gaps-two-jobs": {
+        "runs": 5,
+        "task_success_rate": 0.6,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 2,
+        "mischaracterized_unknown_rate": 0.4,
+        "mischaracterized_requirement_mentions": 12,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 2.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 5258.3,
+        "wall_latency_ms_p95": 5588.7,
+        "mean_tokens_per_query": 3196.0,
+        "mean_cost_usd_per_query": 0.000668,
+        "total_cost_usd": 0.003338
+      },
+      "search-and-explain-germany": {
+        "runs": 5,
+        "task_success_rate": 0.6,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 2,
+        "mischaracterized_unknown_rate": 0.4,
+        "mischaracterized_requirement_mentions": 4,
+        "unknown_coverage": 0.8889,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 3.6,
+        "mean_model_turns": 3.0,
+        "wall_latency_ms_p50": 9888.8,
+        "wall_latency_ms_p95": 10499.9,
+        "mean_tokens_per_query": 6978.0,
+        "mean_cost_usd_per_query": 0.001298,
+        "total_cost_usd": 0.006492
+      }
+    },
+    "v2": {
+      "gaps-llm-engineer": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 3320.3,
+        "wall_latency_ms_p95": 4019.1,
+        "mean_tokens_per_query": 2685.2,
+        "mean_cost_usd_per_query": 0.000491,
+        "total_cost_usd": 0.002453
+      },
+      "lacking-genai-developer": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 3502.7,
+        "wall_latency_ms_p95": 3936.6,
+        "mean_tokens_per_query": 2680.2,
+        "mean_cost_usd_per_query": 0.00049,
+        "total_cost_usd": 0.002449
+      },
+      "weaknesses-cpp-security": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 3484.4,
+        "wall_latency_ms_p95": 4017.1,
+        "mean_tokens_per_query": 2738.6,
+        "mean_cost_usd_per_query": 0.000506,
+        "total_cost_usd": 0.002532
+      },
+      "unmet-and-unknown-platform": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 1.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 3648.4,
+        "wall_latency_ms_p95": 4024.3,
+        "mean_tokens_per_query": 2652.6,
+        "mean_cost_usd_per_query": 0.000488,
+        "total_cost_usd": 0.002441
+      },
+      "compare-gaps-two-jobs": {
+        "runs": 5,
+        "task_success_rate": 0.8,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 1,
+        "mischaracterized_unknown_rate": 0.2,
+        "mischaracterized_requirement_mentions": 5,
+        "unknown_coverage": 1.0,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 2.0,
+        "mean_model_turns": 2.0,
+        "wall_latency_ms_p50": 6215.6,
+        "wall_latency_ms_p95": 7176.5,
+        "mean_tokens_per_query": 3466.6,
+        "mean_cost_usd_per_query": 0.000719,
+        "total_cost_usd": 0.003596
+      },
+      "search-and-explain-germany": {
+        "runs": 5,
+        "task_success_rate": 1.0,
+        "completed_rate": 1.0,
+        "runs_with_mischaracterized_unknown": 0,
+        "mischaracterized_unknown_rate": 0.0,
+        "mischaracterized_requirement_mentions": 0,
+        "unknown_coverage": 0.8889,
+        "runs_with_ungrounded_scores": 0,
+        "calculate_match_coverage": 1.0,
+        "mean_tool_calls": 8.2,
+        "mean_model_turns": 3.0,
+        "wall_latency_ms_p50": 11633.1,
+        "wall_latency_ms_p95": 13211.6,
+        "mean_tokens_per_query": 8582.0,
+        "mean_cost_usd_per_query": 0.001706,
+        "total_cost_usd": 0.008531
+      }
+    }
+  },
+  "limitations": "5 live sample(s) per scenario and version on synthetic data with one model; the lexical deficit detector is conservative and can miss paraphrases. Treat differences as indicative, not statistically conclusive.",
+  "runs": {
+    "v1": [
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV has a compatibility score of **52.87/100** for the LLM Engineer position (fixture-21). Here's a breakdown of how you fit the role:\n\n### Supported Requirements\n- **Python**: Supported (evidenced by the following statement in your CV: \"Python for data processing and model training.\")\n- **English**: Supported (you listed English proficiency at C1 level and German at B1 level).\n\n### Unmet Requirements\n- No unmet requirements were identified.\n\n### Unknown Requirements\n- **OpenAI API**: Not evidenced in your CV; absence is not proof of inability.\n- **Pydantic**: Not evidenced in your CV; absence is not proof of inability.\n\n### Summary\nYou have demonstrated relevant skills in Python and English, which are crucial for the role. However, details about your experience with the OpenAI API and Pydantic are missing from your CV. Including this information could enhance your fit for the position.",
+        "wall_latency_ms": 4442.588,
+        "llm_calls": 2,
+        "total_tokens": 2414,
+        "estimated_cost_usd": 0.00045975,
+        "repeat": 0
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the **Generative AI Developer** role (job ID: fixture-29), you have a match score of **52.3/100**. Here's a breakdown of the requirements:\n\n### Supported Requirements:\n- **Python**: Explicitly evidenced in your CV.\n  - **Evidence**: \"Python for data processing and model training.\"\n- **German**: Language explicitly listed; the job did not specify a proficiency level.\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unmet Requirements:\n- There are no unmet requirements for this role.\n\n### Unknown Requirements:\nThese are skills or experiences not evidenced in your CV:\n- **RAG**: Not evidenced; absence is not proof of inability.\n- **pgvector**: Not evidenced; absence is not proof of inability.\n- **3 years of experience**: No precise, evidenced employment boundaries in your CV.\n\nIf you need further details or want to explore related job roles, let me know!",
+        "wall_latency_ms": 3171.545,
+        "llm_calls": 2,
+        "total_tokens": 2459,
+        "estimated_cost_usd": 0.00046785,
+        "repeat": 0
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **C++ Security Engineer (match-06-cpp-security)**, your compatibility score is **28.53/100**. Here are your weaknesses:\n\n### Unmet Requirements:\n- **German C2 proficiency**: Your CV indicates that your German is at a B1 level.\n\n### Unknown Requirements:\n- **C**: There is no evidence of experience with this language in your CV.\n- **Rust**: No evidence of experience with this language in your CV.\n- **Linux**: No evidence of experience with this operating system in your CV.\n- **3 years of experience**: There are no clear indications of meeting this specific requirement in your employment history.\n\n### Supported Requirement:\n- **C++**: This skill is explicitly evidenced in your CV.\n\nGiven these points, you may want to improve or clarify your qualifications in the areas marked as unmet or unknown before applying, especially the German language requirement.",
+        "wall_latency_ms": 3051.124,
+        "llm_calls": 2,
+        "total_tokens": 2492,
+        "estimated_cost_usd": 0.0004692,
+        "repeat": 0
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **Senior Platform Engineer** (job ID: match-05-senior-platform), here are the compatibility details:\n\n- **Match Score**: **41.26/100**\n  \n### Requirements Breakdown:\n\n1. **Supported**:\n   - **Python**: \n     - Explicitly evidenced in your CV.\n     - Example: \"Python for data processing and model training.\"\n\n2. **Unmet**:\n   - **German C1**: \n     - Proficiency noted as below C1.\n     - Example: \"English C1 and German B1.\"\n\n3. **Unknown**:\n   - **Kubernetes**: \n     - Not evidenced in CV; absence doesn't imply lack of capability.\n   - **5 years of experience**: \n     - No precise evidence of meeting this requirement.\n\n### Summary:\nYou meet the Python requirement, but the language requirement is unmet, and there are unknowns regarding Kubernetes and your total years of experience relevant to the role.",
+        "wall_latency_ms": 4158.406,
+        "llm_calls": 2,
+        "total_tokens": 2432,
+        "estimated_cost_usd": 0.0004665,
+        "repeat": 0
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here\u2019s a comparison of your fit for the two positions, including your skill gaps for each role:\n\n### Position: **Senior GenAI Engineer (fixture-05)**\n- **Match Score:** 48.06/100\n- **Supported Skills:**\n  - **Python**\n    - Evidenced in CV: \"Python for data processing and model training.\"\n  - **English**\n    - Evidenced in CV: \"English C1 and German B1.\"\n\n- **Unmet Requirements:** None\n- **Unknown Requirements:**\n  - **RAG**\n  - **LangChain**\n  - **Azure OpenAI**\n  - **5 years of experience**\n  \nYour CV does not provide evidence for the following skills, which could indicate gaps for this role:\n- Experience with RAG, LangChain, and Azure OpenAI.\n- No clear indication of having 5 years of experience in relevant fields.\n\n### Position: **Cloud Platform Engineer (match-04-cloud-platform)**\n- **Match Score:** 53.45/100\n- **Supported Skills:**\n  - **Azure**\n    - Evidenced in CV: \"Deployed a demonstration service on Azure Container Apps.\"\n  - **English**\n    - Evidenced in CV: \"English C1 and German B1.\"\n\n- **Unmet Requirements:** None\n- **Unknown Requirements:**\n  - **Terraform**\n  - **Kubernetes**\n\nYour CV does not provide evidence for the following skills, indicating potential gaps for this position:\n- Experience with Terraform and Kubernetes.\n\n### Summary of Skill Gaps:\n- For **Senior GenAI Engineer**: Lack of evidence for RAG, LangChain, Azure OpenAI, and specific experience duration.\n- For **Cloud Platform Engineer**: Lack of evidence for Terraform and Kubernetes.\n\nIf you need assistance in addressing these skill gaps or have any questions, feel free to ask!",
+        "wall_latency_ms": 4956.24,
+        "llm_calls": 2,
+        "total_tokens": 3216,
+        "estimated_cost_usd": 0.0006795,
+        "repeat": 0
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv"
+        ],
+        "tool_calls": 10,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are the top AI Engineer jobs found in Germany that fit your CV:\n\n### 1. AI Solutions Engineer\n- **Location:** Heidelberg\n- **Score:** 74.31/100\n- **Skills Required:** Python, Azure, REST APIs.\n- **Supported Skills:** Python, Azure, English, German\n- **Unmet Skills:** None\n- **Unknown Skills:** REST APIs\n- **Explanation:** You clearly demonstrated your skills in Python and Azure in your CV. However, there is no evidence that you have experience with REST APIs.\n\n---\n\n### 2. AI Platform Engineer\n- **Location:** Frankfurt\n- **Score:** 73.72/100\n- **Skills Required:** Python, Docker, Kubernetes, Azure.\n- **Supported Skills:** Python, Docker, Azure, English\n- **Unmet Skills:** None\n- **Unknown Skills:** Kubernetes, 4 years of experience\n- **Explanation:** Your skills in Python, Docker, and Azure are well-supported in your CV. However, there is no evidence for your experience with Kubernetes or meeting the 4 years of experience requirement.\n\n---\n\n### 3. AI Engineer\n- **Location:** Berlin\n- **Score:** 69.59/100\n- **Skills Required:** Python, LangGraph, Azure.\n- **Supported Skills:** Python, Azure, English, German\n- **Unmet Skills:** None\n- **Unknown Skills:** LangGraph, 3 years of experience\n- **Explanation:** You have shown proficiency in Python and Azure, but the job requires knowledge of LangGraph and 3 years of experience, which is not evidenced in your CV.\n\n---\n\n### 4. Applied AI Engineer\n- **Location:** Cologne\n- **Score:** 69.51/100\n- **Skills Required:** Python, FastAPI, PostgreSQL.\n- **Supported Skills:** Python, FastAPI, German, English\n- **Unmet Skills:** None\n- **Unknown Skills:** PostgreSQL, 2 years of experience\n- **Explanation:** Your skills in Python and FastAPI are well-documented in your CV. However, there is no evidence of experience with PostgreSQL or the 2 years of relevant experience.\n\n---\n\n### 5. Junior AI Engineer\n- **Location:** Stuttgart\n- **Score:** 69.51/100\n- **Skills Required:** Python, SQL, Git.\n- **Supported Skills:** Python, SQL, English, German\n- **Unmet Skills:** None\n- **Unknown Skills:** Git, 1 year of experience\n- **Explanation:** Your skills in Python and SQL are supported, but there is no evidence of your Git experience or to confirm you meet the 1 year of experience requirement.\n\n---\n\nIf you would like to pursue any of these jobs further or save a specific job, just let me know!",
+        "wall_latency_ms": 10624.816,
+        "llm_calls": 3,
+        "total_tokens": 8699,
+        "estimated_cost_usd": 0.0016662,
+        "repeat": 0
+      },
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV matches the LLM Engineer role (fixture-21) with a score of **52.87/100**. Here's a breakdown of your fit:\n\n### Supported Requirements\n- **Python**\n  - *Evidenced in CV*: \"Python for data processing and model training.\"\n  \n- **English**\n  - *Evidenced in CV*: \"English C1 and German B1.\"\n\n### Unmet Requirements\n- None identified.\n\n### Unknown Requirements\n- **OpenAI API**\n  - Not evidenced in your CV; absence does not imply inability.\n  \n- **Pydantic**\n  - Not evidenced in your CV; absence does not imply inability.\n\n### Summary\nYou have strong support in Python and English, but your CV does not show experience with the OpenAI API and Pydantic. Consider adding relevant projects, skills, or experiences involving these technologies to improve your match for this position.",
+        "wall_latency_ms": 3098.462,
+        "llm_calls": 2,
+        "total_tokens": 2402,
+        "estimated_cost_usd": 0.00045255,
+        "repeat": 1
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the Generative AI Developer role (fixture-29), you are lacking evidence for the following requirements:\n\n### Supported Requirements:\n- **Python**: You have this explicitly evidenced in your CV. \n  - **Evidence**: \"Python for data processing and model training.\"\n- **German**: You also meet this requirement with a B1 level in German.\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unmet Requirements:\n- **None** \n\n### Unknown Requirements:\n1. **RAG**: Not evidenced in your CV; your absence of evidence does not indicate inability.\n2. **pgvector**: Similar to RAG, no evidence found for this skill.\n3. **3 years of experience**: Your CV does not provide specific boundaries for your work experience duration.\n\nYour matching score for this role is **52.3/100**. This indicates that while you have some appropriate skills and language capabilities, there are certain areas that require further evidence or experience.",
+        "wall_latency_ms": 3752.665,
+        "llm_calls": 2,
+        "total_tokens": 2464,
+        "estimated_cost_usd": 0.00047085,
+        "repeat": 1
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **C++ Security Engineer** (match-06-cpp-security), your compatibility score is **28.53/100**. Here are your weaknesses:\n\n### Weaknesses:\n1. **Language Skills:**\n   - **German C2:** Your proficiency is below the required level (you currently have German at B1).\n\n2. **Unknown Requirements:**\n   - **C:** Not evidenced in your CV; there's no indication of experience or skills in C.\n   - **Rust:** Not evidenced in your CV; no indication of experience or skills in Rust.\n   - **Linux:** Not evidenced in your CV; no indication of experience or skills in Linux.\n   - **3 Years of Experience:** There's no precise evidence in your CV to demonstrate the required three years of relevant experience.\n\n### Supported Requirements:\n- You have evidenced **C++**, which aligns with the job requirements.\n\nIf you have further questions or need assistance, feel free to ask!",
+        "wall_latency_ms": 7349.765,
+        "llm_calls": 2,
+        "total_tokens": 2500,
+        "estimated_cost_usd": 0.000474,
+        "repeat": 1
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **Senior Platform Engineer**, your compatibility score is **41.26/100**. Here's a breakdown of how you meet or do not meet the requirements:\n\n### Supported Requirements:\n- **Python**: Supported, as evidenced in your CV: \n  - \"Python for data processing and model training.\"\n\n### Unmet Requirements:\n- **German C1**: Unmet. Your CV indicates proficiency below C1:\n  - \"English C1 and German B1.\"\n\n### Unknown Requirements:\n- **Kubernetes**: Unknown; there's no evidence in your CV relating to this skill.\n- **5 years of experience**: Unknown; your CV does not specify the duration of your employment clearly.\n\n### Summary:\nYou meet the Python requirement, but you do not meet the language proficiency requirement for German, and there are gaps in evidence for Kubernetes and the experience duration. Would you like to explore other job opportunities or need assistance with anything else?",
+        "wall_latency_ms": 3124.701,
+        "llm_calls": 2,
+        "total_tokens": 2423,
+        "estimated_cost_usd": 0.0003651,
+        "repeat": 1
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here's a comparison of your fit for the two positions, along with the identified skill gaps:\n\n### 1. **Senior GenAI Engineer (fixture-05)**\n- **Match Score:** 48.06/100\n- **Supported Skills:**\n  - **Python**: Explicitly evidenced in your CV. \n    - **Evidence:** \"Python for data processing and model training.\"\n  - **English**: Language proficiency mentioned in your CV.\n    - **Evidence:** \"English C1 and German B1.\"\n  \n- **Unmet Skills:** None identified.\n- **Unknown Skills:**\n  - **RAG**: Not evidenced in your CV; absence is not proof of inability.\n  - **LangChain**: Not evidenced in your CV.\n  - **Azure OpenAI**: Not evidenced in your CV.\n  - **5 years of experience**: The specific years of experience cannot be determined from your CV.\n\n### 2. **Cloud Platform Engineer (match-04-cloud-platform)**\n- **Match Score:** 53.45/100\n- **Supported Skills:**\n  - **Azure**: Explicitly evidenced in your CV.\n    - **Evidence:** \"Deployed a demonstration service on Azure Container Apps.\"\n  - **English**: Language proficiency mentioned in your CV.\n    - **Evidence:** \"English C1 and German B1.\"\n\n- **Unmet Skills:** None identified.\n- **Unknown Skills:**\n  - **Terraform**: Not evidenced in your CV.\n  - **Kubernetes**: Not evidenced in your CV.\n\n### Summary of Gaps:\n- For **Senior GenAI Engineer**:\n  - Familiarity with RAG, LangChain, and Azure OpenAI.\n  - 5+ years of experience in relevant roles.\n\n- For **Cloud Platform Engineer**:\n  - Knowledge of Terraform and Kubernetes.\n\nFeel free to ask if you want to explore further or have any specific requests!",
+        "wall_latency_ms": 5258.312,
+        "llm_calls": 2,
+        "total_tokens": 3230,
+        "estimated_cost_usd": 0.0006879,
+        "repeat": 1
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are some AI Engineer jobs in Germany that match your CV, along with an explanation of the best matches and the skills you might be lacking.\n\n### 1. **AI Solutions Engineer** (Berlin) - **Score: 74.31/100**\n   - **Supported Skills**: Python, Azure, English, German\n     - *Evidence*: \n       - Python: \"Python for data processing and model training.\"\n       - Azure: \"Deployed a demonstration service on Azure Container Apps.\"\n       - Languages: English C1 and German B1.\n   - **Unknown Skills**: \n     - REST APIs (not evidenced in your CV; absence is not proof of inability)\n\n### 2. **AI Platform Engineer** (Frankfurt) - **Score: 73.72/100**\n   - **Supported Skills**: Python, Docker, Azure, English\n     - *Evidence*:\n       - Python: \"Python for data processing and model training.\"\n       - Docker: \"Packaged applications with Docker and automated checks using GitHub Actions.\"\n       - Azure: \"Deployed a demonstration service on Azure Container Apps.\"\n       - Languages: English C1 and German B1.\n   - **Unknown Skills**: \n     - Kubernetes (not evidenced in your CV)\n     - 4 years of experience (no precise, evidenced employment boundaries)\n\n### 3. **AI Engineer** (Berlin) - **Score: 69.59/100**\n   - **Supported Skills**: Python, Azure, English, German\n     - *Evidence*:\n       - Python: \"Python for data processing and model training.\"\n       - Azure: \"Deployed a demonstration service on Azure Container Apps.\"\n       - Languages: English C1 and German B1.\n   - **Unknown Skills**: \n     - LangGraph (not evidenced in your CV)\n     - 3 years of experience (no precise, evidenced employment boundaries)\n\n### 4. **Applied AI Engineer** (Cologne) - **Score: 69.51/100**\n   - **Supported Skills**: Python, FastAPI, German, English\n     - *Evidence*:\n       - Python: \"Python for data processing and model training.\"\n       - FastAPI: \"Developed a FastAPI service with Pydantic validation and REST endpoints.\"\n       - Languages: English C1 and German B1.\n   - **Unknown Skills**: \n     - PostgreSQL (not evidenced in your CV)\n     - 2 years of experience (no precise, evidenced employment boundaries)\n\n### 5. **Junior AI Engineer** (Stuttgart) - **Score: 69.51/100**\n   - **Supported Skills**: Python, SQL, English, German\n     - *Evidence*:\n       - Python: \"Python for data processing and model training.\"\n       - SQL: \"SQL for relational queries.\"\n       - Languages: English C1 and German B1.\n   - **Unknown Skills**: \n     - Git (not evidenced in your CV)\n     - 1 year of experience (no precise, evidenced employment boundaries)\n\n### Summary of Gaps\n- **REST APIs**, **Kubernetes**, **LangGraph**, **PostgreSQL**, and **Git** are skills that are noted as unknown.\n- Experience levels (2-4 years) for some of the positions are unknown due to lack of precise evidence in your CV.\n\nIf you would like to apply to any of these positions or need further details, let me know!",
+        "wall_latency_ms": 10000.002,
+        "llm_calls": 3,
+        "total_tokens": 6626,
+        "estimated_cost_usd": 0.0013422,
+        "repeat": 1
+      },
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV fits the LLM Engineer position (fixture-21) with a match score of **52.87/100**. Here\u2019s a breakdown of the evaluation:\n\n### Supported Requirements\n- **Python**: Supported\n  - Evidence: \"Python for data processing and model training.\"\n  \n- **English**: Supported\n  - Evidence: \"English C1 and German B1.\"\n\n### Unmet Requirements\n- No unmet requirements were identified.\n\n### Unknown Requirements\n- **OpenAI API**: Not evidenced in your CV.\n- **Pydantic**: Not evidenced in your CV.\n\n### Summary\nYou have solid evidence for the skills in Python and English, which are relevant for the LLM Engineer role. However, the job also seeks familiarity with the OpenAI API and Pydantic, neither of which are reflected in your CV. You may want to emphasize any experience or familiarity you have with those technologies to strengthen your application.",
+        "wall_latency_ms": 3300.169,
+        "llm_calls": 2,
+        "total_tokens": 2409,
+        "estimated_cost_usd": 0.00045675,
+        "repeat": 2
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the **Generative AI Developer** role (fixture-29), you have a match score of **52.3/100**. Here's a breakdown of the requirements where you're lacking or have unknowns:\n\n### Supported Requirements:\n- **Python**: Supported, as it's explicitly evidenced in your CV (e.g., \"Python for data processing and model training\").\n- **German**: Supported; you listed German B1 in your language skills.\n\n### Unmet Requirements:\n- You have no unmet requirements.\n\n### Unknown Requirements:\n1. **RAG**: Not evidenced in your CV; absence does not imply a lack of ability.\n2. **pgvector**: Not evidenced in your CV; absence does not imply a lack of ability.\n3. **3 years of experience**: No precise evidence of having this amount of relevant experience in your CV.\n\nIf you would like to enhance your CV or explore related job opportunities, feel free to ask!",
+        "wall_latency_ms": 3905.737,
+        "llm_calls": 2,
+        "total_tokens": 2452,
+        "estimated_cost_usd": 0.00046365,
+        "repeat": 2
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **C++ Security Engineer** (match-06-cpp-security), your match score is **28.53/100**. Here are your weaknesses:\n\n### Unmet Requirements:\n1. **Language Proficiency: German C2** \n   - Your current proficiency is at B1, which is below the required level.\n\n### Unknown Requirements:\n2. **C Language Skills**\n   - Not evidenced in your CV; absence doesn't imply inability.\n  \n3. **Rust Skills**\n   - Not evidenced in your CV; absence doesn't imply inability.\n\n4. **Linux Knowledge**\n   - Not evidenced in your CV; absence doesn't imply inability.\n\n5. **Experience of 3 Years**\n   - There are no precise employment boundaries evidenced in your CV indicating this experience.\n\n### Supported Requirement:\n- You fully meet the requirement for **C++**, which is explicitly evidenced in your CV.\n\nGiven these points, you have significant weaknesses in the language requirement and additional skills, along with the experience criteria. Consider enhancing these areas if you choose to apply.",
+        "wall_latency_ms": 3427.723,
+        "llm_calls": 2,
+        "total_tokens": 2516,
+        "estimated_cost_usd": 0.0004836,
+        "repeat": 2
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your compatibility score for the **Senior Platform Engineer** position is **41.26/100**. Here's a breakdown of the requirements:\n\n### Supported Requirements:\n- **Python**: You have explicitly evidenced this skill in your CV.  \n  - **Evidence**: \"Python for data processing and model training.\"\n\n### Unmet Requirements:\n- **German C1**: Your German proficiency is below the C1 level.  \n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unknown Requirements:\n- **Kubernetes**: This skill is not evidenced in your CV; absence is not proof of inability.\n- **5 years of experience**: No precise, evidenced employment boundaries related to your experience were found.\n\n### Summary\nYou meet some requirements, but the unmet German proficiency and unknown skills could be barriers to securing this position. If you need further assistance, feel free to ask!",
+        "wall_latency_ms": 3214.508,
+        "llm_calls": 2,
+        "total_tokens": 2413,
+        "estimated_cost_usd": 0.0004551,
+        "repeat": 2
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "### Comparison of Your Fit for Jobs\n\n#### 1. **Senior GenAI Engineer (fixture-05)**\n- **Match Score**: **48.06/100**\n- **Supported Skills**:\n  - **Python**: Evidenced in your CV (\"Python for data processing and model training.\")\n  - **English**: Evidence of proficiency (\"English C1 and German B1.\")\n  \n- **Unmet Skills**: None\n\n- **Unknown Skills**:\n  - **RAG**: No evidence in CV.\n  - **LangChain**: No evidence in CV.\n  - **Azure OpenAI**: No evidence in CV.\n  - **5 years of experience**: No specific evidence regarding the duration of experience.\n\n#### 2. **Cloud Platform Engineer (match-04-cloud-platform)**\n- **Match Score**: **53.45/100**\n- **Supported Skills**:\n  - **Azure**: Evidenced in your CV (\"Deployed a demonstration service on Azure Container Apps.\")\n  - **English**: Evidence of proficiency (\"English C1 and German B1.\")\n  \n- **Unmet Skills**: None\n\n- **Unknown Skills**:\n  - **Terraform**: No evidence in CV.\n  - **Kubernetes**: No evidence in CV.\n\n### Summary of Skill Gaps:\n- **Senior GenAI Engineer**: Lacks evident skills in RAG, LangChain, Azure OpenAI, and specific experience duration.\n- **Cloud Platform Engineer**: Lacks evident skills in Terraform and Kubernetes.\n\nIf you would like to explore any opportunities to bridge these gaps or find related job roles, let me know!",
+        "wall_latency_ms": 4667.358,
+        "llm_calls": 2,
+        "total_tokens": 3173,
+        "estimated_cost_usd": 0.0006537,
+        "repeat": 2
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are the best AI Engineer jobs in Germany that match your CV, along with an explanation of your compatibility with each position:\n\n### 1. **AI Solutions Engineer**\n- **Location:** Heidelberg\n- **Score:** **74.31/100**\n- **Supported Skills:** Python, Azure, English, German\n- **Unknown Skills:** REST APIs\n- **Job Requirements:**\n  - **Supported:**\n    - **Python:** Evidenced in your CV (e.g., \"Python for data processing and model training.\").\n    - **Azure:** Evidenced (e.g., \"Deployed a demonstration service on Azure Container Apps.\").\n    - **Languages:** English (C1) and German (B1) are explicitly supported.\n  - **Unknown:** You lack evidence for REST APIs, which isn't proof of inability but signifies a gap.\n\n---\n\n### 2. **AI Platform Engineer**\n- **Location:** Frankfurt\n- **Score:** **73.72/100**\n- **Supported Skills:** Python, Docker, Azure, English\n- **Unknown Skills:** Kubernetes, 4 years of experience\n- **Job Requirements:**\n  - **Supported:**\n    - **Python:** Evidenced usage in your CV.\n    - **Docker:** Also evidenced (e.g., \"Packaged applications with Docker...\").\n    - **Azure:** Evidenced.\n    - **Languages:** English (C1) is supported.\n  - **Unknown:** The position asks for Kubernetes experience and four years of experience, which you haven't documented.\n\n---\n\n### 3. **AI Engineer**\n- **Location:** Berlin\n- **Score:** **69.59/100**\n- **Supported Skills:** Python, Azure, English, German\n- **Unknown Skills:** LangGraph, 3 years of experience\n- **Job Requirements:**\n  - **Supported:** Matches for Python and Azure along with language requirements.\n  - **Unknown:** Lack of documented experience with LangGraph and the required three years of experience.\n\n---\n\n### 4. **Applied AI Engineer**\n- **Location:** Cologne\n- **Score:** **69.51/100**\n- **Supported Skills:** Python, FastAPI, English, German\n- **Unknown Skills:** PostgreSQL, 2 years of experience\n- **Job Requirements:**\n  - **Supported:** Has documented skills in Python and FastAPI.\n  - **Unknown:** PostgreSQL and two years, which aren't covered in your CV.\n\n---\n\n### 5. **Junior AI Engineer**\n- **Location:** Stuttgart\n- **Score:** **69.51/100**\n- **Supported Skills:** Python, SQL, English, German\n- **Unknown Skills:** Git, 1 year of experience\n- **Job Requirements:**\n  - **Supported:** Skills in Python and SQL are evidenced.\n  - **Unknown:** Experience with Git and the requisite one year of experience isn't documented.\n\n---\n\n### Summary\nThe **AI Solutions Engineer** position appears to be the strongest match for your skills, with a high compatibility score and no unmet requirements. You might want to consider gaining some experience or documentation for REST APIs, Git, and other unspecified skills to improve your application for these roles. If you'd like to save any of these job postings or need further assistance, let me know!",
+        "wall_latency_ms": 9888.765,
+        "llm_calls": 3,
+        "total_tokens": 6580,
+        "estimated_cost_usd": 0.0013146,
+        "repeat": 2
+      },
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV scored **52.87/100** for the LLM Engineer position (fixture-21). Here's a breakdown of what you have and what might be missing:\n\n### Supported Requirements:\n- **Python**: Supported (Explicitly evidenced in CV)\n  - **Evidence**: \"Python for data processing and model training.\"\n  \n- **English**: Supported (Language explicitly listed)\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Missing Requirements:\n- **OpenAI API**: Unknown (Not evidenced in CV; absence is not proof of inability)\n- **Pydantic**: Unknown (Not evidenced in CV; absence is not proof of inability)\n\n### Summary\nYou have strong evidence in Python and English skills, but there are two critical technologies (OpenAI API and Pydantic) that are not mentioned in your CV. Consider adding relevant experiences or projects that highlight these technologies to improve your fit for the role.",
+        "wall_latency_ms": 3404.776,
+        "llm_calls": 2,
+        "total_tokens": 2411,
+        "estimated_cost_usd": 0.00045795,
+        "repeat": 3
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the **Generative AI Developer** role (fixture-29), you have a match score of **52.3/100**. Here are the details of the requirements you are lacking:\n\n### Supported Requirements:\n- **Python**: Supported (evidenced in your CV).\n  - Evidence: \"Python for data processing and model training.\"\n  \n- **German**: Supported (you indicated a proficiency level).\n  - Evidence: \"English C1 and German B1.\"\n\n### Unmet Requirements:\n- None.\n\n### Unknown Requirements:\n1. **RAG**: Not evidenced in your CV; absence is not proof of inability.\n2. **pgvector**: Not evidenced in your CV; absence is not proof of inability.\n3. **3 years of experience**: No precise, evidenced employment boundaries in your CV.\n\nLet me know if you need more information or further assistance!",
+        "wall_latency_ms": 3472.204,
+        "llm_calls": 2,
+        "total_tokens": 2440,
+        "estimated_cost_usd": 0.00045645,
+        "repeat": 3
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **C++ Security Engineer** (match-06-cpp-security), here are your weaknesses based on the compatibility score of **28.53/100**:\n\n### Weaknesses:\n1. **Unmet Requirement**:\n   - **German Language Proficiency (C2)**: Your CV indicates proficiency in German at level B1, which does not meet the requirement for C2.\n\n2. **Unknown Requirements** (not evidenced in your CV):\n   - **C**: No evidence found regarding your experience or skills in C programming.\n   - **Rust**: No evidence found regarding your experience or skills in Rust programming.\n   - **Linux**: No evidence found regarding your experience or skills in Linux.\n   - **3 Years of Experience**: There are no precise boundaries in your employment history indicating 3 years of relevant experience.\n\n### Supported Requirement:\n- **C++**: You have explicitly evidenced your proficiency in C++, as stated in your CV (\"C++ for embedded software\").\n\nGiven these weaknesses, you may want to address or enhance your skills in the unmet and unknown areas before applying, or consider if you still wish to apply despite these gaps.",
+        "wall_latency_ms": 3560.1,
+        "llm_calls": 2,
+        "total_tokens": 2543,
+        "estimated_cost_usd": 0.0004038,
+        "repeat": 3
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "You have a match score of **41.26/100** for the position of **Senior Platform Engineer**. Here's how your qualifications align with the job requirements:\n\n### Supported Requirements:\n- **Python**: Supported\n  - **Evidence**: \"Python for data processing and model training.\"\n\n### Unmet Requirements:\n- **German C1**: Unmet\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unknown Requirements:\n- **Kubernetes**: Unknown\n  - Reason: Not evidenced in CV; absence is not proof of inability.\n  \n- **5 years of experience**: Unknown\n  - Reason: No precise, evidenced employment boundaries.\n\n### Summary:\nYou meet the requirement for Python, but you do not meet the language requirement for German at level C1, and your experience with Kubernetes or the total years of required experience is unclear based on your CV.",
+        "wall_latency_ms": 3207.212,
+        "llm_calls": 2,
+        "total_tokens": 2414,
+        "estimated_cost_usd": 0.0004557,
+        "repeat": 3
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": false,
+        "flagged_sentences": [
+          "Azure OpenAI: ### Summary of Gaps > For **Senior GenAI Engineer**, focus on obtaining experience with RAG, LangChain, Azure OpenAI, and accumulating 5 years of relevant experience.",
+          "LangChain: ### Summary of Gaps > For **Senior GenAI Engineer**, focus on obtaining experience with RAG, LangChain, Azure OpenAI, and accumulating 5 years of relevant experience.",
+          "5 years: ### Summary of Gaps > For **Senior GenAI Engineer**, focus on obtaining experience with RAG, LangChain, Azure OpenAI, and accumulating 5 years of relevant experience.",
+          "RAG: ### Summary of Gaps > For **Senior GenAI Engineer**, focus on obtaining experience with RAG, LangChain, Azure OpenAI, and accumulating 5 years of relevant experience.",
+          "Kubernetes: ### Summary of Gaps > For **Cloud Platform Engineer**, consider gaining knowledge in Terraform and Kubernetes.",
+          "Terraform: ### Summary of Gaps > For **Cloud Platform Engineer**, consider gaining knowledge in Terraform and Kubernetes."
+        ],
+        "final_answer": "### Your Fit for Jobs\n\n#### 1. **Senior GenAI Engineer (fixture-05)**\n- **Score:** 48.06/100\n- **Supported Skills:**\n  - **Python:** Evidenced in your CV.\n  - **English:** Evidenced in your CV (C1 level).\n  \n- **Unmet Skills:** None listed.\n\n- **Unknown Skills:**\n  - **RAG**\n  - **LangChain**\n  - **Azure OpenAI**\n  - **5 years of relevant experience**\n\n**Skill Gaps:** The job requires familiarity with several technologies and a specific experience duration, none of which were evidenced in your CV.\n\n---\n\n#### 2. **Cloud Platform Engineer (match-04-cloud-platform)**\n- **Score:** 53.45/100\n- **Supported Skills:**\n  - **Azure:** Evidenced in your CV (experience with Azure Container Apps).\n  - **English:** Evidenced in your CV (C1 level).\n\n- **Unmet Skills:** None listed.\n\n- **Unknown Skills:**\n  - **Terraform**\n  - **Kubernetes**\n\n**Skill Gaps:** You lack evidence of experience with Terraform and Kubernetes.\n\n---\n\n### Summary of Gaps\n1. For **Senior GenAI Engineer**, focus on obtaining experience with RAG, LangChain, Azure OpenAI, and accumulating 5 years of relevant experience.\n2. For **Cloud Platform Engineer**, consider gaining knowledge in Terraform and Kubernetes.\n\nIf you'd like to explore roles that fit your CV better or need assistance with anything else, just let me know!",
+        "wall_latency_ms": 5660.809,
+        "llm_calls": 2,
+        "total_tokens": 3156,
+        "estimated_cost_usd": 0.0006435,
+        "repeat": 3
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [
+          "Kubernetes",
+          "PostgreSQL"
+        ],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": false,
+        "flagged_sentences": [
+          "PostgreSQL: - **Kubernetes** and **PostgreSQL** are also missing from your experience.",
+          "Kubernetes: - **Kubernetes** and **PostgreSQL** are also missing from your experience."
+        ],
+        "final_answer": "Here are some AI Engineer job opportunities in Germany, ranked by how well they match your CV:\n\n### 1. **AI Solutions Engineer**\n- **Location**: Heidelberg\n- **Score**: **74.31/100**\n- **Match Details**:\n  - **Supported Skills**: Python, Azure, English, German\n  - **Unknown Skills**: REST APIs (not evidenced in your CV)\n  - **Languages**: You listed both English and German, which are supported by the job requirements.\n\n### 2. **AI Platform Engineer**\n- **Location**: Frankfurt\n- **Score**: **73.72/100**\n- **Match Details**:\n  - **Supported Skills**: Python, Docker, Azure, English\n  - **Unknown Skills**: Kubernetes (not evidenced in your CV)\n  - **Experience**: The job requires 4 years of experience; this was not clearly evidenced in your CV.\n\n### 3. **AI Engineer**\n- **Location**: Berlin\n- **Score**: **69.59/100**\n- **Match Details**:\n  - **Supported Skills**: Python, Azure, English, German\n  - **Unknown Skills**: LangGraph (not evidenced in your CV)\n  - **Experience**: The job requires 3 years of experience; again, this was not clearly evidenced.\n\n### 4. **Applied AI Engineer**\n- **Location**: Cologne\n- **Score**: **69.51/100**\n- **Match Details**:\n  - **Supported Skills**: Python, FastAPI, German, English\n  - **Unknown Skills**: PostgreSQL (not evidenced in your CV)\n  - **Experience**: The job requires 2 years of experience which was also not clearly evidenced.\n\n### 5. **Junior AI Engineer**\n- **Location**: Stuttgart\n- **Score**: **69.51/100**\n- **Match Details**:\n  - **Supported Skills**: Python, SQL, English, German\n  - **Unknown Skills**: Git (not evidenced in your CV)\n  - **Experience**: The job requires 1 year of experience; this was not clearly evidenced.\n\n### Summary of Gaps:\n- **REST APIs** and **LangGraph** are skills that were not found in your CV.\n- **Kubernetes** and **PostgreSQL** are also missing from your experience.\n- The **exact years of experience** required for some roles were not clearly documented in your CV (4 years for the second role, 3 years for the third, and 2 years for the fourth).\n\nLet me know if you\u2019d like to explore any of these jobs further or save a specific one!",
+        "wall_latency_ms": 9176.272,
+        "llm_calls": 3,
+        "total_tokens": 6471,
+        "estimated_cost_usd": 0.0009708,
+        "repeat": 3
+      },
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV fits the LLM Engineer role (fixture-21) with a score of **52.87/100**. Here's a breakdown of your compatibility:\n\n### Supported Requirements:\n- **Python**: Evidenced in your CV with the statement: *\"Python for data processing and model training.\"*\n- **English**: Listed as **C1** level in your CV, matching the job requirements.\n\n### Unmet Requirements:\n- No unmet requirements identified.\n\n### Unknown Requirements:\n1. **OpenAI API**: No evidence found in your CV regarding experience with this API.\n2. **Pydantic**: Also not evidenced in your CV.\n\n### Summary:\nYou have strong support for Python and English, which are crucial for the role. However, there's no evidence of experience with the OpenAI API or Pydantic, which the employer might consider beneficial.\n\nWould you like to address any specific areas or perhaps look for jobs that match your current qualifications better?",
+        "wall_latency_ms": 3170.984,
+        "llm_calls": 2,
+        "total_tokens": 2413,
+        "estimated_cost_usd": 0.00045915,
+        "repeat": 4
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the Generative AI Developer role (fixture-29), your CV shows a match score of **52.3/100**. Here's a breakdown of the requirements:\n\n### Supported Skills\n- **Python**: Supported as you have explicitly evidenced this in your CV.\n  - **Evidence**: \"Python for data processing and model training.\"\n  \n- **German**: Supported as you have listed this language.\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unmet Requirements\n- There are no unmet requirements.\n\n### Unknown Requirements\n1. **RAG**: Not evidenced in your CV; the absence doesn't imply you lack this skill.\n2. **pgvector**: Similarly, this is not evidenced in your CV, but lack of evidence doesn't mean inability.\n3. **3 years of experience**: You have not provided specific employment boundaries that would indicate this level of experience.\n\nIf you have any questions or need further assistance, feel free to ask!",
+        "wall_latency_ms": 3422.938,
+        "llm_calls": 2,
+        "total_tokens": 2460,
+        "estimated_cost_usd": 0.00046845,
+        "repeat": 4
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the job of **C++ Security Engineer (match-06-cpp-security)**, here are your weaknesses based on the match score of **28.53/100**:\n\n### Unmet Requirements:\n1. **German C2 Proficiency**: Your CV indicates that your German proficiency is at a B1 level, which does not meet the C2 requirement.\n\n### Unknown Requirements:\n1. **C Language**: Not evidenced in your CV, which means there's no mention of experience or skills in C.\n2. **Rust**: Similarly, Rust experience is not evidenced in your CV.\n3. **Linux**: There is no mention of Linux experience in your CV.\n4. **3 Years of Experience**: There is no precise evidence of having 3 years in relevant roles.\n\n### Supported Requirement:\n- **C++**: Your CV explicitly mentions experience with C++ for embedded software.\n\nIf you need advice on whether to apply or further assistance, feel free to ask!",
+        "wall_latency_ms": 3716.115,
+        "llm_calls": 2,
+        "total_tokens": 2503,
+        "estimated_cost_usd": 0.0004758,
+        "repeat": 4
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your match score for the **Senior Platform Engineer** position is **41.26/100**. Here\u2019s a breakdown of the requirements:\n\n### Supported Requirements:\n- **Skill**: Python\n  - **Status**: Supported\n  - **Evidence**: \"Python for data processing and model training.\"\n\n### Unmet Requirements:\n- **Language**: German (C1 proficiency)\n  - **Status**: Unmet\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unknown Requirements:\n- **Skill**: Kubernetes\n  - **Status**: Unknown\n  - **Reason**: Not evidenced in CV; absence is not proof of inability.\n- **Experience**: 5 years\n  - **Status**: Unknown\n  - **Reason**: No precise, evidenced employment boundaries.\n\n### Summary:\nYou meet the requirement for Python but do not meet the required proficiency in German. Additionally, your experience with Kubernetes and the overall experience level are not evidenced in your CV. Would you like to explore other job opportunities?",
+        "wall_latency_ms": 3210.03,
+        "llm_calls": 2,
+        "total_tokens": 2446,
+        "estimated_cost_usd": 0.0004749,
+        "repeat": 4
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": false,
+        "flagged_sentences": [
+          "Azure OpenAI: ### Summary of Skill Gaps: > - **For Senior GenAI Engineer:** RAG, LangChain, Azure OpenAI, and 5 years of experience.",
+          "LangChain: ### Summary of Skill Gaps: > - **For Senior GenAI Engineer:** RAG, LangChain, Azure OpenAI, and 5 years of experience.",
+          "5 years: ### Summary of Skill Gaps: > - **For Senior GenAI Engineer:** RAG, LangChain, Azure OpenAI, and 5 years of experience.",
+          "RAG: ### Summary of Skill Gaps: > - **For Senior GenAI Engineer:** RAG, LangChain, Azure OpenAI, and 5 years of experience.",
+          "Kubernetes: ### Summary of Skill Gaps: > - **For Cloud Platform Engineer:** Terraform and Kubernetes.",
+          "Terraform: ### Summary of Skill Gaps: > - **For Cloud Platform Engineer:** Terraform and Kubernetes."
+        ],
+        "final_answer": "Here's a comparison of your fit for the two roles:\n\n### 1. **Senior GenAI Engineer (fixture-05)**\n- **Match Score:** 48.06/100\n- **Supported Skills:**\n  - **Python**: Explicitly evidenced in CV.\n    - **Evidence:** \"Python for data processing and model training.\"\n  - **English**: Language explicitly listed.\n    - **Evidence:** \"English C1 and German B1.\"\n\n- **Unmet Skills:** None listed.\n  \n- **Unknown Skills:**\n  - **RAG**\n  - **LangChain**\n  - **Azure OpenAI**\n  - **5 years of experience**\n\n### Skill Gaps:\n- You lack evidence for RAG, LangChain, and Azure OpenAI in your CV, along with a clear 5 years of relevant experience.\n\n---\n\n### 2. **Cloud Platform Engineer (match-04-cloud-platform)**\n- **Match Score:** 53.45/100\n- **Supported Skills:**\n  - **Azure**: Explicitly evidenced in CV.\n    - **Evidence:** \"Deployed a demonstration service on Azure Container Apps.\"\n  - **English**: Language explicitly listed.\n    - **Evidence:** \"English C1 and German B1.\"\n\n- **Unmet Skills:** None listed.\n  \n- **Unknown Skills:**\n  - **Terraform**\n  - **Kubernetes**\n\n### Skill Gaps:\n- You lack evidence for Terraform and Kubernetes in your CV.\n\n---\n\n### Summary of Skill Gaps:\n- **For Senior GenAI Engineer:** RAG, LangChain, Azure OpenAI, and 5 years of experience.\n- **For Cloud Platform Engineer:** Terraform and Kubernetes. \n\nIf you want to explore ways to enhance your qualifications or search for other job opportunities, feel free to ask!",
+        "wall_latency_ms": 5300.191,
+        "llm_calls": 2,
+        "total_tokens": 3205,
+        "estimated_cost_usd": 0.0006729,
+        "repeat": 4
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [
+          "Kubernetes",
+          "REST APIs"
+        ],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": false,
+        "flagged_sentences": [
+          "Kubernetes: The main areas where you fall short are specific tools or technologies such as REST APIs and Kubernetes, and the expected years of experience for some roles.",
+          "REST APIs: The main areas where you fall short are specific tools or technologies such as REST APIs and Kubernetes, and the expected years of experience for some roles."
+        ],
+        "final_answer": "Here are some AI Engineer job matches in Germany that fit your CV, along with explanations of your compatibility and what you might be lacking:\n\n### 1. AI Solutions Engineer (Frankfurt)\n- **Score:** 74.31/100\n- **Supported Requirements:** Python, Azure, English, German\n- **Unmet Requirements:** None\n- **Unknown Requirements:** REST APIs\n- **Explanation:** Your CV explicitly evidences your skills in Python and Azure, and you are proficient in both English and German, which the job requires. However, your CV does not show evidence of experience with REST APIs. \n\n### 2. AI Platform Engineer (Frankfurt)\n- **Score:** 73.72/100\n- **Supported Requirements:** Python, Docker, Azure, English\n- **Unmet Requirements:** None\n- **Unknown Requirements:** Kubernetes, 4 years of experience\n- **Explanation:** You've demonstrated Python, Docker, and Azure skills in your CV. There\u2019s no evidence of experience with Kubernetes, and the job expects four years of experience, which is not documented in your CV.\n\n### 3. AI Engineer (Berlin)\n- **Score:** 69.59/100\n- **Supported Requirements:** Python, Azure, English, German\n- **Unmet Requirements:** None\n- **Unknown Requirements:** LangGraph, 3 years of experience\n- **Explanation:** Your proficiency in Python and Azure is well shown, but the role requires familiarity with LangGraph, which isn't evident in your CV. It also expects three years of relevant experience, which isn't clearly outlined in your employment history.\n\n### 4. Applied AI Engineer (Cologne)\n- **Score:** 69.51/100\n- **Supported Requirements:** Python, FastAPI, German, English\n- **Unmet Requirements:** None\n- **Unknown Requirements:** PostgreSQL, 2 years of experience\n- **Explanation:** Your CV provides evidence of Python and FastAPI skills, but the job lists PostgreSQL as a requirement, which isn't reflected in your CV. It also mentions a 2-year experience requirement that isn't specified in your CV.\n\n### 5. Junior AI Engineer (Stuttgart)\n- **Score:** 69.51/100\n- **Supported Requirements:** Python, SQL, English, German\n- **Unmet Requirements:** None\n- **Unknown Requirements:** Git, 1 year of experience\n- **Explanation:** You have supported skills in Python and SQL, but the role mentions Git, which isn\u2019t documented in your CV. Additionally, while it\u2019s a junior position, it expects a year of experience that isn\u2019t clearly defined in your CV.\n\n### Summary\nYour CV shows strong skills in Python and Azure across multiple job options. The main areas where you fall short are specific tools or technologies such as REST APIs and Kubernetes, and the expected years of experience for some roles. \n\nWould you like to explore further or consider saving any of these job listings?",
+        "wall_latency_ms": 8430.481,
+        "llm_calls": 3,
+        "total_tokens": 6514,
+        "estimated_cost_usd": 0.0011982,
+        "repeat": 4
+      }
+    ],
+    "v2": [
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV matches 52.87/100 for the LLM Engineer position (job fixture-21). Here's a breakdown of the requirements:\n\n### Supported Requirements\n- **Skills:**\n  - **Python**: Explicitly evidenced in your CV.\n    - **Evidence**: \"Python for data processing and model training.\"\n  - **English**: Language explicitly listed (job did not specify a level).\n    - **Evidence**: \"English C1 and German B1.\"\n\n### Unmet Requirements\n- There are no unmet requirements.\n\n### Unknown Requirements\n- **OpenAI API**: Not evidenced in your CV; absence is not proof of inability.\n- **Pydantic**: Not evidenced in your CV; absence is not proof of inability.\n\n### Summary\nYour CV supports key skills like Python and English well. However, there are unknown skills regarding the OpenAI API and Pydantic, which could enhance your candidacy. Consider adding evidence or experience related to these technologies to strengthen your application.",
+        "wall_latency_ms": 3879.505,
+        "llm_calls": 2,
+        "total_tokens": 2668,
+        "estimated_cost_usd": 0.00050145,
+        "repeat": 0
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the Generative AI Developer role (fixture-29), here is the analysis of the requirements:\n\n### Supported Requirements\n- **Python** (Evidenced in CV: \"Python for data processing and model training.\")\n- **German** (Evidenced in CV: \"English C1 and German B1.\")\n\n### Unmet Requirements\n- **None** \u2014 There are no unmet requirements for this role.\n\n### Unknown Requirements\n- **RAG** (No evidence in the CV)\n- **pgvector** (No evidence in the CV)\n- **3 years of experience** (No precise, evidenced employment boundaries)\n\nYour match score for this role is **52.3/100**. \n\nIf you have experience with RAG or pgvector, or if you have a specific timeline of your work experience, consider adding this information to your CV.",
+        "wall_latency_ms": 3040.073,
+        "llm_calls": 2,
+        "total_tokens": 2679,
+        "estimated_cost_usd": 0.00048915,
+        "repeat": 0
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **C++ Security Engineer (match-06-cpp-security)**, your match score is **28.53/100**. Here are the details regarding your weaknesses:\n\n### Weaknesses:\n1. **Unmet Requirements:**\n   - **German C2**: Your CV indicates that your German proficiency is at B1 level, which is below the required C2 level.\n\n2. **Unknown Requirements:**\n   - **C**: There is no evidence in your CV regarding experience with the C programming language.\n   - **Rust**: There is no evidence in your CV regarding experience with Rust.\n   - **Linux**: There is no evidence in your CV regarding experience with Linux.\n   - **3 years of experience**: Your CV does not specify if you have three years of relevant employment experience.\n\nIf you are considering applying, you may want to address these weaknesses by either acquiring the necessary skills or providing additional information in your CV to clarify your experience.",
+        "wall_latency_ms": 3753.171,
+        "llm_calls": 2,
+        "total_tokens": 2750,
+        "estimated_cost_usd": 0.0005133,
+        "repeat": 0
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **Senior Platform Engineer (match-05-senior-platform)**, your compatibility score is **41.26/100**. Here's a breakdown of the requirements:\n\n### Supported Requirements\n- **Python**: Supported (Explicitly evidenced in CV)\n  - **Evidence**: \"Python for data processing and model training.\"\n\n### Unmet Requirements\n- **German C1**: Unmet (Explicit proficiency below C1)\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unknown Requirements\n- **Kubernetes**: Unknown (Not evidenced in CV; absence is not proof of inability)\n- **5 years of experience**: Unknown (No precise, evidenced employment boundaries)\n\nIf you want to discuss improving your fit for this role, especially regarding the unknown requirements or how to address the unmet language proficiency, let me know!",
+        "wall_latency_ms": 4034.473,
+        "llm_calls": 2,
+        "total_tokens": 2653,
+        "estimated_cost_usd": 0.0004884,
+        "repeat": 0
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "### Job Comparison and Skill Gaps\n\n#### **1. Senior GenAI Engineer (fixture-05)**\n- **Match Score:** 48.06/100\n- **Supported Requirements:**\n  - **Python:** Supported (Evidence: \"Python for data processing and model training.\")\n  - **English:** Supported (Evidence: \"English C1 and German B1.\")\n  \n- **Unmet Requirements:** None\n  \n- **Unknown Requirements:**\n  - **RAG:** Not evidenced in CV; absence is not proof of inability.\n  - **LangChain:** Not evidenced in CV; absence is not proof of inability.\n  - **Azure OpenAI:** Not evidenced in CV; absence is not proof of inability.\n  - **5 years of experience:** No precise, evidenced employment boundaries.\n\n#### **2. Cloud Platform Engineer (match-04-cloud-platform)**\n- **Match Score:** 53.45/100\n- **Supported Requirements:**\n  - **Azure:** Supported (Evidence: \"Deployed a demonstration service on Azure Container Apps.\")\n  - **English:** Supported (Evidence: \"English C1 and German B1.\")\n  \n- **Unmet Requirements:** None\n  \n- **Unknown Requirements:**\n  - **Terraform:** Not evidenced in CV; absence is not proof of inability.\n  - **Kubernetes:** Not evidenced in CV; absence is not proof of inability.\n\n### Summary of Skill Gaps\n- **For Senior GenAI Engineer:**\n  - Knowledge or experience with RAG, LangChain, Azure OpenAI, and confirmation of 5 years of relevant experience.\n\n- **For Cloud Platform Engineer:**\n  - Knowledge or experience with Terraform and Kubernetes.\n\nIf you need assistance in updating your CV or have further questions, feel free to ask!",
+        "wall_latency_ms": 6215.61,
+        "llm_calls": 2,
+        "total_tokens": 3441,
+        "estimated_cost_usd": 0.0007038,
+        "repeat": 0
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv"
+        ],
+        "tool_calls": 11,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are the top AI Engineer job matches in Germany based on your CV:\n\n### 1. **AI Solutions Engineer**\n- **Location:** Heidelberg\n- **Score:** 74.31/100\n- **Supported Requirements:**\n  - **Python:** Supported (evidence: \"Python for data processing and model training.\")\n  - **Azure:** Supported (evidence: \"Deployed a demonstration service on Azure Container Apps.\")\n  - **Languages:** English and German supported.\n- **Unknown Requirements:**\n  - **REST APIs:** No evidence in the CV; suggest adding this if experienced.\n\n### 2. **AI Platform Engineer**\n- **Location:** Frankfurt\n- **Score:** 73.72/100\n- **Supported Requirements:**\n  - **Python:** Supported (evidence: \"Python for data processing and model training.\")\n  - **Docker:** Supported (evidence: \"Packaged applications with Docker.\")\n  - **Azure:** Supported (evidence: \"Deployed a demonstration service on Azure Container Apps.\")\n  - **Language:** English supported.\n- **Unknown Requirements:**\n  - **Kubernetes:** No evidence in the CV; consider including experience if applicable.\n  - **Experience:** 4 years of relevant experience is not evidenced; add if you have this background.\n\n### 3. **AI Engineer**\n- **Location:** Berlin\n- **Score:** 69.59/100\n- **Supported Requirements:**\n  - **Python:** Supported (evidence: \"Python for data processing and model training.\")\n  - **Azure:** Supported (evidence: \"Deployed a demonstration service on Azure Container Apps.\")\n  - **Languages:** English and German supported.\n- **Unknown Requirements:**\n  - **LangGraph:** No evidence; suggest mentioning if you have experience.\n  - **Experience:** 3 years is not evidenced; add relevant details if applicable.\n\n### 4. **Applied AI Engineer**\n- **Location:** Cologne\n- **Score:** 69.51/100\n- **Supported Requirements:**\n  - **Python:** Supported (evidence: \"Python for data processing and model training.\")\n  - **FastAPI:** Supported (evidence: \"Developed a FastAPI service.\")\n  - **Language:** German and English supported.\n- **Unknown Requirements:**\n  - **PostgreSQL:** No evidence in the CV; consider adding relevant skills if available.\n  - **Experience:** 2 years is not evidenced; include if you qualify.\n\n### 5. **Junior AI Engineer**\n- **Location:** Stuttgart\n- **Score:** 69.51/100\n- **Supported Requirements:**\n  - **Python:** Supported (evidence: \"Python for data processing and model training.\")\n  - **SQL:** Supported (evidence: \"SQL for relational queries.\")\n  - **Languages:** English and German supported.\n- **Unknown Requirements:**\n  - **Git:** No evidence in CV; if familiar, consider including this.\n  - **Experience:** At least 1 year is not evidenced; add if applicable.\n\n### Summary of Unknown Requirements\n- The unknown requirements are areas where your CV does not provide evidence either way, indicating potential experience or skills that are not currently highlighted. If you possess these skills, consider adding them to strengthen your CV.\n\nIf any of these jobs interest you, please let me know if you'd like to save a specific job!",
+        "wall_latency_ms": 9563.069,
+        "llm_calls": 3,
+        "total_tokens": 9450,
+        "estimated_cost_usd": 0.00184005,
+        "repeat": 0
+      },
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV score for the LLM Engineer position (job \"fixture-21\") is **52.87/100**. Here's a breakdown of your fit and what you may be missing:\n\n### Supported Requirements\n- **Python**: \n  - **Status**: Supported\n  - **Evidence**: \"Python for data processing and model training.\"\n  \n- **English**:\n  - **Status**: Supported\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unmet Requirements\n- There are no unmet requirements in your CV for the skills outlined.\n\n### Unknown Requirements\n- **OpenAI API**:\n  - **Status**: Unknown (not evidenced in CV)\n  \n- **Pydantic**:\n  - **Status**: Unknown (not evidenced in CV)\n\n### Summary\nWhile your Python skills and English proficiency are well-supported in your CV, it would be beneficial to mention any experience or familiarity with the OpenAI API and Pydantic. You might consider adding specific examples or training related to these technologies to strengthen your application.",
+        "wall_latency_ms": 3320.281,
+        "llm_calls": 2,
+        "total_tokens": 2682,
+        "estimated_cost_usd": 0.00050985,
+        "repeat": 1
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the Generative AI Developer role (fixture-29), here are the requirements you are lacking or have unknown status:\n\n### Supported Requirements\n- **Python**: Supported (evidence: \"Python for data processing and model training.\")\n- **German**: Supported at B1 level (evidence: \"English C1 and German B1.\")\n\n### Met Requirements\n- **None**: There are no unmet requirements.\n\n### Unknown Requirements\n- **RAG**: No evidence in the CV.\n- **pgvector**: No evidence in the CV.\n- **Experience of 3 years**: No precise, evidenced employment boundaries.\n\nIf you have experience in RAG or pgvector, it might be beneficial to add that to your CV.",
+        "wall_latency_ms": 4029.472,
+        "llm_calls": 2,
+        "total_tokens": 2657,
+        "estimated_cost_usd": 0.00047595,
+        "repeat": 1
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "The compatibility score for the position **C++ Security Engineer** (job ID: match-06-cpp-security) is **28.53/100**. Here are the details regarding your strengths and weaknesses:\n\n### Supported Requirements:\n- **C++**: Supported (Evidenced in your CV: \"C++ for embedded software.\")\n\n### Unmet Requirements:\n- **German C2**: Not met (Your CV states: \"English C1 and German B1.\")\n\n### Unknown Requirements:\n- **C**: No evidence in the CV.\n- **Rust**: No evidence in the CV.\n- **Linux**: No evidence in the CV.\n- **3 years of experience**: No precise, evidenced employment boundaries.\n\n### Summary of Weaknesses:\n1. **Language Proficiency**: German C2 is not met.\n2. **Technical Skills**: There is no evidence of skills in C, Rust, and Linux.\n3. **Experience Requirement**: It's unclear if you meet the 3 years of experience requirement.\n\nConsider enhancing your CV with these skills or relevant experiences if you believe you possess them!",
+        "wall_latency_ms": 3441.001,
+        "llm_calls": 2,
+        "total_tokens": 2778,
+        "estimated_cost_usd": 0.0005301,
+        "repeat": 1
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are the match details for the position of Senior Platform Engineer:\n\n- **Match Score:** 41.26/100\n\n### Supported Requirements:\n- **Python**: Explicitly evidenced in CV.\n  - **Evidence**: \"Python for data processing and model training.\"\n\n### Unmet Requirements:\n- **German C1**: Your proficiency is below C1.\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unknown Requirements:\n- **Kubernetes**: Not evidenced in CV; absence is not proof of inability.\n- **5 years of experience**: No precise, evidenced employment boundaries.\n\nIf you wish to improve your score, consider addressing the unmet and unknown requirements related to German proficiency and Kubernetes experience.",
+        "wall_latency_ms": 3555.244,
+        "llm_calls": 2,
+        "total_tokens": 2626,
+        "estimated_cost_usd": 0.0004722,
+        "repeat": 1
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "### Job Comparison and Skill Gaps\n\n#### 1. Senior GenAI Engineer (job_id: fixture-05)\n- **Match Score:** 48.06/100\n- **Supported Skills:**\n  - **Python:** Evidenced in CV (Quote: \"Python for data processing and model training.\")\n  - **English:** Evidenced in CV (Quote: \"English C1 and German B1.\")\n\n- **Unmet Requirements:** \n  - None\n\n- **Unknown Requirements:**\n  - **RAG**: Not evidenced in CV; absence is not proof of inability.\n  - **LangChain**: Not evidenced in CV; absence is not proof of inability.\n  - **Azure OpenAI**: Not evidenced in CV; absence is not proof of inability.\n  - **5 years of experience**: No precise, evidenced employment boundaries.\n\n---\n\n#### 2. Cloud Platform Engineer (job_id: match-04-cloud-platform)\n- **Match Score:** 53.45/100\n- **Supported Skills:**\n  - **Azure:** Evidenced in CV (Quote: \"Deployed a demonstration service on Azure Container Apps.\")\n  - **English:** Evidenced in CV (Quote: \"English C1 and German B1.\")\n\n- **Unmet Requirements:**\n  - None\n\n- **Unknown Requirements:**\n  - **Terraform**: Not evidenced in CV; absence is not proof of inability.\n  - **Kubernetes**: Not evidenced in CV; absence is not proof of inability.\n\n---\n\n### Summary of Skill Gaps\n- For **Senior GenAI Engineer**:\n  - RAG\n  - LangChain\n  - Azure OpenAI\n  - 5 years of experience\n\n- For **Cloud Platform Engineer**:\n  - Terraform\n  - Kubernetes\n\nFocusing on these unknown areas in your CV could enhance your fit for these positions.",
+        "wall_latency_ms": 5824.284,
+        "llm_calls": 2,
+        "total_tokens": 3464,
+        "estimated_cost_usd": 0.0007176,
+        "repeat": 1
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv"
+        ],
+        "tool_calls": 11,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are some AI Engineer job opportunities in Germany that match your CV, along with details about how well you fit each position and what you might lack.\n\n### Best Matches\n\n1. **AI Solutions Engineer (Score: 74.31/100)**\n   - **Location:** Heidelberg\n   - **Supported Requirements:**\n     - **Python:** Evidence found in your CV: \u201cPython for data processing and model training.\u201d\n     - **Azure:** Evidence found: \u201cDeployed a demonstration service on Azure Container Apps.\u201d\n     - **Languages:** English (C1) and German (B1).\n\n   - **Unknown Requirements:**\n     - **REST APIs:** Not evidenced in your CV. You may want to add any relevant experience you have in this area.\n\n---\n\n2. **AI Platform Engineer (Score: 73.72/100)**\n   - **Location:** Frankfurt\n   - **Supported Requirements:**\n     - **Python:** Evidence: \u201cPython for data processing and model training.\u201d\n     - **Docker:** Evidence: \u201cPackaged applications with Docker and automated checks using GitHub Actions.\u201d\n     - **Azure:** Evidence found.\n     - **Language:** English (C1).\n\n   - **Unknown Requirements:**\n     - **Kubernetes:** Not evidenced in your CV.\n     - **Experience Level:** 4 years; no precise evidence found about your work experience duration.\n\n---\n\n3. **AI Engineer (Score: 69.59/100)**\n   - **Location:** Berlin\n   - **Supported Requirements:**\n     - **Python:** Evidence found.\n     - **Azure:** Evidence found.\n     - **Languages:** English (C1) and German (B1).\n\n   - **Unknown Requirements:**\n     - **LangGraph:** Not evidenced in your CV.\n     - **Experience Level:** 3 years; no precise evidence found about your work experience duration.\n\n---\n\n4. **Applied AI Engineer (Score: 69.51/100)**\n   - **Location:** Cologne\n   - **Supported Requirements:**\n     - **Python:** Evidence found.\n     - **FastAPI:** Evidence: \u201cDeveloped a FastAPI service with Pydantic validation and REST endpoints.\u201d\n     - **Languages:** German and English.\n\n   - **Unknown Requirements:**\n     - **PostgreSQL:** Not evidenced in your CV.\n     - **Experience Level:** 2 years; no precise evidence found about your work experience duration.\n\n---\n\n5. **Junior AI Engineer (Score: 69.51/100)**\n   - **Location:** Stuttgart\n   - **Supported Requirements:**\n     - **Python:** Evidence found.\n     - **SQL:** Evidence: \u201cSQL for relational queries.\u201d\n     - **Languages:** English (C1) and German (B1).\n\n   - **Unknown Requirements:**\n     - **Git:** Not evidenced in your CV.\n     - **Experience Level:** 1 year; no precise evidence found about your work experience duration.\n\n---\n\n### Summary\nYou have strong support for several critical requirements across these roles, particularly in **Python** and **Azure**. However, there are a few skills and experience levels marked as \"unknown,\" suggesting areas for potential improvement or additional evidence in your CV, particularly regarding REST APIs, Kubernetes, PostgreSQL, Git, and specific experience durations.\n\nIf you're interested in a particular job, let me know, and I can save it for you!",
+        "wall_latency_ms": 13579.55,
+        "llm_calls": 3,
+        "total_tokens": 9449,
+        "estimated_cost_usd": 0.0018381,
+        "repeat": 1
+      },
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV has a compatibility score of **52.87/100** for the LLM Engineer position (fixture-21). Here's a breakdown of the requirements:\n\n### Supported Requirements\n1. **Python**\n   - **Status**: Supported\n   - **Reason**: Explicitly evidenced in your CV. \n   - **Evidence**: \"Python for data processing and model training.\"\n\n2. **English**\n   - **Status**: Supported\n   - **Reason**: Language explicitly listed; no specific level required by the job.\n   - **Evidence**: \"English C1 and German B1.\"\n\n### Unmet Requirements\n- There are no unmet requirements.\n\n### Unknown Requirements\n1. **OpenAI API**\n   - **Status**: Unknown\n   - **Reason**: Not evidenced in your CV; absence is not proof of inability.\n\n2. **Pydantic**\n   - **Status**: Unknown\n   - **Reason**: Not evidenced in your CV; absence is not proof of inability.\n\n### Summary\nYour CV supports **Python** and **English**, both of which are relevant for the role. However, it does not provide evidence for experience with the **OpenAI API** and **Pydantic**, which are also important skills for this position. Consider adding information or experiences related to these technologies to strengthen your application.",
+        "wall_latency_ms": 4053.942,
+        "llm_calls": 2,
+        "total_tokens": 2739,
+        "estimated_cost_usd": 0.00043845,
+        "repeat": 2
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the Generative AI Developer role (fixture-29), here's a breakdown of the requirements based on your CV:\n\n### Supported Requirements\n- **Python**: Supported as you provided evidence of using Python for data processing and model training.\n- **German**: Supported; you indicated proficiency in German at level B1.\n\n### Unmet Requirements\n- **None**: There are no requirements listed as unmet.\n\n### Unknown Requirements\n- **RAG**: No evidence found in your CV.\n- **pgvector**: No evidence found in your CV.\n- **3 years of experience**: No specific evidence regarding the duration of your experience is available in your CV.\n\nYou may want to consider adding evidence for the unknown requirements to strengthen your application.",
+        "wall_latency_ms": 3502.687,
+        "llm_calls": 2,
+        "total_tokens": 2657,
+        "estimated_cost_usd": 0.00047595,
+        "repeat": 2
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the job matching ID **match-06-cpp-security** (C++ Security Engineer), your compatibility score is **28.53/100**. Here are your weaknesses in relation to the job requirements:\n\n### Unmet Requirements:\n- **German C2**: Your CV shows proficiency in German at B1 level, which does not meet the requirement for C2.\n\n### Unknown Requirements:\n- **C**: No evidence of experience or knowledge in C.\n- **Rust**: No evidence of experience or knowledge in Rust.\n- **Linux**: No evidence of experience or knowledge in Linux.\n- **3 years of experience**: No specific evidence of having three years of relevant experience.\n\nFeel free to ask if you need help with anything else!",
+        "wall_latency_ms": 4083.043,
+        "llm_calls": 2,
+        "total_tokens": 2702,
+        "estimated_cost_usd": 0.0004845,
+        "repeat": 2
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the role of **Senior Platform Engineer**, your match score is **41.26/100**. Here's a breakdown of the requirements:\n\n### Supported Requirements\n- **Python**: Supported; explicitly evidenced in your CV.  \n  - Evidence: \"Python for data processing and model training.\"\n\n### Unmet Requirements\n- **German C1**: Unmet; your evidence shows proficiency below C1.  \n  - Evidence: \"English C1 and German B1.\"\n\n### Unknown Requirements\n- **Kubernetes**: Unknown; there's no evidence in your CV regarding this skill.\n- **5 years**: Unknown; there are no precise, evidenced employment boundaries mentioned in your CV.\n\nIf you have experience with Kubernetes or meet the 5 years requirement, consider adding that information to your CV to improve your match for this role.",
+        "wall_latency_ms": 3983.469,
+        "llm_calls": 2,
+        "total_tokens": 2645,
+        "estimated_cost_usd": 0.0004836,
+        "repeat": 2
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here's the comparison of your fit for the two positions: **Senior GenAI Engineer** (fixture-05) and **Cloud Platform Engineer** (match-04-cloud-platform).\n\n### 1. Senior GenAI Engineer (fixture-05)\n- **Match Score:** 48.06/100\n- **Supported Requirements:** \n  - **Python**: Explicitly evidenced in your CV.\n    - *Evidence*: \"Python for data processing and model training.\"\n  - **English**: Language explicitly listed; job did not specify a level.\n    - *Evidence*: \"English C1 and German B1.\"\n\n- **Unmet Requirements:** \n  - None.\n\n- **Unknown Requirements:**\n  - **RAG**: No evidence in the CV.\n  - **LangChain**: No evidence in the CV.\n  - **Azure OpenAI**: No evidence in the CV.\n  - **5 years of experience**: No precise, evidenced employment boundaries.\n\n### 2. Cloud Platform Engineer (match-04-cloud-platform)\n- **Match Score:** 53.45/100\n- **Supported Requirements:**\n  - **Azure**: Explicitly evidenced in your CV.\n    - *Evidence*: \"Deployed a demonstration service on Azure Container Apps.\"\n  - **English**: Language explicitly listed; job did not specify a level.\n    - *Evidence*: \"English C1 and German B1.\"\n\n- **Unmet Requirements:** \n  - None.\n\n- **Unknown Requirements:**\n  - **Terraform**: No evidence in the CV.\n  - **Kubernetes**: No evidence in the CV.\n\n### Summary of Skill Gaps\n- **For Senior GenAI Engineer**:\n  - RAG\n  - LangChain\n  - Azure OpenAI\n  - 5 years of experience\n\n- **For Cloud Platform Engineer**:\n  - Terraform\n  - Kubernetes\n\nYou might want to consider adding evidence of these skills to your CV to enhance your fit for these positions.",
+        "wall_latency_ms": 6695.181,
+        "llm_calls": 2,
+        "total_tokens": 3489,
+        "estimated_cost_usd": 0.0007326,
+        "repeat": 2
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match",
+          "get_job_details",
+          "get_job_details",
+          "get_job_details",
+          "get_job_details",
+          "get_job_details"
+        ],
+        "tool_calls": 7,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are the top AI Engineer job matches in Germany based on your CV:\n\n### 1. AI Solutions Engineer\n- **Location:** Heidelberg\n- **Score:** 74.31/100\n- **Skills Required:** Python, REST APIs, Azure\n- **Languages Required:** English, German\n- **Supported Requirements:**\n  - **Python:** Evidenced in CV (e.g., \"Python for data processing and model training.\")\n  - **Azure:** Evidenced in CV (e.g., \"Deployed a demonstration service on Azure Container Apps.\")\n  - **English:** Evidenced, C1 level.\n  - **German:** Evidenced, B1 level.\n- **Unmet Requirements:** None.\n- **Unknown Requirements:** REST APIs (Not evidenced in CV; absence is not proof of inability).\n\n---\n\n### 2. AI Platform Engineer\n- **Location:** Frankfurt\n- **Score:** 73.72/100\n- **Skills Required:** Python, Docker, Kubernetes, Azure\n- **Languages Required:** English\n- **Supported Requirements:**\n  - **Python:** Evidenced in CV.\n  - **Docker:** Evidenced in CV (e.g., \"Packaged applications with Docker and automated checks using GitHub Actions.\")\n  - **Azure:** Evidenced in CV.\n  - **English:** Evidenced, C1 level.\n- **Unmet Requirements:** None.\n- **Unknown Requirements:** Kubernetes (Not evidenced in CV); 4 years of experience (No precise recorded employment boundaries in CV).\n\n---\n\n### 3. AI Engineer\n- **Location:** Berlin\n- **Score:** 69.59/100\n- **Skills Required:** Python, LangGraph, Azure\n- **Languages Required:** English, German\n- **Supported Requirements:**\n  - **Python:** Evidenced in CV.\n  - **Azure:** Evidenced in CV.\n  - **English:** Evidenced, C1 level.\n  - **German:** Evidenced, B1 level.\n- **Unmet Requirements:** None.\n- **Unknown Requirements:** LangGraph (Not evidenced in CV); 3 years of experience (No precise recorded employment boundaries in CV).\n\n---\n\n### 4. Applied AI Engineer\n- **Location:** Cologne\n- **Score:** 69.51/100\n- **Skills Required:** Python, FastAPI, PostgreSQL\n- **Languages Required:** German, English\n- **Supported Requirements:**\n  - **Python:** Evidenced in CV.\n  - **FastAPI:** Evidenced in CV (e.g., \"Developed a FastAPI service with Pydantic validation and REST endpoints.\")\n  - **English:** Evidenced, C1 level.\n  - **German:** Evidenced, B1 level.\n- **Unmet Requirements:** None.\n- **Unknown Requirements:** PostgreSQL (Not evidenced in CV); 2 years of experience (No precise recorded employment boundaries in CV).\n\n---\n\n### 5. Junior AI Engineer\n- **Location:** Stuttgart\n- **Score:** 69.51/100\n- **Skills Required:** Python, SQL, Git\n- **Languages Required:** English, German\n- **Supported Requirements:**\n  - **Python:** Evidenced in CV.\n  - **SQL:** Evidenced in CV (e.g., \"SQL for relational queries.\")\n  - **English:** Evidenced, C1 level.\n  - **German:** Evidenced, B1 level.\n- **Unmet Requirements:** None.\n- **Unknown Requirements:** Git (Not evidenced in CV); 1 year of experience (No precise recorded employment boundaries in CV).\n\n---\n\n### Summary\nYou have strong matches for these roles with key skills like Python and Azure well-evidenced in your CV. However, there are unknown requirements in several job postings, such as REST APIs, Kubernetes, LangGraph, and Git. Consider updating your CV to reflect any familiarity with these skills if applicable.",
+        "wall_latency_ms": 11633.059,
+        "llm_calls": 3,
+        "total_tokens": 7730,
+        "estimated_cost_usd": 0.0015933,
+        "repeat": 2
+      },
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV shows a score of **52.87/100** for the LLM Engineer position (job ID: fixture-21). Here's a breakdown of how well you fit the requirements:\n\n### Supported Requirements\n- **Python:** Supported, as your CV explicitly mentions Python for data processing and model training.\n- **English:** Supported, with your CV listing English at a C1 level.\n\n### Unmet Requirements\n- There are no unmet requirements based on your CV.\n\n### Unknown Requirements\n- **OpenAI API:** This skill is not evidenced in your CV; however, absence does not imply inability.\n- **Pydantic:** Similar to the OpenAI API, this skill is also not evidenced in your CV.\n\n### Summary\nYour strengths include strong skills in Python and proficiency in English. To improve your fit, consider adding explicit experience with the OpenAI API and Pydantic to your CV, as these are relevant to the LLM Engineer role but are currently unknown.",
+        "wall_latency_ms": 3277.421,
+        "llm_calls": 2,
+        "total_tokens": 2660,
+        "estimated_cost_usd": 0.00049665,
+        "repeat": 3
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the **Generative AI Developer** role (job ID: fixture-29), here are the findings regarding the requirements:\n\n### Supported Requirements\n- **Python**: Supported; explicitly evidenced in your CV with the statement: \"Python for data processing and model training.\"\n- **German**: Supported; evidenced as \"English C1 and German B1.\" (the job did not specify a level).\n\n### Unmet Requirements\n- There are no unmet requirements.\n\n### Unknown Requirements\nThese are the aspects that your CV does not address, and not having evidence does not indicate a lack of ability:\n- **RAG**: No evidence in the CV.\n- **pgvector**: No evidence in the CV.\n- **3 years of experience**: No precise, evidenced employment duration listed.\n\nWould you like assistance in updating your CV to reflect any of these unknown requirements?",
+        "wall_latency_ms": 3497.459,
+        "llm_calls": 2,
+        "total_tokens": 2682,
+        "estimated_cost_usd": 0.00049095,
+        "repeat": 3
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **C++ Security Engineer** (job ID: **match-06-cpp-security**), your compatibility score is **28.53/100**. Here are the details regarding your weaknesses:\n\n### Unmet Requirements:\n1. **German C2**: Your CV indicates you are at a **B1 level** in German, which does not meet the C2 proficiency required for this role.\n\n### Unknown Requirements:\n1. **C**: There is no evidence in your CV regarding your knowledge or experience in the C programming language.\n2. **Rust**: Similarly, your CV does not provide evidence for skills in Rust.\n3. **Linux**: Your CV lacks information related to your experience with Linux.\n4. **3 years of experience**: There are no specific details in your CV regarding your total years of relevant employment, so this requirement is unknown.\n\nWould you like to know more about this job or seek help with anything else?",
+        "wall_latency_ms": 3484.447,
+        "llm_calls": 2,
+        "total_tokens": 2745,
+        "estimated_cost_usd": 0.0005103,
+        "repeat": 3
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **Senior Platform Engineer** (match-05-senior-platform), your compatibility score is **41.26/100**. Here's how you meet the job requirements:\n\n### Supported Requirements\n- **Python**:\n  - **Status**: Supported\n  - **Evidence**: \"Python for data processing and model training.\"\n\n### Unmet Requirements\n- **German C1**:\n  - **Status**: Unmet\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unknown Requirements\n- **Kubernetes**:\n  - **Status**: Unknown\n  - **Reason**: No evidence in the CV.\n  \n- **5 years of experience**:\n  - **Status**: Unknown\n  - **Reason**: No precise, evidenced employment boundaries.\n\n### Summary\nYou have a solid foundation in Python, but to improve your compatibility, consider enhancing your German language skills and possibly providing evidence of skills in Kubernetes and your total years of experience.",
+        "wall_latency_ms": 3648.376,
+        "llm_calls": 2,
+        "total_tokens": 2681,
+        "estimated_cost_usd": 0.0005052,
+        "repeat": 3
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": false,
+        "flagged_sentences": [
+          "Azure OpenAI: ### Summary of Skill Gaps > You might consider adding information regarding RAG, LangChain, Azure OpenAI, Terraform, and Kubernetes to strengthen your CV for these roles.",
+          "Kubernetes: ### Summary of Skill Gaps > You might consider adding information regarding RAG, LangChain, Azure OpenAI, Terraform, and Kubernetes to strengthen your CV for these roles.",
+          "Terraform: ### Summary of Skill Gaps > You might consider adding information regarding RAG, LangChain, Azure OpenAI, Terraform, and Kubernetes to strengthen your CV for these roles.",
+          "LangChain: ### Summary of Skill Gaps > You might consider adding information regarding RAG, LangChain, Azure OpenAI, Terraform, and Kubernetes to strengthen your CV for these roles.",
+          "RAG: ### Summary of Skill Gaps > You might consider adding information regarding RAG, LangChain, Azure OpenAI, Terraform, and Kubernetes to strengthen your CV for these roles."
+        ],
+        "final_answer": "### Fit Comparison\n\n#### 1. **Senior GenAI Engineer (fixture-05)**\n- **Match Score**: 48.06/100\n\n**Supported Requirements**:\n- **Python**: Explicitly evidenced in CV.  \n  - *Evidence*: \"Python for data processing and model training.\"\n- **English**: Language explicitly listed; job did not specify a level.  \n  - *Evidence*: \"English C1 and German B1.\"\n\n**Unmet Requirements**: None\n\n**Unknown Requirements**:\n- **RAG**: No evidence in CV.\n- **LangChain**: No evidence in CV.\n- **Azure OpenAI**: No evidence in CV.\n- **5 years experience**: No precise, evidenced employment boundaries.\n\n---\n\n#### 2. **Cloud Platform Engineer (match-04-cloud-platform)**\n- **Match Score**: 53.45/100\n\n**Supported Requirements**:\n- **Azure**: Explicitly evidenced in CV.  \n  - *Evidence*: \"Deployed a demonstration service on Azure Container Apps.\"\n- **English**: Language explicitly listed; job did not specify a level.  \n  - *Evidence*: \"English C1 and German B1.\"\n\n**Unmet Requirements**: None\n\n**Unknown Requirements**:\n- **Terraform**: No evidence in CV.\n- **Kubernetes**: No evidence in CV.\n\n---\n\n### Summary of Skill Gaps\n- **For Senior GenAI Engineer (fixture-05)**: Lack of evidence for RAG, LangChain, Azure OpenAI, and 5 years of experience.\n- **For Cloud Platform Engineer (match-04-cloud-platform)**: Lack of evidence for Terraform and Kubernetes.\n\nYou might consider adding information regarding RAG, LangChain, Azure OpenAI, Terraform, and Kubernetes to strengthen your CV for these roles.",
+        "wall_latency_ms": 7296.887,
+        "llm_calls": 2,
+        "total_tokens": 3456,
+        "estimated_cost_usd": 0.0007128,
+        "repeat": 3
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv",
+          "search_cv"
+        ],
+        "tool_calls": 10,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are some AI Engineer jobs in Germany that match your CV, along with an explanation of the compatibility and any potential gaps:\n\n### 1. **AI Solutions Engineer**\n- **Location:** Heidelberg\n- **Match Score:** 74.31/100\n- **Supported Requirements:**\n  - **Python**: Explicitly evidenced in your CV.\n  - **Azure**: Supported by your experience deploying services on Azure.\n  - **Languages**: Both English (C1) and German (B1) are explicitly supported.\n- **Unknown Requirements:**\n  - **REST APIs**: There is no evidence in your CV regarding REST API experience.\n\n### 2. **AI Platform Engineer**\n- **Location:** Frankfurt\n- **Match Score:** 73.72/100\n- **Supported Requirements:**\n  - **Python**: Clearly evidenced in your CV.\n  - **Docker**: Supported by your experience in packaging applications.\n  - **Azure**: Evidenced through your deployment tasks.\n  - **Languages**: Both English (C1) and German (B1) are supported.\n- **Unknown Requirements:**\n  - **Kubernetes**: Not evidenced in your CV; absence is not proof of inability.\n  - **4 years of experience**: There is no precise evidence of your employment duration.\n\n### 3. **AI Engineer**\n- **Location:** Berlin\n- **Match Score:** 69.59/100\n- **Supported Requirements:**\n  - **Python**: Evidenced in your CV.\n  - **Azure**: Supported by your deployment experience.\n  - **Languages**: Supported in both English (C1) and German (B1).\n- **Unknown Requirements:**\n  - **LangGraph**: Not evidenced in your CV; absence indicates no experience.\n  - **3 years of experience**: No precise evidence of this duration in your CV.\n\n### 4. **Applied AI Engineer**\n- **Location:** Cologne\n- **Match Score:** 69.51/100\n- **Supported Requirements:**\n  - **Python**: Evidenced.\n  - **FastAPI**: Supported through your development of a FastAPI service.\n  - **Languages**: Both languages supported as mentioned.\n- **Unknown Requirements:**\n  - **PostgreSQL**: Absent from your CV.\n  - **2 years of experience**: No specific evidence provided.\n\n### 5. **Junior AI Engineer**\n- **Location:** Stuttgart\n- **Match Score:** 69.51/100\n- **Supported Requirements:**\n  - **Python**: Evidenced.\n  - **SQL**: Supported in your CV.\n  - **Languages**: Both English (C1) and German (B1) supported.\n- **Unknown Requirements:**\n  - **Git**: Not evidenced in your CV.\n  - **1 year of experience**: No precise evidence.\n\n### Summary of Gaps:\n- **REST APIs** and **LangGraph** skills in your CV are marked as unknown, meaning you may want to provide evidence of experience with these technologies.\n- **Experience duration** for most positions is also listed as unknown. If you have relevant experience, specifying durations could strengthen your applications.\n  \nIf you want to apply for any of these positions or have additional queries, let me know!",
+        "wall_latency_ms": 9695.363,
+        "llm_calls": 3,
+        "total_tokens": 9160,
+        "estimated_cost_usd": 0.0017826,
+        "repeat": 3
+      },
+      {
+        "case": "gaps-llm-engineer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "unknown_mentioned": [
+          "OpenAI API",
+          "Pydantic"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-21",
+            52.87
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Your CV received a match score of **52.87/100** for the LLM Engineer role (job ID: fixture-21). Here's a breakdown of your fit and the requirements:\n\n### Supported Requirements\n- **Python**: Supported. You have explicitly evidenced this skill in your CV.\n  - **Evidence**: \"Python for data processing and model training.\"\n  \n- **English**: Supported. This language is explicitly listed in your CV, although the job did not specify a level.\n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unmet Requirements\n- There are no unmet requirements based on your CV.\n\n### Unknown Requirements\n- **OpenAI API**: Unknown. This skill is not evidenced in your CV.\n- **Pydantic**: Unknown. This skill is also not evidenced in your CV.\n\n### Summary\nWhile you have strengths in Python and English, consider adding evidence for the OpenAI API and Pydantic if you have experience with them. This could help improve your fit for the role.",
+        "wall_latency_ms": 3248.117,
+        "llm_calls": 2,
+        "total_tokens": 2677,
+        "estimated_cost_usd": 0.00050685,
+        "repeat": 4
+      },
+      {
+        "case": "lacking-genai-developer",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "RAG",
+          "pgvector"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-29",
+            52.3
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the **Generative AI Developer** role (fixture-29), here are the requirements and their statuses:\n\n### Supported Requirements\n- **Python**: This is explicitly evidenced in your CV. \n  - **Evidence**: \"Python for data processing and model training.\"\n  \n- **German Language**: Supported as well, although no specific level is stated. \n  - **Evidence**: \"English C1 and German B1.\"\n\n### Unmet Requirements\n- There are no unmet requirements for this role.\n\n### Unknown Requirements\n- **RAG**: No evidence in the CV. The absence of evidence does not imply a lack of ability.\n- **pgvector**: No evidence in the CV. Again, the absence does not imply inability.\n- **3 years of experience**: No precise evidence regarding your duration of employment.\n\nYour match score for this role is **52.3/100**. If you have experience or skills in RAG or pgvector, or if you can specify your work experience further, consider adding that information to your CV for a stronger application.",
+        "wall_latency_ms": 3565.021,
+        "llm_calls": 2,
+        "total_tokens": 2726,
+        "estimated_cost_usd": 0.00051735,
+        "repeat": 4
+      },
+      {
+        "case": "weaknesses-cpp-security",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "unknown_mentioned": [
+          "3 years",
+          "C",
+          "Linux",
+          "Rust"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-06-cpp-security",
+            28.53
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **C++ Security Engineer** (job ID: `match-06-cpp-security`), your match score is **28.53/100**. \n\n### Weaknesses:\n1. **Unmet Requirement**:\n   - **German C2**: Your CV indicates proficiency below C2, as it shows \"German B1.\"\n\n2. **Unknown Requirements**:\n   - **C**: No evidence of experience or proficiency in C.\n   - **Rust**: No evidence of experience or proficiency in Rust.\n   - **Linux**: No evidence of experience or proficiency in Linux.\n   - **3 years**: No precise evidence of having 3 years of relevant experience.\n\nYou could consider strengthening your CV to address the unmet and unknown requirements if you possess any experience or knowledge in those areas.",
+        "wall_latency_ms": 3436.62,
+        "llm_calls": 2,
+        "total_tokens": 2718,
+        "estimated_cost_usd": 0.0004941,
+        "repeat": 4
+      },
+      {
+        "case": "unmet-and-unknown-platform",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match"
+        ],
+        "tool_calls": 1,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Kubernetes"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "match-05-senior-platform",
+            41.26
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "For the position of **Senior Platform Engineer** (job ID: match-05-senior-platform), here are your match results:\n\n- **Match Score**: 41.26/100\n\n### Supported Requirements\n- **Python**: Supported. This is explicitly evidenced in your CV. \n  - Evidence: \"Python for data processing and model training.\"\n\n### Unmet Requirements\n- **German C1**: Unmet. Your proficiency is below C1. \n  - Evidence: \"English C1 and German B1.\"\n\n### Unknown Requirements\n- **Kubernetes**: Unknown. There is no evidence of this in your CV.\n- **5 years of experience**: Unknown. No precise evidence of your employment duration is provided in your CV. \n\nIf you have experience with Kubernetes or can clarify your work history, including years of experience, consider adding that evidence to your CV.",
+        "wall_latency_ms": 3374.91,
+        "llm_calls": 2,
+        "total_tokens": 2658,
+        "estimated_cost_usd": 0.0004914,
+        "repeat": 4
+      },
+      {
+        "case": "compare-gaps-two-jobs",
+        "status": "completed",
+        "tool_sequence": [
+          "calculate_match",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 2,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "unknown_mentioned": [
+          "5 years",
+          "Azure OpenAI",
+          "Kubernetes",
+          "LangChain",
+          "RAG",
+          "Terraform"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-05",
+            48.06
+          ],
+          [
+            "match-04-cloud-platform",
+            53.45
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here\u2019s a comparison of your fit for the roles **Senior GenAI Engineer (fixture-05)** and **Cloud Platform Engineer (match-04-cloud-platform)**, along with the skill gaps identified for each position.\n\n### 1. Senior GenAI Engineer (fixture-05)\n- **Score**: 48.06/100\n- **Supported Skills**:\n  - **Python**: Evidenced by your CV (e.g., \"Python for data processing and model training\").\n  - **English**: Evidenced by your CV (C1 level).\n\n- **Unmet Skills**: None.\n\n- **Unknown Requirements**:\n  - **RAG**: No evidence in the CV.\n  - **LangChain**: No evidence in the CV.\n  - **Azure OpenAI**: No evidence in the CV.\n  - **5 years of experience**: No precise evidence of employment boundaries.\n\n### 2. Cloud Platform Engineer (match-04-cloud-platform)\n- **Score**: 53.45/100\n- **Supported Skills**:\n  - **Azure**: Evidenced by your CV (e.g., \"Deployed a demonstration service on Azure Container Apps\").\n  - **English**: Evidenced by your CV (C1 level).\n\n- **Unmet Skills**: None.\n\n- **Unknown Requirements**:\n  - **Terraform**: No evidence in the CV.\n  - **Kubernetes**: No evidence in the CV.\n\n### Summary\n- For the **Senior GenAI Engineer** position, you have a solid foundation but lack evidentiary support for several skills, including RAG, LangChain, Azure OpenAI, and explicit experience duration.\n  \n- For the **Cloud Platform Engineer** role, you perform better, evidenced primarily by your knowledge of Azure, but need to provide evidence for Terraform and Kubernetes skills.\n\nIf you have experience with the unknown skills, consider adding that information to your CV to strengthen your applications for both roles.",
+        "wall_latency_ms": 5512.79,
+        "llm_calls": 2,
+        "total_tokens": 3483,
+        "estimated_cost_usd": 0.000729,
+        "repeat": 4
+      },
+      {
+        "case": "search-and-explain-germany",
+        "status": "completed",
+        "tool_sequence": [
+          "search_jobs",
+          "calculate_match"
+        ],
+        "tool_calls": 2,
+        "model_turns": 3,
+        "calculate_match_covered": true,
+        "unknown_requirements": [
+          "1 years",
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "unknown_mentioned": [
+          "2 years",
+          "3 years",
+          "4 years",
+          "Git",
+          "Kubernetes",
+          "LangGraph",
+          "PostgreSQL",
+          "REST APIs"
+        ],
+        "mischaracterized_unknowns": [],
+        "ungrounded_scores": [],
+        "scores": [
+          [
+            "fixture-01",
+            69.59
+          ],
+          [
+            "fixture-13",
+            69.51
+          ],
+          [
+            "fixture-17",
+            73.72
+          ],
+          [
+            "fixture-25",
+            69.51
+          ],
+          [
+            "fixture-33",
+            74.31
+          ]
+        ],
+        "task_success": true,
+        "flagged_sentences": [],
+        "final_answer": "Here are some AI Engineer job matches in Germany that fit your CV, along with details on what you excel in and areas where you may be lacking evidence:\n\n### 1. AI Solutions Engineer\n- **Location:** Heidelberg\n- **Score:** 74.31/100\n- **Supported:**\n  - **Python**: Evidenced (e.g., \"Python for data processing and model training.\")\n  - **Azure**: Evidenced (e.g., \"Deployed a demonstration service on Azure Container Apps.\")\n  - **English**: Evidenced (C1 level)\n  - **German**: Evidenced (B1 level)\n- **Unmet:** None\n- **Unknown:**\n  - **REST APIs**: No evidence in the CV.\n\n---\n\n### 2. AI Platform Engineer\n- **Location:** Frankfurt\n- **Score:** 73.72/100\n- **Supported:**\n  - **Python**: Evidenced (e.g., \"Python for data processing and model training.\")\n  - **Docker**: Evidenced (e.g., \"Packaged applications with Docker.\")\n  - **Azure**: Evidenced (e.g., \"Deployed a demonstration service on Azure Container Apps.\")\n  - **English**: Evidenced (C1 level)\n- **Unmet:** None\n- **Unknown:**\n  - **Kubernetes**: No evidence in the CV.\n  - **4 years of experience**: No precise, evidenced employment boundaries.\n\n---\n\n### 3. AI Engineer\n- **Location:** Berlin\n- **Score:** 69.59/100\n- **Supported:**\n  - **Python**: Evidenced (e.g., \"Python for data processing and model training.\")\n  - **Azure**: Evidenced (e.g., \"Deployed a demonstration service on Azure Container Apps.\")\n  - **English**: Evidenced (C1 level)\n  - **German**: Evidenced (B1 level)\n- **Unmet:** None\n- **Unknown:**\n  - **LangGraph**: No evidence in the CV.\n  - **3 years of experience**: No precise, evidenced employment boundaries.\n\n---\n\n### 4. Applied AI Engineer\n- **Location:** Cologne\n- **Score:** 69.51/100\n- **Supported:**\n  - **Python**: Evidenced (e.g., \"Python for data processing and model training.\")\n  - **FastAPI**: Evidenced (e.g., \"Developed a FastAPI service.\")\n  - **English**: Evidenced (C1 level)\n  - **German**: Evidenced (B1 level)\n- **Unmet:** None\n- **Unknown:**\n  - **PostgreSQL**: No evidence in the CV.\n  - **2 years of experience**: No precise, evidenced employment boundaries.\n\n---\n\n### 5. Junior AI Engineer\n- **Location:** Stuttgart\n- **Score:** 69.51/100\n- **Supported:**\n  - **Python**: Evidenced (e.g., \"Python for data processing and model training.\")\n  - **SQL**: Evidenced (e.g., \"SQL for relational queries.\")\n  - **English**: Evidenced (C1 level)\n  - **German**: Evidenced (B1 level)\n- **Unmet:** None\n- **Unknown:**\n  - **Git**: No evidence in the CV.\n  - **1 year of experience**: No precise, evidenced employment boundaries.\n\n---\n\n### Summary\nYou have strong qualifications in Python, Azure, and language skills (English and German) across all roles. However, for optimal alignment, consider adding evidence for the following skills to your CV:\n\n- **REST APIs** and **LangGraph** are skills that are noted as unknown.\n- Experience levels (3 years for some positions, 4 years for others) aren't fully evidenced.\n- Additional skills like **Kubernetes**, **PostgreSQL**, and **Git** are also marked as unknown.\n\nIf you'd like me to help with any specific actions (like saving a job or expanding on your CV), just let me know!",
+        "wall_latency_ms": 11739.987,
+        "llm_calls": 3,
+        "total_tokens": 7121,
+        "estimated_cost_usd": 0.00147675,
+        "repeat": 4
+      }
+    ]
+  },
+  "rescored_at": "2026-10-28T23:17:43+00:00",
+  "model": "gpt-4o-mini"
+}

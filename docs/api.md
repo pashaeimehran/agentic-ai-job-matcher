@@ -7,8 +7,9 @@ HTTP request → route (src/api/app.py) → ApiServices.call_tool() / LangGraphA
              → ToolRegistry.execute() → src.matching / src.rag / job catalog / saved-job store
 ```
 
-Routes contain no search, matching or scoring logic. Every endpoint except `/health` and the
-catalog listing is a call to one of the five shared tools, or to the LangGraph agent.
+Routes contain no search, matching or scoring logic. Every endpoint except the probes
+(`/health`, `/ready`) and the catalog listing is a call to one of the five shared tools, or to
+the LangGraph agent.
 
 ## Running
 
@@ -17,10 +18,17 @@ python -m pip install -r requirements.txt
 python -m scripts.serve_api            # http://127.0.0.1:8000, OpenAPI UI at /docs
 ```
 
-Default services (`build_default_services`): the synthetic fixture CV with offline hash
-embeddings, the fixture job catalog, and saved jobs in git-ignored `data/private/saved_jobs.json`.
-`/chat` is enabled only when `OPENAI_API_KEY` is set (`OPENAI_MODEL` defaults to `gpt-4o-mini`);
-those calls are paid. All other endpoints are deterministic and make no LLM calls.
+Default services (`build_default_services`) come from environment variables (`.env.example`):
+the synthetic fixture CV, the fixture job catalog, and saved jobs in git-ignored
+`data/private/saved_jobs.json` (or PostgreSQL when `DATABASE_URL` is set).
+
+- `APP_MODE=fixture` (default without `OPENAI_API_KEY`): `/chat` runs the real LangGraph agent and
+  tools with a deterministic scripted provider (`src/llm/fixture_provider.py`); hash embeddings;
+  no paid calls.
+- `APP_MODE=live`: `/chat` uses OpenAI (`OPENAI_MODEL`, default `gpt-4o-mini`) and the CV index
+  uses OpenAI embeddings; those calls are paid.
+
+All other endpoints are deterministic and make no LLM calls in either mode.
 
 The CV is selected by server configuration, never by the request. A request that includes `cv_id`
 is rejected as a validation error.
@@ -29,7 +37,8 @@ is rejected as a validation error.
 
 | Method | Path | Backed by | Purpose |
 |---|---|---|---|
-| GET | `/health` | registry, catalog | process health; no LLM call |
+| GET | `/health` | registry, catalog | liveness: the process is up; no dependency checks |
+| GET | `/ready` | database, CV index, catalog | readiness: 200 when dependencies are usable, else 503 |
 | GET | `/jobs` | `JobCatalog.all()` | browse the catalog (paged, catalog order) |
 | GET | `/jobs/{job_id}` | `get_job_details` | full structured posting |
 | POST | `/search` | `search_jobs` or `search_cv` | ranked job search or CV evidence retrieval |
@@ -42,9 +51,24 @@ otherwise one is generated. It is echoed in the `X-Request-ID` response header.
 ### GET /health
 
 ```json
-{"status": "ok", "version": "0.1.0", "agent": "langgraph", "chat_available": true,
+{"status": "ok", "version": "0.1.0", "mode": "fixture", "agent": "langgraph", "chat_available": true,
  "tools": ["search_jobs", "get_job_details", "search_cv", "calculate_match", "save_job"],
  "catalog_jobs": 16}
+```
+
+### GET /ready
+
+Checks PostgreSQL reachability and the required tables (`cv_documents`, `cv_chunks`, `saved_jobs`,
+`cost_log`) when `DATABASE_URL` is set, that the configured CV has indexed chunks, and that the
+catalog is loaded. It never calls an LLM, so readiness does not depend on OpenAI availability.
+Details name the failing check, never a connection string.
+
+```json
+{"status": "ready", "mode": "fixture",
+ "checks": {"database": {"ok": true, "detail": "schema ready"},
+            "cv_index": {"ok": true, "detail": "13 chunks for the configured CV"},
+            "catalog": {"ok": true, "detail": "16 jobs"},
+            "chat_provider": {"ok": true, "detail": "deterministic fixture provider"}}}
 ```
 
 ### GET /jobs?offset=0&limit=20

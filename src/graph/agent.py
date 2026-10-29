@@ -12,9 +12,11 @@ from langgraph.errors import GraphRecursionError
 from langgraph.graph import END, START, StateGraph
 
 from src.agent.prompts import SYSTEM_PROMPT
-from src.graph.nodes import GraphNodes, route_after_agent, route_after_tools
+from src.graph.nodes import GraphNodes, route_after_agent, route_after_tools, traced_node
 from src.graph.state import AgentState, GraphConfig, GraphRunResult
 from src.llm.tool_calling import ToolCallingLLMProvider
+from src.observability.context import run_scope
+from src.observability.tracing import get_tracer
 from src.tools.registry import ToolRegistry
 
 # Every application type that can appear in checkpointed state. Anything else is
@@ -37,11 +39,8 @@ def memory_checkpointer() -> InMemorySaver:
 
 def build_graph(nodes: GraphNodes, checkpointer: BaseCheckpointSaver | None = None):
     graph = StateGraph(AgentState)
-    graph.add_node("prepare", nodes.prepare)
-    graph.add_node("agent", nodes.agent)
-    graph.add_node("execute_tools", nodes.execute_tools)
-    graph.add_node("finalize", nodes.finalize)
-    graph.add_node("fail", nodes.fail)
+    for name in ("prepare", "agent", "execute_tools", "finalize", "fail"):
+        graph.add_node(name, traced_node(name, getattr(nodes, name)))
     graph.add_edge(START, "prepare")
     graph.add_edge("prepare", "agent")
     graph.add_conditional_edges("agent", route_after_agent, ["execute_tools", "finalize", "fail"])
@@ -71,6 +70,16 @@ class LangGraphAgent:
         invoke_config: dict = {"recursion_limit": self.config.recursion_limit()}
         if thread_id:
             invoke_config["configurable"] = {"thread_id": thread_id}
+        with run_scope(run_id, budget=self.config.budget()), get_tracer().span(
+                "agent.langgraph", kind="agent", input=request,
+                metadata={"run_id": run_id, "thread_id": thread_id}) as span:
+            result = self._invoke(request, run_id, thread_id, invoke_config)
+            span.update(metadata={"status": result.status, "model_turns": result.model_turns,
+                                  "tool_calls": len(result.tool_calls), "path": result.path},
+                        output=result.final_answer or result.error)
+            return result
+
+    def _invoke(self, request: str, run_id: str, thread_id: str | None, invoke_config: dict) -> GraphRunResult:
         try:
             state = self.graph.invoke({"request": request, "run_id": run_id}, invoke_config)
         except GraphRecursionError:

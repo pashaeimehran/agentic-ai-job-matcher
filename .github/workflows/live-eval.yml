@@ -1,0 +1,39 @@
+# Paid live evaluations on synthetic data. Manual trigger only, never on push or PR.
+# Requires the repository secret OPENAI_API_KEY.
+name: Live evaluation
+
+on:
+  workflow_dispatch:
+    inputs:
+      repeats:
+        description: "Repeats per scenario for the prompt version comparison"
+        default: "3"
+
+permissions:
+  contents: read
+
+jobs:
+  live-eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: live-evaluation
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      APP_MODE: live
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+      - run: python -m pip install -r requirements-dev.txt -c constraints.txt
+      - name: Live tool selection, latency, tokens, cost and cache experiment
+        run: python -m scripts.evaluate_system --live --output "$RUNNER_TEMP/system_live.json"
+      - name: Prompt version comparison (v1 vs v2)
+        run: python -m scripts.compare_versions --mode live --repeats "${{ inputs.repeats }}" --output "$RUNNER_TEMP/version_comparison_live.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: live-evaluation
+          path: |
+            ${{ runner.temp }}/*.json
+            ${{ runner.temp }}/*.md

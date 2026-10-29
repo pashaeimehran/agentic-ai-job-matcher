@@ -6,6 +6,7 @@ run in src.tools via ToolRegistry.execute(); /chat runs LangGraphAgent.
 from __future__ import annotations
 
 import re
+import time
 import uuid
 from contextlib import asynccontextmanager
 from typing import Callable
@@ -20,13 +21,17 @@ from src.api.dependencies import (ApiServices, build_default_services, get_agent
 from src.api.errors import ApiError, ErrorResponse, from_agent_status, log_event
 from src.api.schemas import (AnalyzeJobRequest, AnalyzeJobResponse, ChatRequest, ChatResponse, CVSearchRequest,
                              CVSearchResponse, HealthResponse, JobDetailsResponse, JobListItem, JobListResponse,
-                             JobSearchResponse, SearchRequest, SearchResponse, ToolCallSummary)
+                             JobSearchResponse, ReadinessCheck, ReadyResponse, SearchRequest, SearchResponse,
+                             ToolCallSummary)
 from src.graph import LangGraphAgent
+from src.observability.context import run_scope
+from src.observability.tracing import NoopTracer, get_tracer
 from src.tools.jobs import JobCatalog
 from src.tools.schemas import JobDetailsResult
 
 API_VERSION = "0.1.0"
 _REQUEST_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
+_PROBES = frozenset({"/health", "/ready"})
 ERROR_RESPONSES = {code: {"model": ErrorResponse} for code in (404, 409, 422, 500, 502, 503)}
 
 router = APIRouter()
@@ -34,8 +39,43 @@ router = APIRouter()
 
 @router.get("/health", response_model=HealthResponse)
 def health(services: ApiServices = Depends(get_services)) -> HealthResponse:
-    return HealthResponse(version=API_VERSION, chat_available=services.agent is not None,
+    return HealthResponse(version=API_VERSION, mode=services.mode, chat_available=services.agent is not None,
                           tools=services.registry.names(), catalog_jobs=len(services.context.catalog.all()))
+
+
+def readiness_checks(services: ApiServices) -> dict[str, ReadinessCheck]:
+    """Database reachability and schema, CV index and provider configuration; no LLM calls."""
+    checks: dict[str, ReadinessCheck] = {}
+    if services.database_url:
+        try:
+            from src.db import missing_tables
+            missing = missing_tables(services.database_url)
+            checks["database"] = ReadinessCheck(ok=not missing, detail="schema ready" if not missing
+                                                else f"missing tables: {', '.join(missing)}")
+        except Exception as exc:  # noqa: BLE001 - reported, never raised; no DSN in the detail
+            checks["database"] = ReadinessCheck(ok=False, detail=f"unreachable ({type(exc).__name__})")
+    else:
+        checks["database"] = ReadinessCheck(ok=True, detail="not configured (in-memory CV store)")
+    if checks["database"].ok:
+        try:
+            chunks = services.context.cv_service.store.list_chunks(services.context.cv_id)
+            checks["cv_index"] = ReadinessCheck(ok=bool(chunks), detail=f"{len(chunks)} chunks for the configured CV")
+        except Exception as exc:  # noqa: BLE001
+            checks["cv_index"] = ReadinessCheck(ok=False, detail=f"unavailable ({type(exc).__name__})")
+    jobs = len(services.context.catalog.all())
+    checks["catalog"] = ReadinessCheck(ok=jobs > 0, detail=f"{jobs} jobs")
+    provider = {"fixture": "deterministic fixture provider", "live": "OpenAI configured (not called)"}
+    checks["chat_provider"] = ReadinessCheck(ok=True, detail=provider.get(
+        services.mode, "configured" if services.agent is not None else "not configured; /chat disabled"))
+    return checks
+
+
+@router.get("/ready", response_model=ReadyResponse, responses={503: {"model": ReadyResponse}})
+def ready(services: ApiServices = Depends(get_services)) -> JSONResponse:
+    checks = readiness_checks(services)
+    body = ReadyResponse(status="ready" if all(c.ok for c in checks.values()) else "not_ready",
+                         mode=services.mode, checks=checks)
+    return JSONResponse(body.model_dump(), status_code=200 if body.status == "ready" else 503)
 
 
 @router.get("/jobs", response_model=JobListResponse, responses=ERROR_RESPONSES)
@@ -137,20 +177,42 @@ def create_app(services: ApiServices | None = None,
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        if getattr(app.state, "services", None) is None:
+        owned = getattr(app.state, "services", None) is None
+        if owned:
+            # Configuration or schema errors propagate here and stop startup with a clear message.
             app.state.services = services_factory()
-        yield
+        try:
+            yield
+        finally:
+            if owned:
+                app.state.services.close()
 
+    # FastAPI's native OpenTelemetry spans are disabled: the middleware below creates the request
+    # span through src.observability, and extra framework spans would be dropped by the Langfuse
+    # exporter and leave the agent spans without their parent.
     app = FastAPI(title="Job Match Agent API", version=API_VERSION, lifespan=lifespan,
-                  description="Typed REST API over the shared job-matching tools and the LangGraph agent.")
+                  description="Typed REST API over the shared job-matching tools and the LangGraph agent.",
+                  telemetry={"tracing": False, "metrics": False, "logs": False})
     app.state.services = services
 
     @app.middleware("http")
     async def request_id_middleware(request: Request, call_next):
         supplied = request.headers.get("X-Request-ID", "")
-        request.state.request_id = supplied if _REQUEST_ID.match(supplied) else uuid.uuid4().hex[:12]
-        response = await call_next(request)
-        response.headers["X-Request-ID"] = request.state.request_id
+        request_id = request.state.request_id = supplied if _REQUEST_ID.match(supplied) else uuid.uuid4().hex[:12]
+        started = time.perf_counter()
+        probe = request.url.path in _PROBES
+        # Request-level root span (not for health probes); query strings and bodies are never recorded.
+        tracer = NoopTracer() if probe else get_tracer()
+        with run_scope(request_id=request_id), tracer.span(
+                f"{request.method} {request.url.path}", metadata={"request_id": request_id}) as span:
+            response = await call_next(request)
+            duration_ms = round((time.perf_counter() - started) * 1000, 3)
+            span.update(metadata={"status_code": response.status_code, "duration_ms": duration_ms},
+                        **({"level": "ERROR"} if response.status_code >= 500 else {}))
+        if not probe:
+            log_event("http_request", request_id=request_id, method=request.method, path=request.url.path,
+                      status=response.status_code, duration_ms=duration_ms)
+        response.headers["X-Request-ID"] = request_id
         return response
 
     app.add_exception_handler(ApiError, _api_error)

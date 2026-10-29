@@ -15,6 +15,8 @@ from src.agent.prompts import SYSTEM_PROMPT
 from src.agent.schemas import AgentConfig, AgentRunResult, ToolCallRecord
 from src.llm.tool_calling import (ChatMessage, ConversationItem, ToolCallingLLMProvider,
                                   ToolResultMessage)
+from src.observability.context import BudgetExceededError, run_scope
+from src.observability.tracing import get_tracer
 from src.tools.registry import ToolRegistry
 
 logger = logging.getLogger("src.agent")
@@ -47,6 +49,15 @@ class ManualAgent:
 
     def run(self, request: str, run_id: str | None = None) -> AgentRunResult:
         run_id = run_id or uuid.uuid4().hex[:12]
+        with run_scope(run_id, budget=self.config.budget()), get_tracer().span(
+                "agent.manual", kind="agent", metadata={"run_id": run_id}, input=request) as span:
+            result = self._run(request, run_id)
+            span.update(metadata={"status": result.status, "model_turns": result.model_turns,
+                                  "tool_calls": len(result.tool_calls)},
+                        output=result.final_answer or result.error)
+            return result
+
+    def _run(self, request: str, run_id: str) -> AgentRunResult:
         cfg = self.config
         messages: list[ConversationItem] = [ChatMessage(role="system", content=self.system_prompt),
                                             ChatMessage(role="user", content=request)]
@@ -67,6 +78,9 @@ class ManualAgent:
         for step in range(1, cfg.max_model_turns + 1):
             try:
                 reply = self.provider.complete(messages, specs)
+            except BudgetExceededError as exc:
+                _log("model_turn_failed", run_id=run_id, step=step, exception=type(exc).__name__)
+                return finish("budget_exceeded", step - 1, error=str(exc))
             except Exception as exc:  # noqa: BLE001 - provider payloads are not echoed
                 _log("model_turn_failed", run_id=run_id, step=step, exception=type(exc).__name__)
                 return finish("provider_error", step, error=f"Model call failed ({type(exc).__name__}).")
