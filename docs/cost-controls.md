@@ -110,8 +110,8 @@ a month. They change; check the pricing calculator before relying on them.
 
 The Container Apps price list also has an "Environment Management" meter ($0.13/h). Microsoft's
 billing documentation ties it to private endpoints, planned maintenance and Dedicated workload
-profiles, none of which this environment uses. Check Cost Management after the first full day to
-confirm it stays at zero.
+profiles, none of which this environment uses. Cost Management confirmed it: Container Apps cost
+€0.00 through 6 November 2026.
 
 To spend less while not demonstrating:
 
@@ -121,12 +121,20 @@ To spend less while not demonstrating:
 - The Container App already scales to zero. A cold start takes about 30 s.
 - Delete everything: `az group delete --name rg-job-match-agent`.
 
+The table shows list prices. Observed cost is lower on the current free account: Cost Management
+for `rg-job-match-agent` showed €0.85 for 1–6 November 2026, all of it Container Registry, with
+PostgreSQL, Container Apps and Log Analytics at €0.00 and a forecast of about €4.20 for the month.
+The PostgreSQL compute and storage appear to be covered by the free account's 12-month free
+services (Burstable B1ms hours and 32 GB storage). The list-price estimate applies once that
+allowance ends, or on another subscription.
+
 The current deployment runs on an Azure free account: $200 credit until 2026-11-28 with the
 spending limit on. Azure disables the subscription instead of charging the card when the credit or
 the trial runs out, and the public demo URL then stops responding. Before that date, decide
-between upgrading to Pay-As-You-Go (about $22/month as above; storage and ACR, about $9/month,
-are billed even while PostgreSQL is stopped, and Azure restarts a stopped server after 7 days) and
-deleting the resource group. Nothing in the repository depends on the deployment
+between upgrading to Pay-As-You-Go and deleting the resource group. Expect a few euros a month
+while the 12-month free services last, and about $22/month at list prices after that. Storage and
+ACR, about $9/month at list prices, are billed even while PostgreSQL is stopped, and Azure
+restarts a stopped server after 7 days. Nothing in the repository depends on the deployment
 staying up.
 
 Revisions, logs and the full operating command set (show, revision list, console and system logs,

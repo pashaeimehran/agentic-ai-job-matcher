@@ -94,7 +94,7 @@ Internet ── HTTPS ──► Container App  jobmatch-api        (Consumption,
 | Log Analytics workspace | PerGB2018, 30-day retention |
 | Container Registry | Basic, admin user disabled |
 | User-assigned managed identity | `AcrPull` on the registry; the app pulls images with it |
-| Container Apps environment | Consumption only (no workload profiles, no private endpoint) |
+| Container Apps environment | Consumption only: Azure creates it as a workload-profiles environment (the Portal shows "Workload profiles"), and the app runs on the built-in `Consumption` profile; no Dedicated profiles, no private endpoint |
 | Container App `jobmatch-api` | 0.5 vCPU / 1 GiB, scale 0–1, external HTTPS-only ingress on port 8000; startup and liveness probes on `/health`, readiness on `/ready` |
 | PostgreSQL Flexible Server | PostgreSQL 16, Burstable `Standard_B1ms`, 32 GB, no auto-grow, 7-day backups, no HA or geo backup, password auth, `azure.extensions=VECTOR` |
 | Database `careermatch` | created by Bicep; the app creates the tables and runs `CREATE EXTENSION vector` at startup (`src/db.py`) |
@@ -212,6 +212,20 @@ redeploying: cold start from zero 25.6 s; then `/health` 0.14 s, `/ready` 0.25 s
 13 CV chunks from PostgreSQL), `/jobs` 0.14 s, `/search` (jobs and CV) 0.13 s, `/analyze-job`
 0.38–0.44 s (95.11, deterministic), `/chat` 0.93–0.99 s (`search_jobs → calculate_match`), all 200,
 `mode` fixture.
+
+Control plane, checked read-only in the Azure Portal on 2026-11-07:
+
+| Check | Result |
+|---|---|
+| Container App | provisioning Succeeded, running; one active revision (`jobmatch-api--0000001`, 100 % traffic, scale 0–1, scaled to zero when idle) |
+| Image | `job-match-agent:20261029-142538-8dd4848-dirty` from the project registry, pulled with the user-assigned identity `jobmatch-pull-<suffix>`; system-assigned identity off |
+| Registry | Basic, admin user disabled; the only role assignment besides the inherited subscription Owner is `AcrPull` for the pull identity |
+| Configuration | `APP_MODE=fixture`, `TRACING_ENABLED=false`, `DATABASE_URL` from secret `database-url`; that is the only secret: no OpenAI key, no Langfuse keys or host |
+| PostgreSQL | Ready, 16.15, Burstable `Standard_B1ms`, 32 GiB, no auto-grow, 7-day backups, HA off; database `careermatch` present |
+| Logs (10 days) | no crash loops, image-pull failures, database or pgvector errors. The only console errors are the OpenTelemetry export failures of the temporary tracing-outage test revision on 2026-10-29. Each cold start logs one startup `ProbeFailed` before Uvicorn listens, then becomes ready. |
+
+The `AcrPush`/`Contributor` identity for the GitHub OIDC `deploy.yml` workflow is not provisioned
+yet; deployments so far used `deploy.sh` and `deploy_app.sh` from a workstation.
 
 ### Operating and cost control
 
