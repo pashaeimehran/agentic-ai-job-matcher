@@ -14,9 +14,10 @@ recorded live runs, and deployed on Azure Container Apps with PostgreSQL/pgvecto
 
 Job postings and CVs describe the same things differently. A useful match tells a candidate
 which requirements their CV *shows* they meet, which it shows they *don't* meet, and which it
-simply doesn't mention. It must never invent evidence or a score. So this project keeps the
-judgement in deterministic, testable code and uses the LLM only to choose tools and explain the
-results, with every claim traceable to a CV quotation.
+simply doesn't mention. It must never invent evidence or a score. So match judgements and scores
+stay in deterministic, testable code, and LLMs are used for structured extraction, tool selection
+and explanation. Evidence-backed assessments cite the CV quotation they rest on; without evidence,
+a requirement stays explicitly `unknown`.
 
 ## Key capabilities
 
@@ -24,8 +25,9 @@ results, with every claim traceable to a CV quotation.
   languages, experience).
 - **CV retrieval**: CV ingestion, chunking and embeddings in PostgreSQL/pgvector, with hybrid
   vector + keyword search and quotation-only Q&A that abstains when evidence is missing.
-- **Evidence-grounded matching**: each requirement is `supported`, `unmet` or `unknown`, backed by
-  CV quotations, with a deterministic, reproducible 0–100 compatibility score.
+- **Evidence-grounded matching**: each requirement is `supported` or `unmet` with the CV quotation
+  behind it, or explicitly `unknown` when the CV has no evidence, with a deterministic,
+  reproducible 0–100 compatibility score.
 - **Agentic tool use**: a LangGraph agent chooses among five validated tools (`search_jobs`,
   `get_job_details`, `search_cv`, `calculate_match`, `save_job`) and explains the results.
 - **Interfaces**: FastAPI (`/jobs`, `/search`, `/analyze-job`, `/chat`, health and readiness) and
@@ -75,8 +77,9 @@ The REST API, MCP server, LangGraph agent and the framework-free baseline loop a
   extracted requirements and CV evidence. The model chooses tools and writes the explanation; a
   grounding check flags any score in the answer that no tool produced.
 - **Evidence-grounded requirement statuses.** `supported` needs a CV quotation, `unmet` needs
-  contradicting evidence (for example German B1 against a C1 requirement), and anything the CV
-  doesn't mention is `unknown`, never reported as a gap.
+  contradicting evidence (for example German B1 against a C1 requirement), and a requirement
+  without evidence stays `unknown`, with no quotation. Absence of evidence is not treated as proof
+  of inability, so unknowns are never reported as gaps.
 - **Hybrid retrieval.** pgvector similarity fused with keyword retrieval (reciprocal-rank fusion
   plus a token-coverage rerank). On the labeled matching set, recall@3 rises from 83% to 100%
   over vector-only.
