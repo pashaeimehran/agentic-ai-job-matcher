@@ -63,20 +63,11 @@ source chunks approved in comparisons and cited claims.
 Reviewed numeric report:
 [`evaluation/results/matching_ragas_baseline.json`](../evaluation/results/matching_ragas_baseline.json).
 
-Reproduction (paid OpenAI calls; requires ingested `synthetic-demo` CV):
-
-```powershell
-$evalPython = Join-Path $HOME '.venvs/job-match-ragas-py312/Scripts/python.exe'
-& $evalPython -m scripts.evaluate_matching_ragas `
-  --cv-id synthetic-demo `
-  --limit 3 `
-  --profile-source labeled-fixture `
-  --output evaluation/results/matching_ragas_final.json
-```
+Reproduction (paid OpenAI calls; requires the ingested `synthetic-demo` CV and
+the separate Ragas environment): see
+[the matching runbook](../docs/matching-runbook.md#ragas-explanation-quality-evaluation-paid-separate-environment).
 
 This experiment evaluates explanation quality with a fixed source-validated
 profile, **not** end-to-end extraction reliability, real-world job matching,
 or hiring accuracy. Judge outputs can vary between runs. The mean faithfulness
 score (~0.70) indicates some claims were judged insufficiently supported.
-Earlier one-job diagnostics used different explanation formatting or context
-policies and must not be described as a controlled before/after comparison.

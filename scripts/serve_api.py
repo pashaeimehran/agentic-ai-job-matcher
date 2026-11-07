@@ -23,7 +23,7 @@ from src.api import create_app
 
 def main() -> int:
     load_dotenv()
-    parser = argparse.ArgumentParser(description="Serve the Job Match Agent REST API")
+    parser = argparse.ArgumentParser(description="Serve the Agentic AI Job Matcher REST API")
     parser.add_argument("--host", default=os.getenv("HOST", "127.0.0.1"))
     parser.add_argument("--port", type=int, default=int(os.getenv("PORT", "8000")))
     args = parser.parse_args()

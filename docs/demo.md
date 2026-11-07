@@ -74,6 +74,7 @@ What to point out:
     `5 years` (*"No precise, evidenced employment boundaries"*).
 
 For contrast, `match-01-python-backend` scores **95.11** with all four requirements supported.
+Expected output: [screenshot](images/analyze-job-breakdown.png).
 
 ## 5. Ask the agent
 
@@ -94,6 +95,7 @@ What to point out:
 
 In fixture mode the model is a rule-based script, so this shows orchestration and grounding, not
 language quality. Live-mode quality is measured separately ([evaluation.md](evaluation.md)).
+Expected output: [screenshot](images/chat-grounded-answer.png).
 
 ## 6. Azure architecture (one minute)
 
@@ -105,14 +107,15 @@ Internet ─HTTPS─► Container App (Consumption, scale 0–1)
 ```
 
 - Infrastructure: `infra/azure/main.bicep` through `deploy.sh`.
-- Releases: `deploy_app.sh` (or the manual, OIDC-authenticated `deploy.yml`) builds the image,
-  pushes it to ACR with a short-lived token, updates only the Container App and waits for a healthy
-  revision. PostgreSQL is not touched.
+- Releases: `deploy_app.sh` builds the image, pushes it to ACR with a short-lived token, updates
+  only the Container App and waits for a healthy revision. PostgreSQL is not touched. A manual,
+  approval-gated GitHub workflow (`deploy.yml`, OIDC login) wraps the same script; its federated
+  identity is not provisioned yet.
 - Details: [deployment.md](deployment.md). Costs: [cost-controls.md](cost-controls.md).
 
 Clean up locally with `docker compose down` (add `-v` to delete the database volume).
 
-## What to show in an interview
+## What to highlight in an interview
 
 1. **The score is code, not the model.** `calculate_match` computes it; the LLM only chooses tools
    and explains. `ungrounded_scores` and the replay evaluations check that the answer never
@@ -123,8 +126,9 @@ Clean up locally with `docker compose down` (add `-v` to delete the database vol
 3. **One tool layer, four entry points.** REST, MCP, the LangGraph agent and the framework-free
    baseline loop all call the same `ToolRegistry`, which owns validation, error codes and retries.
 4. **Measured before claimed.** Seven deterministic system gates run in CI (requirement-status
-   accuracy, score reproducibility, retrieval Hit@3, replay statuses, orchestration equivalence),
-   plus recorded live runs for tool selection, cost, latency and cache effect.
+   accuracy, score reproducibility, retrieval Hit@3, replay statuses, orchestration equivalence
+   and score consistency, prompt-version labels), plus recorded live runs for tool selection,
+   cost, latency and cache effect. The data sets are small and synthetic, and the reports say so.
 5. **Fixture mode makes the whole system testable without keys**: the same API, graph, tools,
    retrieval and PostgreSQL path run in CI, in Compose and in Azure with a scripted provider.
 6. **Deployment separates infrastructure from releases**: Bicep for infrastructure, an app-only

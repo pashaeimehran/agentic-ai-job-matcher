@@ -15,7 +15,7 @@ src/tools/registry.py        Tool + ToolRegistry: name -> argument schema -> han
 src/tools/jobs.py            JobCatalog, search_jobs, get_job_details
 src/tools/cv.py              search_cv
 src/tools/matching.py        calculate_match
-src/tools/saved_jobs.py      SavedJobStore (JSON file / memory), save_job
+src/tools/saved_jobs.py      SavedJobStore (PostgreSQL / JSON file / memory), save_job
 src/tools/context.py         ToolContext: application-owned scope (CV, catalog, store)
 src/agent/loop.py            ManualAgent: bounded model/tool loop
 src/agent/schemas.py         AgentConfig, ToolCallRecord, AgentRunResult
@@ -37,7 +37,7 @@ application decides whether and how to act on the request.
 | `get_job_details` | `job_id` | `JobPosting`, language levels, `prepare_job` | full structured posting |
 | `search_cv` | `query`, `k`, `section?` | `matching.retrieval.hybrid_search` over `CVService` | chunk ID, section, text, retrieval scores |
 | `calculate_match` | `job_ids` (1–10) | `matching.service.analyze_jobs` → `score_match`, `rank_analyses` | ranked deterministic `MatchScore`, comparisons, evidence |
-| `save_job` | `job_id`, `note?` | new minimal `SavedJobStore` | `saved` / `already_saved` |
+| `save_job` | `job_id`, `note?` | `SavedJobStore` (PostgreSQL, JSON file or memory) | `saved` / `already_saved` |
 
 The job catalog is the committed structured fixture set. `jobs.json` contains
 four phrasing variants per posting for extraction benchmarking; identical
@@ -49,9 +49,10 @@ A future catalog only needs to implement `JobCatalog`.
 `cv_id` is never a tool argument. CV scope comes from `ToolContext`, so a model
 cannot request another user's CV (extra keys such as `cv_id` are rejected).
 
-No saved-job persistence existed before. `JsonFileSavedJobStore` writes
-`data/private/saved_jobs.json` (git-ignored) atomically; saving is idempotent
-and only catalog job IDs are accepted.
+Saved jobs go to the PostgreSQL `saved_jobs` table when `DATABASE_URL` is set;
+otherwise `JsonFileSavedJobStore` writes `data/private/saved_jobs.json`
+(git-ignored) atomically. Saving is idempotent and only catalog job IDs are
+accepted.
 
 ## Why arguments are validated
 
@@ -166,7 +167,7 @@ JSON schemas, and `ToolRegistry.execute(name, args, context)` returns a
 serialisable `ToolOutcome` and never raises for tool problems. The LangGraph
 `execute_tools` node, the FastAPI routes ([api.md](api.md)) and the MCP server
 ([mcp.md](mcp.md)) call these same two methods; see the
-[architecture overview](architecture_overview.md).
+[architecture overview](architecture.md).
 
 ## Running
 

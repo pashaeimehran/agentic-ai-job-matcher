@@ -1,5 +1,7 @@
 # CV ingestion and semantic retrieval
 
+Design and evaluation method. Commands: [cv-retrieval-runbook.md](cv-retrieval-runbook.md).
+
 ## Data flow
 
 `PDF/Markdown/text -> normalized CVDocument -> CVChunk list -> embeddings -> PostgreSQL`
@@ -20,8 +22,7 @@ This layer stores source evidence, not a permanent LLM-generated career
 profile. The matching layer extracts source-attributed candidate facts from
 stored chunks when required; the **labeled-fixture Ragas mode** instead uses
 versioned synthetic facts after verifying the exact stored CV and chunks.
-Neither mode changes the original document/chunk schema or requires a new
-PostgreSQL migration. See [matching architecture](job_cv_matching_architecture.md).
+Both read the same document/chunk schema. See [matching](matching.md).
 
 ## Dependencies and boundaries
 
@@ -40,9 +41,10 @@ Deleting a document cascades to its chunks. Exact search is appropriate for a
 small CV corpus; no approximate vector index is needed yet.
 
 The database contains source chunks and vectors, but no separate copy of the
-full original file. CV IDs scope every search. This is a local single-user CLI,
-not an authentication or tenant authorization system. A future API must add
-access control before exposing it to multiple users.
+full original file. CV IDs scope every search, and the API and agents take the
+CV ID from server configuration (`ToolContext`), never from a request. Scoping
+is not authorization: the API has no authentication or tenant isolation, so it
+must not serve real CVs to multiple users as is (see [limitations](limitations.md)).
 
 ## Grounding and limitations
 
@@ -55,8 +57,8 @@ quality still require live evaluation. Source text is treated as untrusted data
 in the generation instructions; prompt instructions alone are not a security
 boundary.
 
-OpenAI requests transmit CV text. The CLI does not log raw content in error
-messages; search and ask intentionally display selected evidence. Real CVs
+OpenAI requests transmit CV text. Error messages and logs never include raw CV
+content; the CLI `search` and `ask` commands intentionally display selected evidence. Real CVs
 belong in ignored `data/private/`. Deletion removes database records, not the
 original input, terminal history, database backups or provider-side retention.
 The Docker volume persists across `docker compose down` (without `-v`).

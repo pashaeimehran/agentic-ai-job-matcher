@@ -190,7 +190,7 @@ def create_app(services: ApiServices | None = None,
     # FastAPI's native OpenTelemetry spans are disabled: the middleware below creates the request
     # span through src.observability, and extra framework spans would be dropped by the Langfuse
     # exporter and leave the agent spans without their parent.
-    app = FastAPI(title="Job Match Agent API", version=API_VERSION, lifespan=lifespan,
+    app = FastAPI(title="Agentic AI Job Matcher API", version=API_VERSION, lifespan=lifespan,
                   description="Typed REST API over the shared job-matching tools and the LangGraph agent.",
                   telemetry={"tracing": False, "metrics": False, "logs": False})
     app.state.services = services

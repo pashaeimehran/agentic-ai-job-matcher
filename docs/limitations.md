@@ -49,7 +49,7 @@ The current boundaries of the system, stated plainly. Planned remedies are in
 - **LLM non-determinism.** Most live numbers are single runs on one model (`gpt-4o-mini`). The
   prompt v1 vs v2 comparison repeats each scenario 5 times per version, and its main effect
   (4/30 vs 1/30 runs with deficit wording) is not statistically significant (Fisher p = 0.35).
-- **Ragas scores are LLM-judge estimates** and vary by about ±0.04 between runs. Ragas needs a
+- **Ragas scores are LLM-judge estimates** and differed by about 0.04 between the two recorded runs. Ragas needs a
   separate Python 3.12 environment because of an OpenAI SDK conflict.
 - The grounding detector is lexical and conservative. It can miss paraphrased deficit claims.
 - Replay and fixture-mode metrics test orchestration and wiring with scripted model turns, not
@@ -94,6 +94,8 @@ non-determinism, and its latency and zero cost say nothing about a real model.
   live OpenAI path is covered by the local live evaluations.
 - `AllowAzureServices` on PostgreSQL admits any Azure-hosted client (password + TLS still
   required).
+- The GitHub `deploy.yml` workflow is prepared but has not been run: its OIDC federated identity is
+  not provisioned. The deployment was made with the workstation scripts.
 - Langfuse is self-hosted only in Compose. In Azure, tracing needs an external Langfuse (for
   example Langfuse Cloud EU).
 - Model pricing is a dated configuration table and must be reviewed when provider prices change.

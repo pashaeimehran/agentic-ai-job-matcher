@@ -42,7 +42,7 @@ development sets, not evidence of generalization to real CVs.
 | Tool-selection replay, manual loop and LangGraph (18 cases) | first-tool accuracy 100%, completion 100% |
 | Manual loop vs LangGraph (29 scenarios) | 28 equivalent, 1 documented guard difference, identical scores |
 | Termination behaviour covered | completed, model-turn limit, tool-call limit, provider error, invalid-request guard (graph) |
-| Fixture-mode end to end (8 requests × 5, LangGraph + real tools, scripted provider) | task success 100%, p50 6 ms, p95 ≈ 13 ms |
+| Fixture-mode end to end (8 requests × 5, LangGraph + real tools, scripted provider) | task success 100%, p50 ≈ 6 ms, p95 ≈ 14 ms |
 
 Fixture-mode latency measures orchestration and tool execution only. No model is involved.
 
@@ -85,16 +85,15 @@ and `version_comparison_live.json`.
 Three top-ranked jobs, labeled synthetic profile, explanations from `gpt-4o-mini`, judged by Ragas
 0.4.3 in an isolated Python 3.12 environment. The main environment's OpenAI SDK conflicts with
 Ragas, so it is never installed there (`requirements-matching-eval.txt`,
-`docs/apply_job_cv_matching.md`).
+[matching-runbook.md](matching-runbook.md)).
 
-| Run | Faithfulness | Answer relevancy |
-|---|---:|---:|
-| Baseline, 2026-10-21 (`matching_ragas_baseline.json`) | 0.703 | 0.698 |
-| 2026-10-28 (`matching_ragas_final.json`) | 0.744 | 0.672 |
-| 2026-10-29 re-run | 0.676 | 0.689 |
+| Run | Faithfulness | Answer relevancy | Recorded in |
+|---|---:|---:|---|
+| Baseline, 2026-10-21 | 0.703 | 0.698 | `matching_ragas_baseline.json` |
+| 2026-10-28 | 0.744 | 0.672 | `system_evaluation_*.json` (`recorded.ragas`) |
 
-The spread between runs (±0.04) is as large as any change between them, so the three runs
-together show judge and model variance, not a trend.
+The difference between the two runs (about 0.04 on each metric, in opposite directions) is judge
+and model variance with an unchanged pipeline, not an improvement or a trend.
 
 ## Limitations of these numbers
 

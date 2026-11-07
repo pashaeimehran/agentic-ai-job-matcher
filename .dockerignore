@@ -1,29 +1,13 @@
-# Build context allow-list by exclusion: secrets, private data and dev artefacts never enter the image.
-.git
-.github
-.gitignore
-.env
-.env.*
-venv
-.venv
+# Allow-list build context: only what the Dockerfile copies is sent to the builder, so secrets
+# (.env), private data, virtual environments and local files can never enter an image layer.
+*
+!requirements.txt
+!requirements-retrieval.txt
+!constraints.txt
+!src/
+!scripts/serve_api.py
+!scripts/serve_mcp.py
+!scripts/cv.py
+!data/fixtures/
 **/__pycache__
 **/*.pyc
-.pytest_cache
-.coverage
-htmlcov
-pytest-cache-files-*
-data/private
-data/ba_jobs.json
-Roadmap
-sandbox.py
-Workspace.code-workspace
-*.patch
-.update-backups
-docs
-tests
-benchmarks
-evaluation
-infra
-compose*.yaml
-README.md
-LICENSE

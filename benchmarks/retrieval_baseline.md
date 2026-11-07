@@ -1,6 +1,6 @@
 # CV retrieval validation
 
-Validated locally on 19 October 2026 using a synthetic CV and 20 labeled questions.
+Measured on 19 October 2026 with a synthetic CV and 20 labeled questions.
 Hit@3 measures whether expected evidence appears among the first three results.
 MRR measures the rank of the first relevant result.
 
@@ -26,17 +26,16 @@ Model: `text-embedding-3-small`; dimensions: 1536.
 | 300 | 60 | 100.0% | 0.975 |
 | 900 | 150 | 100.0% | 0.975 |
 
-## Validation scope
+## Additional checks
 
-- All 36 offline tests passed.
-- The separate PostgreSQL integration test passed.
+- The PostgreSQL integration test (search, isolation, replacement, rollback,
+  deletion) passed; CI runs it on every push.
 - Live Q&A returned a source-backed German B1 quotation.
-- The salary question produced an insufficient-evidence response.
-- The default live configuration passed the 80% hit@3 acceptance gate.
+- A salary question produced an insufficient-evidence response.
+- The default live configuration passed the 80% Hit@3 acceptance gate.
 
 These results describe a synthetic development benchmark, not accuracy on
 unseen CVs. Q&A relevance and abstention need broader evaluation.
-The historical extraction benchmark was preserved, not rerun.
 
 Reports: `evaluation/results/retrieval_offline.json` and
 `evaluation/results/retrieval_semantic.json`.

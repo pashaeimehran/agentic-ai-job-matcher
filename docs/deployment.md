@@ -13,7 +13,9 @@ variables only (`.env.example`, `src/config.py`). Nothing secret is baked into t
 - runtime: `python:3.14-slim`, only `src/`, the API/MCP/CV scripts and `data/fixtures/`
   (synthetic data), non-root user `app` (UID 10001), `HEALTHCHECK` on `/health`,
   `APP_MODE=fixture` by default;
-- `.dockerignore` excludes `.env*`, `data/private`, `venv`, tests, docs and Git metadata.
+- `.dockerignore` is an allow-list: the build context contains only the requirement files, `src/`,
+  the three runtime scripts and `data/fixtures/`, so `.env`, private data and virtual environments
+  never reach the builder.
 
 ```bash
 docker build -t job-match-agent .
@@ -158,12 +160,13 @@ What `deploy_app.sh` does:
    revision reports Healthy. In single-revision mode the previous revision keeps serving until then;
 4. runs the agentic smoke test against the public URL.
 
-A Bicep run re-applies the PostgreSQL server even when nothing about it changes. During
-validation, a North Europe incident in the PostgreSQL management plane (Azure Service Health
-`6JYK-S00`, 29 October 2026) made every Bicep run fail on that resource, while the running database
-and app stayed healthy. App-only deployments therefore never go through Bicep. If you update the
-Container App directly, keep its settings in line with `main.bicep` so the next infrastructure
-run doesn't revert anything unexpectedly.
+Why releases bypass Bicep: a Bicep run re-applies the PostgreSQL server even when nothing about it
+changes, so an incident in the regional PostgreSQL management plane blocks every infrastructure run
+while the database itself keeps serving (observed with Azure Service Health incident `6JYK-S00` in
+North Europe on 29 October 2026). `deploy_app.sh` changes only the Container App, so releases do
+not depend on the database's management plane. When you update the Container App directly, keep
+its settings in line with `main.bicep` so the next infrastructure run doesn't revert anything
+unexpectedly.
 
 Configuration and secrets:
 
@@ -224,8 +227,9 @@ Control plane, checked read-only in the Azure Portal on 2026-11-07:
 | PostgreSQL | Ready, 16.15, Burstable `Standard_B1ms`, 32 GiB, no auto-grow, 7-day backups, HA off; database `careermatch` present |
 | Logs (10 days) | no crash loops, image-pull failures, database or pgvector errors. The only console errors are the OpenTelemetry export failures of the temporary tracing-outage test revision on 2026-10-29. Each cold start logs one startup `ProbeFailed` before Uvicorn listens, then becomes ready. |
 
-The `AcrPush`/`Contributor` identity for the GitHub OIDC `deploy.yml` workflow is not provisioned
-yet; deployments so far used `deploy.sh` and `deploy_app.sh` from a workstation.
+The environment was deployed from a workstation with the scripts above. The federated
+`AcrPush`/`Contributor` identity that the GitHub `deploy.yml` workflow needs is not provisioned, so
+that workflow is prepared but has not been run.
 
 ### Operating and cost control
 
@@ -248,14 +252,14 @@ az group delete --name $RG                        # deletes everything, includin
 | Workflow | Trigger | Does |
 |---|---|---|
 | `.github/workflows/ci.yml` | pull requests; pushes to `main`, `feat/**`, `fix/**`; manual | installs pinned dependencies, byte-compiles, runs the full pytest suite against a pgvector service (integration tests included) and the deterministic evaluation gates, builds the image, smoke-tests the container and checks `/ready` on the Compose stack. No secrets, no paid calls. |
-| `.github/workflows/deploy.yml` | manual (`workflow_dispatch`) only, GitHub environment `production` (add a required reviewer) | OIDC login, then `infra/azure/deploy_app.sh`: `docker build`, token login and `docker push` to ACR, `az containerapp update` to the new tag, wait for a healthy revision, agentic smoke test. Container App only. |
+| `.github/workflows/deploy.yml` | manual (`workflow_dispatch`) only, GitHub environment `production` (add a required reviewer) | OIDC login, then `infra/azure/deploy_app.sh`: `docker build`, token login and `docker push` to ACR, `az containerapp update` to the new tag, wait for a healthy revision, agentic smoke test. Container App only. Prepared, not yet run: needs the OIDC identity below. |
 | `.github/workflows/live-eval.yml` | manual only, environment `live-evaluation` | paid live system evaluation and version comparison; uploads the reports |
 
 Deployment is never automatic on push. Merging to `main` runs CI; deploying is a separate, approved
 action. `deploy.yml` deploys application images only; infrastructure is created and changed with
 `deploy.sh`.
 
-GitHub configuration (names only):
+GitHub configuration for `deploy.yml` (names only; to be created before its first run):
 
 | Name | Kind | Purpose |
 |---|---|---|

@@ -66,14 +66,14 @@ Graph, API and MCP tests compare `calculate_match` scores with a direct `analyze
 
 The same image and the same `Settings` drive all three; only environment variables differ.
 Infrastructure is defined in `infra/azure/main.bicep` (`deploy.sh`). Application images go through
-Docker → ACR (short-lived token) → `az containerapp update` (`deploy_app.sh`, `deploy.yml`), which
+Docker → ACR (short-lived token) → `az containerapp update` (`deploy_app.sh`, or the prepared `deploy.yml` workflow), which
 never touches PostgreSQL. See [deployment.md](deployment.md).
 
 ## Entry points
 
 | Entry point | Who chooses the tools | LLM | Docs |
 |---|---|---|---|
-| Manual loop | the model, in a `for` loop | yes | [tool_calling_agent_architecture.md](tool_calling_agent_architecture.md) |
+| Manual loop | the model, in a `for` loop | yes | [tool-calling-agent.md](tool-calling-agent.md) |
 | LangGraph | the model, in an explicit state graph | yes | [why-langgraph.md](why-langgraph.md) |
 | REST `/search`, `/analyze-job`, `/jobs` | the HTTP client (fixed per endpoint) | no | [api.md](api.md) |
 | REST `/chat` | the model via LangGraph | yes | [api.md](api.md) |

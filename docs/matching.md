@@ -1,14 +1,15 @@
 # Job–CV matching and ranking
 
+Design, scoring rules and evaluation method. Commands: [matching-runbook.md](matching-runbook.md).
+
 ## Contract and data flow
 
-The structured job extractor remains backward compatible: `JobPosting.language`
-stores names, not levels, and its historical 40-case extraction benchmark has
-not been revised. `src/matching/requirements.py` converts these validated fields
-into `JobRequirements`, optionally enriching explicitly evidenced CEFR levels
-through a separate, quotation-checked LLM call. Curated test postings can supply
-explicit levels without a paid call. There is no assumption that the old schema
-already stores proficiency.
+The structured job extractor stores language names, not levels, in
+`JobPosting.language` (the contract its 40-case extraction benchmark checks).
+`src/matching/requirements.py` converts these validated fields into
+`JobRequirements`, optionally enriching explicitly evidenced CEFR levels through
+a separate, quotation-checked LLM call. Curated test postings can supply
+explicit levels without a paid call.
 
 `ingested CV chunks -> cited CandidateFacts -> validated CandidateProfile`
 
@@ -86,10 +87,9 @@ broken lexically by unique job ID.
 
 ## Retrieval, filtering and explanations
 
-The prior pgvector cosine retrieval stays available and unchanged as a public
-API. The new matching retrieval combines it with token-overlap retrieval via
-reciprocal-rank fusion (RRF), then applies a deterministic token-coverage
-rerank. Optional section metadata filters are passed into the SQL cosine query
+Plain pgvector cosine retrieval remains available on its own (CV Q&A uses it).
+Matching retrieval combines it with token-overlap retrieval via reciprocal-rank
+fusion (RRF), then applies a deterministic token-coverage rerank. Optional section metadata filters are passed into the SQL cosine query
 and applied before lexical fusion. For this single-CV use case, `cv_id` is
 also mandatory. This is not a learned reranker or a cross-encoder. The vector
 candidate pool is capped at 500, and very large CVs are refused by profile
@@ -110,13 +110,14 @@ statuses, or broaden the underlying evidence.
 
 ## Security and operational scope
 
-This remains a local single-user CLI. CV-scoped queries are not authorization:
-a web or multi-tenant interface needs authentication, authorization and PII
-controls. Live candidate extraction and explanations send CV excerpts to
-OpenAI. Do not publish results containing real candidate excerpts. The fixture
-report contains only synthetic data. No existing Postgres schema migration is
-required and no stored CV needs re-ingestion for the new read-only `list_chunks`
-operation. Existing CV replacement, deletion and Docker volumes are unchanged.
+Matching serves a single configured CV. The REST API and MCP server expose it
+without authentication, and CV-scoped queries are not authorization: serving
+real CVs to several users needs authentication, authorization and PII controls
+(see [limitations](limitations.md)). Live candidate extraction and explanations
+send CV excerpts to OpenAI. Do not publish results containing real candidate
+excerpts. The fixture report contains only synthetic data. Matching reads
+stored chunks through the read-only `list_chunks` operation and never modifies
+the CV store.
 
 ## Evaluation boundaries and measured results
 
@@ -145,14 +146,12 @@ uses a human-labeled synthetic profile *only after* verifying that the stored
 CV and chunks match the exact public fixture. This provides a more stable
 explanation-quality benchmark but excludes candidate extraction accuracy.
 
-The verified Windows three-job Ragas baseline on October 21, 2026, used
-`--profile-source labeled-fixture`, with mean **faithfulness 0.7028** and
-**answer relevancy 0.6980**. Job-level results and numeric JSON are recorded
-in [the matching baseline](../benchmarks/matching_baseline.md). Results from
-older one-job evaluations used different answer/context handling and should
-not be presented as a controlled improvement. Ragas scores are variable
-model-judge estimates, and source-linked claims may still be semantically
-unfaithful. Faithfulness near 0.70 identifies a quality limitation to improve.
+The recorded three-job Ragas baseline used `--profile-source labeled-fixture`,
+with mean **faithfulness 0.7028** and **answer relevancy 0.6980**. Job-level
+results and numeric JSON are in [the matching baseline](../benchmarks/matching_baseline.md).
+Ragas scores are variable model-judge estimates, and source-linked claims may
+still be semantically unfaithful. Faithfulness near 0.70 identifies a quality
+limitation to improve.
 
-See [the application guide](apply_job_cv_matching.md) for offline and live
-commands and the isolated Python 3.12 Ragas setup.
+See [the matching runbook](matching-runbook.md) for offline and live commands
+and the isolated Python 3.12 Ragas setup.
