@@ -123,7 +123,16 @@ To spend less while not demonstrating:
 
 The current deployment runs on an Azure free account: $200 credit until 2026-11-28 with the
 spending limit on. Azure disables the subscription instead of charging the card when the credit or
-the trial runs out.
+the trial runs out, and the public demo URL then stops responding. Before that date, decide
+between upgrading to Pay-As-You-Go (about $22/month as above; storage and ACR, about $9/month,
+are billed even while PostgreSQL is stopped, and Azure restarts a stopped server after 7 days) and
+deleting the resource group. Nothing in the repository depends on the deployment
+staying up.
+
+Revisions, logs and the full operating command set (show, revision list, console and system logs,
+stop/start PostgreSQL, delete the group) are in [deployment.md](deployment.md#operating-and-cost-control).
+Inspect actual spend with Cost Management in the Portal or
+`az consumption usage list --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD> -o table`.
 
 ## What is not implemented
 

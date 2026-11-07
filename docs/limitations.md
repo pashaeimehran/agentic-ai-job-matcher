@@ -87,10 +87,11 @@ non-determinism, and its latency and zero cost say nothing about a real model.
   PostgreSQL management-plane incident therefore blocks infrastructure changes, even while the app
   and database keep working (observed on 2026-10-29, Azure incident 6JYK-S00). Image updates use
   `deploy_app.sh`, which only updates the Container App, so they are not affected.
-- **Live LLM mode not tested in Azure.** The optional live-mode smoke test was not executed in
-  Azure: it was deferred because of the active Azure PostgreSQL management-plane incident and
-  because the public API currently has no authentication. The live OpenAI path is covered by the
-  local live evaluations.
+- **Live LLM mode not tested in Azure (intentional).** The optional live-mode smoke test was not
+  executed in Azure. The public API has no authentication or rate limiting, so a live endpoint
+  would expose OpenAI spend to anyone with the URL. Fixture mode exercises the same cloud path
+  (Container App, managed-identity image pull, PostgreSQL + pgvector, LangGraph, tools), and the
+  live OpenAI path is covered by the local live evaluations.
 - `AllowAzureServices` on PostgreSQL admits any Azure-hosted client (password + TLS still
   required).
 - Langfuse is self-hosted only in Compose. In Azure, tracing needs an external Langfuse (for

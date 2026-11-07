@@ -93,9 +93,16 @@ jobs:
           test "$(docker exec api id -u)" = "10001"
       - name: Container logs
         if: always()
-        run: docker logs api || true
+        # Remove the smoke-test container so it releases port 8000 before the Compose stack binds it.
+        run: |
+          docker logs api || true
+          docker rm -f api || true
       - name: Compose stack (API + PostgreSQL/pgvector)
         run: |
           docker compose up -d --build --wait
           curl -sf http://localhost:8000/ready | grep -q '"schema ready"'
-          docker compose down -v
+      - name: Compose logs and teardown
+        if: always()
+        run: |
+          docker compose logs --no-color || true
+          docker compose down -v || true

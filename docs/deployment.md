@@ -178,10 +178,10 @@ Configuration and secrets:
 Live mode: `APP_MODE=live OPENAI_API_KEY=… bash infra/azure/deploy.sh` stores the key as the
 `openai-api-key` secret. The API has no authentication, so in live mode anyone with the URL can
 spend OpenAI tokens; `AGENT_MAX_RUN_TOKENS` caps each run. Redeploy with `APP_MODE=fixture` to
-remove the secret. **Status:** not executed in Azure. The optional live-mode smoke test was
-deferred because of the active Azure PostgreSQL management-plane incident and because the public
-API has no authentication. The live OpenAI path is covered by the local live evaluations
-(`docs/evaluation.md`).
+remove the secret. **Status:** intentionally not executed in Azure. With no authentication or rate
+limiting on the public API, a live endpoint would expose OpenAI spend to anyone with the URL.
+Fixture mode exercises the same cloud path, and the live OpenAI path is covered by the local live
+evaluations (`docs/evaluation.md`).
 
 The smoke test prints status codes, latency, mode and the deterministic score, never response
 bodies: `bash infra/azure/smoke_test.sh https://<fqdn> [--agentic]`.
@@ -207,6 +207,12 @@ bodies: `bash infra/azure/smoke_test.sh https://<fqdn> [--agentic]`.
 For the SQL check, a temporary firewall rule let one client IP reach the database. It was deleted
 straight afterwards, and `AllowAzureServices` is the only remaining rule.
 
+Re-checked on 2026-11-06 with `infra/azure/smoke_test.sh --agentic` against the public URL, without
+redeploying: cold start from zero 25.6 s; then `/health` 0.14 s, `/ready` 0.25 s ("schema ready",
+13 CV chunks from PostgreSQL), `/jobs` 0.14 s, `/search` (jobs and CV) 0.13 s, `/analyze-job`
+0.38–0.44 s (95.11, deterministic), `/chat` 0.93–0.99 s (`search_jobs → calculate_match`), all 200,
+`mode` fixture.
+
 ### Operating and cost control
 
 ```bash
@@ -215,6 +221,7 @@ az resource list -g $RG -o table                                      # everythi
 az containerapp show -g $RG -n jobmatch-api --query "{fqdn:properties.configuration.ingress.fqdn,state:properties.runningStatus}"
 az containerapp revision list -g $RG -n jobmatch-api -o table         # revisions, health, traffic
 az containerapp logs show -g $RG -n jobmatch-api --type console --tail 100
+az containerapp logs show -g $RG -n jobmatch-api --type system  --tail 100   # pulls, probes, scaling
 az acr repository show-tags -n <registry> --repository job-match-agent -o table
 PG=$(az postgres flexible-server list -g $RG --query "[0].name" -o tsv)
 az postgres flexible-server stop  -g $RG -n $PG   # stops compute billing; Azure restarts it after 7 days

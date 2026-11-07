@@ -20,30 +20,58 @@ results, with every claim traceable to a CV quotation.
 
 ## Architecture
 
-```
-             REST client                    MCP client (its own LLM)
-                  │                                  │
-        FastAPI  (src/api)                 MCP server (src/mcp_server)
-                  │  /chat                           │  tools/call
-         LangGraph agent (src/graph)                 │
-   prepare → agent ⇄ execute_tools → finalize        │
-                  │                                  │
-                  └──────────► ToolRegistry ◄────────┘   validation, retries, error contract
-                               (src/tools)
-        search_jobs · get_job_details · search_cv · calculate_match · save_job
-                  │                 │                   │
-            job catalog      CV retrieval (src/rag)   deterministic matching (src/matching)
-                                    │
-                       PostgreSQL + pgvector  ── cv_documents · cv_chunks · saved_jobs · cost_log
+```mermaid
+flowchart TD
+    REST["REST client"] --> API["FastAPI<br/>src/api"]
+    MCPC["MCP client<br/>(its own LLM)"] --> MCP["MCP server<br/>src/mcp_server"]
+    API -- "/chat" --> GRAPH["LangGraph agent · src/graph<br/>prepare → agent ⇄ execute_tools → finalize"]
+    API -- "/search, /analyze-job, /jobs" --> REG
+    MCP -- "tools/call" --> REG
+    GRAPH --> REG["ToolRegistry · src/tools<br/>validation · error contract · bounded retries"]
+    LOOP["Manual tool-calling loop<br/>src/agent (baseline)"] --> REG
+    REG --> JOBS["search_jobs · get_job_details<br/>job catalog"]
+    REG --> CV["search_cv<br/>hybrid vector + keyword retrieval · src/rag"]
+    REG --> MATCH["calculate_match<br/>deterministic scoring · src/matching"]
+    REG --> SAVE["save_job"]
+    CV --> PG[("PostgreSQL + pgvector<br/>cv_documents · cv_chunks · saved_jobs · cost_log")]
+    MATCH --> CV
+    SAVE --> PG
 
- Cross-cutting (src/observability, src/llm):
-   InstrumentedProvider → retries · per-run budget · response cache · usage + cost · Langfuse spans
-   OpenAI provider (live)  |  deterministic fixture provider (zero-key demo)
+    subgraph XC["Cross-cutting · src/llm, src/observability"]
+        PROV["LLM provider<br/>OpenAI (live) | deterministic fixture"]
+        INST["InstrumentedProvider<br/>retries · per-run budget · response cache"]
+        OBS["usage + cost tracking → cost_log<br/>Langfuse-compatible tracing"]
+    end
+    GRAPH -.-> INST
+    LOOP -.-> INST
+    INST -.-> PROV
+    INST -.-> OBS
 ```
 
 The REST API, MCP server, LangGraph agent and the framework-free baseline agent
 (`src/agent/loop.py`) all call the same `ToolRegistry`. None of them re-implements search,
 matching or scoring. More detail: [architecture overview](docs/architecture_overview.md).
+
+## Key engineering decisions
+
+- **Deterministic score, LLM explanation.** `calculate_match` computes the score in Python from
+  extracted requirements and CV evidence. The model chooses tools and writes the explanation; a
+  grounding check flags any score in the answer that no tool produced.
+- **Evidence-grounded requirement statuses.** Every requirement is `supported` (with a CV
+  quotation), `unmet` (with contradicting evidence) or `unknown` (not mentioned). Unknown is never
+  reported as a gap.
+- **Hybrid retrieval.** pgvector similarity fused with keyword coverage; on the labeled matching
+  set this lifts recall@3 from 83% to 100% over vector-only.
+- **One shared tool registry.** Schemas, validation, error codes and retries live in one place and
+  serve REST, MCP and both agents.
+- **Manual loop kept as a baseline.** The framework-free loop is the reference implementation; a
+  replay harness checks that the LangGraph agent behaves the same.
+- **LangGraph for the served agent.** Explicit state, pure routing functions, hard limits and
+  per-thread checkpoints ([why](docs/why-langgraph.md)).
+- **Fixture mode.** A deterministic scripted provider and hash embeddings run the real API, graph,
+  tools and PostgreSQL path with no key, so CI, Compose and the Azure demo are reproducible and free.
+- **Infrastructure separate from releases.** Bicep (`deploy.sh`) creates and changes resources;
+  `deploy_app.sh` ships a new image to the Container App without touching PostgreSQL.
 
 ## Technologies
 
@@ -90,6 +118,7 @@ curl -X POST http://127.0.0.1:8000/chat -H "Content-Type: application/json" \
 
 `/analyze-job` returns a deterministic score (95.11 for this job) with supported, unmet and
 unknown requirements. `/chat` runs the agent: `search_jobs` → `calculate_match` → answer.
+A guided 3–5 minute walkthrough is in [docs/demo.md](docs/demo.md).
 
 Add tracing with a self-hosted Langfuse at <http://localhost:3000> (login `admin@example.com` /
 `local-admin-password`, local only):
@@ -164,6 +193,12 @@ unless marked, and Ragas is an LLM judge.
 | Latency, live agent | p50 2.4 s / p95 6.9 s cold; p50 6.5 ms warm | single run |
 | Ragas faithfulness / answer relevancy | 0.68–0.74 / 0.67–0.70 over three runs | LLM judge |
 | Job extraction | 40/40 fixture variants exact | single run |
+| System evaluation gates | 7 / 7 pass (run in CI on every push and pull request) | deterministic |
+| Test suite | 308 passed with PostgreSQL; 306 passed + 2 skipped without it | deterministic |
+| Azure smoke test (fixture mode) | all endpoints 200; `/analyze-job` 95.11; `/chat` `search_jobs → calculate_match`; warm latency 0.13–0.99 s | deterministic |
+
+The evaluation sets are small and synthetic (one CV, 6 labeled jobs, 20 retrieval questions,
+18 tool-selection cases): perfect scores mean the labeled cases pass, not general accuracy.
 
 Full version comparison: [evaluation/results/version_comparison.md](evaluation/results/version_comparison.md).
 
@@ -212,16 +247,19 @@ identity. Deployment (`deploy.yml`) is manual and approval-gated, with OIDC logi
 
 **Live demo (fixture mode, synthetic data):**
 <https://jobmatch-api.blueglacier-8c9485b6.northeurope.azurecontainerapps.io/docs>. It runs in
-`northeurope` and scales to zero, so the first request after idle takes about 30 s. Verified there:
-health and readiness, pgvector, deterministic `/analyze-job` (95.11), and `/chat` running
+`northeurope` and scales to zero, so the first request after idle takes about 25–30 s. Verified there
+(2026-10-29, re-checked 2026-11-06): health and readiness, pgvector nearest-neighbour search over
+the CV chunks, deterministic `/analyze-job` (95.11), and `/chat` running
 `search_jobs → calculate_match`. Bicep (`infra/azure/deploy.sh`) creates and changes the
 infrastructure. Image updates (`infra/azure/deploy_app.sh`, the `deploy.yml` workflow) only update
 the Container App. A live OpenAI run in Azure was deliberately not executed, because the public API
-has no authentication. Details: [docs/deployment.md](docs/deployment.md).
+has no authentication or rate limiting; the live path is evaluated locally. Details:
+[docs/deployment.md](docs/deployment.md).
 
 ## Limitations
 
-No authentication or multi-user isolation. Conversation memory and the cache are in-process, so
+No authentication, rate limiting or multi-user isolation, so the public demo serves synthetic data
+in fixture mode only. Conversation memory and the cache are in-process, so
 the API runs as one replica. The job catalog is a small synthetic fixture set. Evaluation sets are
 small and synthetic, and most live results are single runs. The match score is an advisory
 heuristic, not a hiring decision. Full list: [docs/limitations.md](docs/limitations.md). Personal
