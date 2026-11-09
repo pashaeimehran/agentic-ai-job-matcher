@@ -2,11 +2,10 @@
 
 [![CI](https://github.com/pashaeimehran/agentic-ai-job-matcher/actions/workflows/ci.yml/badge.svg)](https://github.com/pashaeimehran/agentic-ai-job-matcher/actions/workflows/ci.yml)
 
-An evidence-grounded job-matching agent for the German job market. It extracts structured
-requirements from job postings, retrieves supporting passages from a CV, scores fit with
-deterministic code, and lets an LLM agent search, compare and explain matches through validated
-tools. It is served through a REST API and an MCP server, evaluated with deterministic gates and
-recorded live runs, and deployed on Azure Container Apps with PostgreSQL/pgvector.
+This project helps job seekers understand which job postings in Germany best match their CV.
+It compares job requirements with the candidate's experience, ranks the results, and explains
+each score using evidence from the CV. An AI agent manages the search and analysis, while the
+scoring follows consistent, testable rules.
 
 **Python · LangGraph · FastAPI · MCP · PostgreSQL/pgvector · Langfuse · Docker · Bicep · Azure Container Apps**
 
